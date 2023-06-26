@@ -62,10 +62,6 @@ def format_overwrites(overwrites):
         formatted.append(f"{item[0].name}: {perms_str}")
     return "\n".join(formatted)
 
-AGIFY_API_KEY = 'YOUR_AGIFY_API_KEY'
-NATIONALIZE_API_KEY = 'YOUR_NATIONALIZE_API_KEY'
-GENDERIZE_API_KEY = 'YOUR_GENDERIZE_API_KEY'
-
 def get_age(name):
     url = f"https://api.agify.io?name={name}"
     response = requests.get(url)
@@ -270,7 +266,6 @@ async def on_guild_join(guild: discord.Guild):
             break
   
 @kgb.command(description="Выведет список команд или информацию о команде")
-@helpCategory('info')
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -556,7 +551,6 @@ async def verlist(ctx):
   ))
   
 @kgb.command(description = ")")
-@helpCategory('misc')
 async def love(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
