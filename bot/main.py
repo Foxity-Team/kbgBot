@@ -22,7 +22,7 @@ import ffmpeg
 import yt_dlp
 import typing
 
-from categories import buildHelpEmbed, helpCategory
+from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 
 prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
@@ -33,6 +33,7 @@ kgb.remove_command("help")
 GUILD_SEEK_FILENAME = "guild_seek.json"
 
 HELP_EMB: typing.Union[discord.Embed, None] = None
+HELP_CAT_EMB: typing.Union[list[discord.Embed], None] = None
 
 if not os.path.isfile('guild_seek.json'):
     with open('guild_seek.json', 'w', encoding='utf-8') as f:
@@ -281,68 +282,18 @@ async def help(ctx, *, query=None):
         await ctx.send(embed=HELP_EMB)
         return
 
-    elif query.isdigit():
-        category_number = int(query)
-        if category_number == 1:
-            embed = discord.Embed(title="📃 Просмотр информации", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`banlist` `server` `channel` `category` `role` \n`warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="xommunist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
+    if query.isdigit():
+        if HELP_CAT_EMB is None:
+            embed = discord.Embed(title="Системная ошибка:", description="Эмбед помощи категорий не собран!", color=discord.Colour(0xFF0000))
             await ctx.send(embed=embed)
-        elif category_number == 2:
-            embed = discord.Embed(title="🎮 Развлечение", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade` `comment` \n`rand` `wiki` `tt` `tc` `quote` `shtr` `horny` `info`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 3:
-            embed = discord.Embed(title="😺 Скретч", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`scratch_user`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 4:
-            embed = discord.Embed(title="🎵 Музыка", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`play` `playaudio` `leave`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 5:
-            embed = discord.Embed(title="🎭 РП", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`hug` `kiss` `hit` `lick` `hi` `pet`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 6:
-            embed = discord.Embed(title="🛡️ Модерация", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`ban` `unban` `kick` `clear` `warn` `unwarn` `poll`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 7:
-            embed = discord.Embed(title="⚙️ Конфигурации", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`configwarn` `welcome` `sub`", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        elif category_number == 7:
-            embed = discord.Embed(title="🛠 Остальное", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`invite` `ping` `verlist` `thank` `null` `cipher` `code``", inline=False)
-            embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
-            embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-            await ctx.send(embed=embed)
-        else:
+            return
+
+        try:
+            await ctx.send(HELP_CAT_EMB[int(query) - 1])
+        except KeyError:
             embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
             await ctx.send(embed=embed)
-        return
+            return
 
     command = kgb.get_command(query)
     if command is None:
@@ -1567,4 +1518,5 @@ async def scratch_user(ctx, username):
         print("Error:", e)
 
 HELP_EMB = buildHelpEmbed()
+HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
