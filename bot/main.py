@@ -31,8 +31,7 @@ kgb.remove_command("help")
 
 GUILD_SEEK_FILENAME = "guild_seek.json"
 
-HELP_EMB: discord.Embed | None
-
+HELP_EMB: discord.Embed | None = None
 
 if not os.path.isfile('guild_seek.json'):
     with open('guild_seek.json', 'w', encoding='utf-8') as f:
