@@ -268,7 +268,6 @@ async def on_guild_join(guild: discord.Guild):
             break
   
 @kgb.command(description="Выведет список команд или информацию о команде")
-@helpCategory('info')
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -543,7 +542,7 @@ async def kick(ctx, member: discord.Member = None, *, reason:str =None):
     ))
     
 @kgb.command(description = "Покажет список версий бота" )
-@helpCategory('info')
+@helpCategory('misc')
 async def verlist(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -554,7 +553,7 @@ async def verlist(ctx):
   ))
   
 @kgb.command(description = ")")
-@helpCategory('fun')
+@helpCategory('misc')
 async def love(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -565,7 +564,7 @@ async def love(ctx):
   ))
   
 @kgb.command(description = "шифр")
-@helpCategory('fun')
+@helpCategory('misc')
 async def cipher(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -601,7 +600,7 @@ async def comment(ctx, *, commint):
                 ).set_image(url="attachment://youtube_comment.gif"), file=discord.File(imageData, 'youtube_comment.gif'))
               
 @kgb.command(description = "Список благодарностей")
-@helpCategory('fun')
+@helpCategory('misc')
 async def thank(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -1381,7 +1380,8 @@ async def hackp(ctx):
     else:
         await ctx.send('Pentagon hack: Failed.')
 
-@kgb.command(description="Не может проигрывать музыку с ютуба\nМожет проигрываит только прямые ссылки на аудиофайлы")
+@kgb.command(description="Не может проигрывать музыку с ютуба\nМожет проигрывать только прямые ссылки на аудиофайлы")
+@helpCategory('music')
 async def playaudio(ctx, url):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1407,6 +1407,7 @@ async def playaudio(ctx, url):
     await voice_client.disconnect()
 
 @kgb.command(description="Может проигрывать музыку только с ютуба")
+@helpCategory('music')
 async def play(ctx, url):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1440,6 +1441,7 @@ async def play(ctx, url):
     await voice_client.disconnect()
 
 @kgb.command(description="Выгоняет бота из войс канала")
+@helpCategory('music')
 async def leave(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1484,6 +1486,7 @@ async def info(ctx, *, name):
         await ctx.send('Ошибка.')
 
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
+@helpCategory('config')
 async def sub(ctx, arg=None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
