@@ -264,24 +264,20 @@ async def on_guild_join(guild: discord.Guild):
             break
   
 @kgb.command(description="Выведет список команд или информацию о команде")
+@helpCategory('info')
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
 
     if query is None:
-        embed = discord.Embed(title="Категории команд:", color=discord.Colour(0x000000))
-        embed.add_field(name="1.📃 Просмотр информации", value="", inline=False)
-        embed.add_field(name="2.🎮 Развлечение", value="", inline=False)
-        embed.add_field(name="3.😺 Скретч", value="", inline=False)
-        embed.add_field(name="4.🎵 Музыка", value="", inline=False)
-        embed.add_field(name="5.🎭 РП", value="", inline=False)
-        embed.add_field(name="6.🛡️ Модерация", value="", inline=False)
-        embed.add_field(name="7.⚙️ Конфигурации", value="", inline=False)
-        embed.add_field(name="8. 🛠 Остальное", value=`", inline=False)
-        embed.add_field(name="Что бы узнать команді из категории, напишите:", value="`kgb!help (цифра категории)`", inline=False)
-        embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-        embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
-        await ctx.send(embed=embed)
+        if HELP_EMB is None:
+            embed = discord.Embed(title='Системная ошибка:', description='Эмбед помощи не собран!', color=discord.Colour(0xFF0000))
+            await ctx.send(embed=embed)
+            return
+        
+        await ctx.send(embed=HELP_EMB)
+        return
+
     elif query.isdigit():
         category_number = int(query)
         if category_number == 1:
@@ -289,7 +285,7 @@ async def help(ctx, *, query=None):
             embed.add_field(name="Команды:", value="`banlist` `server` `channel` `category` `role` \n`warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
             embed.add_field(name="Что бы узнать, что делает команда напишите:", value="`kgb!help (команда)`", inline=False)
             embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-            embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
+            embed.set_footer(text="xommunist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
             await ctx.send(embed=embed)
         elif category_number == 2:
             embed = discord.Embed(title="🎮 Развлечение", color=discord.Colour(0x000000))
@@ -343,18 +339,19 @@ async def help(ctx, *, query=None):
         else:
             embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
             await ctx.send(embed=embed)
+        return
+
+    command = kgb.get_command(query)
+    if command is None:
+        embed = discord.Embed(title="Ошибка:", description=f"Команда `{query}` не найдена.", color=discord.Colour(0xFF0000))
     else:
-        command = kgb.get_command(query)
-        if command is None:
-            embed = discord.Embed(title="Ошибка:", description=f"Команда `{query}` не найдена.", color=discord.Colour(0xFF0000))
-        else:
-            embed = discord.Embed(title="Описание команды:", description=command.description, color=discord.Colour(0x000000))
-            if command.aliases:
-                aliases = ', '.join(command.aliases)
-                embed.add_field(name="Альтернативные названия:", value=aliases, inline=False)
-            usage = f"kgb!{command.name} {command.signature}"
-            embed.add_field(name="Использование:", value=f"`{usage}`", inline=False)
-        await ctx.send(embed=embed)
+        embed = discord.Embed(title="Описание команды:", description=command.description, color=discord.Colour(0x000000))
+        if command.aliases:
+            aliases = ', '.join(command.aliases)
+            embed.add_field(name="Альтернативные названия:", value=aliases, inline=False)
+        usage = f"kgb!{command.name} {command.signature}"
+        embed.add_field(name="Использование:", value=f"`{usage}`", inline=False)
+    await ctx.send(embed=embed)
       
 cyrillic = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 translit = "abvgdeejzijklmnoprstufhzcss_y_eua"
