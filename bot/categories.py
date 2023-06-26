@@ -49,11 +49,9 @@ def buildHelpEmbed() -> Embed:
         catName, catVal = categ.getData()
         emb.add_field(name=f'{i+1}. {catName}', value=catVal, inline=False)
 
-    emb.add_field(name="Использование:", value="Для получения списка команд из категории, используйте `kgb!help (номер категории)`. Например: `kgb!help 1`", inline=False)
-    emb.add_field(name="Для получения информации о конкретной команде, используйте `kgb!help (команда)`", value="Например: `kgb!help ban`", inline=False)
-
+    emb.add_field(name="Что бы узнать команді из категории, напишите:", value="`kgb!help (цифра категории)`", inline=False)
     emb.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
-    emb.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
+    emb.set_footer(text="communist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
     
     return emb
 
