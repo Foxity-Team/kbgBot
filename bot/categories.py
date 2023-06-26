@@ -32,19 +32,22 @@ HELP_CATEGORIES = {
     'misc'      : KgbCategory('🛠 Остальное'),
 }
 
-def helpCategory(func: Callable, categoryName: str) -> Callable:
-    if categoryName not in HELP_CATEGORIES:
-        raise ValueError(f'Category {categoryName} is not defined!')
+def helpCategory(categoryName: str) -> Callable:
+    def helpFunc(func: Callable) -> Callable:
+        if categoryName not in HELP_CATEGORIES:
+            raise ValueError(f'Category {categoryName} is not defined!')
 
-    HELP_CATEGORIES[categoryName].addCommand(func.__name__)
-    return func
+        HELP_CATEGORIES[categoryName].addCommand(func.__name__)
+        return func
+
+    return helpFunc
 
 def buildHelpEmbed() -> Embed:
     emb = Embed(title="Категории команд:", color=Colour(0x000000))
 
     for i, categ in enumerate(HELP_CATEGORIES.values()):
         catName, catVal = categ.getData()
-        emb.add_field(name=f'{i}. {catName}', value=catVal, inline=False)
+        emb.add_field(name=f'{i+1}. {catName}', value=catVal, inline=False)
 
     emb.add_field(name="Использование:", value="Для получения списка команд из категории, используйте `kgb!help (номер категории)`. Например: `kgb!help 1`", inline=False)
     emb.add_field(name="Для получения информации о конкретной команде, используйте `kgb!help (команда)`", value="Например: `kgb!help ban`", inline=False)
