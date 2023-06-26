@@ -1,3 +1,4 @@
+from typing import Callable
 from discord import Embed, Colour
 from functools import reduce
 
@@ -31,7 +32,7 @@ HELP_CATEGORIES = {
     'misc'      : KgbCategory('🛠 Остальное'),
 }
 
-def helpCategory(func: function, categoryName: str) -> function:
+def helpCategory(func: Callable, categoryName: str) -> Callable:
     if categoryName not in HELP_CATEGORIES:
         raise ValueError(f'Category {categoryName} is not defined!')
 
