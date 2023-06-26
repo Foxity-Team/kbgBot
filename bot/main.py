@@ -176,23 +176,24 @@ async def on_member_join(member):
 
 @kgb.event
 async def on_message(message):
-    with open('static_data/retr.txt', 'r') as file:
-        channel_ids = file.readlines()
-        channel_ids = [id.strip() for id in channel_ids]
+    if message.channel.id == 1067091686725001306:
+        with open('static_data/retr.txt', 'r') as file:
+            channel_ids = file.readlines()
+            channel_ids = [id.strip() for id in channel_ids]
 
-    for channel_id in channel_ids:
-        channel = kgb.get_channel(int(channel_id))
-        if channel:
-            embed_color = random.choice(['FF0000', 'FFFF00'])
-            embed = discord.Embed(
-                title=f'Сообщение из канала #{message.channel.name}:',
-                description=message.content,
-                color=discord.Color(int(embed_color, 16))
-            )
-            if len(message.attachments) > 0:
-                for attachment in message.attachments:
-                    embed.set_image(url=attachment.url)
-            await channel.send(embed=embed)
+        for channel_id in channel_ids:
+            channel = kgb.get_channel(int(channel_id))
+            if channel:
+                embed_color = random.choice(['FF0000', 'FFFF00'])
+                embed = discord.Embed(
+                    title=f'Сообщение из канала #{message.channel.name}:',
+                    description=message.content,
+                    color=discord.Color(int(embed_color, 16))
+                )
+                if len(message.attachments) > 0:
+                    for attachment in message.attachments:
+                        embed.set_image(url=attachment.url)
+                await channel.send(embed=embed)
               
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
