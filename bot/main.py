@@ -40,7 +40,7 @@ if not os.path.isfile('guild_seek.json'):
         f.write('{}')
 
 async def change_status():
-    statuses = "kgb!help", "версия 2.0", "на {} серверах!", "SLAVA KPSS!"
+    statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
     index = 0
     while not kgb.is_closed():
         servers_count = len(kgb.guilds)
@@ -268,7 +268,6 @@ async def on_guild_join(guild: discord.Guild):
             break
   
 @kgb.command(description="Выведет список команд или информацию о команде")
-@helpCategory('info')
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -543,7 +542,7 @@ async def kick(ctx, member: discord.Member = None, *, reason:str =None):
     ))
     
 @kgb.command(description = "Покажет список версий бота" )
-@helpCategory('info')
+@helpCategory('misc')
 async def verlist(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -554,7 +553,7 @@ async def verlist(ctx):
   ))
   
 @kgb.command(description = ")")
-@helpCategory('fun')
+@helpCategory('misc')
 async def love(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -565,7 +564,7 @@ async def love(ctx):
   ))
   
 @kgb.command(description = "шифр")
-@helpCategory('fun')
+@helpCategory('misc')
 async def cipher(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -601,7 +600,7 @@ async def comment(ctx, *, commint):
                 ).set_image(url="attachment://youtube_comment.gif"), file=discord.File(imageData, 'youtube_comment.gif'))
               
 @kgb.command(description = "Список благодарностей")
-@helpCategory('fun')
+@helpCategory('misc')
 async def thank(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -1039,6 +1038,7 @@ async def seek_server(ctx, *, user_name):
         ))
       
 @kgb.command(description = "Покажет пинг бота")
+@helpCategory('misc')
 async def ping(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1050,6 +1050,7 @@ async def ping(ctx):
         ))
 
 @kgb.command(description="Выведет рандомное число")
+@helpCategory('fun')
 async def rand(ctx, num1, num2=None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1072,6 +1073,7 @@ async def rand(ctx, num1, num2=None):
         ))
 
 @kgb.command(description='Переведёт кириллицу в транслит')
+@helpCategory('fun')
 async def tt(ctx, *, text):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1083,6 +1085,7 @@ async def tt(ctx, *, text):
         ))
 
 @kgb.command(description='Переведёт транслитъ в кириллицу')
+@helpCategory('fun')
 async def tc(ctx, *, text: str):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1094,6 +1097,7 @@ async def tc(ctx, *, text: str):
         ))
 
 @kgb.command(description='Ищет статью на вики')
+@helpCategory('fun')
 async def wiki(ctx, *, query):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1129,12 +1133,14 @@ async def hentai(ctx):
   ))
 
 @kgb.command(description="Поцеловать участника")
+@helpCategory('rp')
 async def kiss(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} поцеловал(а) {member.mention}")
 
 @kgb.command(description="Обнять участника")
+@helpCategory('rp')
 async def hug(ctx, user: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1150,18 +1156,21 @@ async def hug(ctx, user: discord.Member):
     await ctx.send(embed=embed)
 
 @kgb.command(description="Ударить участника")
+@helpCategory('rp')
 async def hit(ctx, user: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} ударил(а) {user.mention}")
 
 @kgb.command(description="Лизнуть участника")
+@helpCategory('rp')
 async def lick(ctx, user: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} лизнул(а) {user.mention}")
 
 @kgb.command(description="Погладить участника")
+@helpCategory('rp')
 async def pet(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1177,12 +1186,14 @@ async def pet(ctx, member: discord.Member):
     await ctx.send(embed=embed)
 
 @kgb.command(description="Поприветствовать участника")
+@helpCategory('rp')
 async def hi(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     await ctx.send(f'{ctx.author.mention} поприветствовал(а) {member.mention}')
 
 @kgb.command(description='Вызывает голосование в канале\n(принимает длительность голосования только в часах)' )
+@helpCategory('moderation')
 async def poll(ctx, hours: int, *, text=None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1223,6 +1234,7 @@ async def poll(ctx, hours: int, *, text=None):
     await msgp.edit(embed=embedVar)
 
 @kgb.command(description="Пишет информацию о категории\n(указывайте айди категории или её пинг")
+@helpCategory('info')
 async def category(ctx, category: discord.CategoryChannel):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1236,6 +1248,7 @@ async def category(ctx, category: discord.CategoryChannel):
     await ctx.send(embed=em)
   
 @kgb.command(description="Пишет информацию о канале\n(указывайте айди канала или его пинг)")
+@helpCategory('info')
 async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1253,6 +1266,7 @@ async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
     await ctx.send(embed=em)
   
 @kgb.command(description="Пишет информацию о роли\n(указывайте айди роли или её пинг" )
+@helpCategory('info')
 async def role(ctx, *, role: discord.Role):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1267,6 +1281,7 @@ async def role(ctx, *, role: discord.Role):
     await ctx.send(embed=em)
 
 @kgb.command(description="Выдаст рандомную цитату")
+@helpCategory('fun')
 async def quote(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1274,6 +1289,7 @@ async def quote(ctx):
     await ctx.send(f"```{fortun}```")
 
 @kgb.command(description="Выдаст рандомную шутку про Штирлица")
+@helpCategory('fun')
 async def shtr(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1289,6 +1305,7 @@ async def null(ctx):
     await ctx.reply(embed=embed)
 
 @kgb.command(description="Хорни карта")
+@helpCategory('fun')
 async def horny(ctx, member: discord.Member = None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1310,6 +1327,7 @@ async def horny(ctx, member: discord.Member = None):
                 await session.close()
 
 @kgb.command(description="hello comrade!")
+@helpCategory('fun')
 async def comrade(ctx, member: discord.Member = None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1343,6 +1361,7 @@ async def comrade(ctx, member: discord.Member = None):
 #    await ctx.send(response_message)
 
 @kgb.command(description="Взлом пентагона")
+@helpCategory('fun')
 async def hackp(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1361,7 +1380,8 @@ async def hackp(ctx):
     else:
         await ctx.send('Pentagon hack: Failed.')
 
-@kgb.command(description="Не может проигрывать музыку с ютуба\nМожет проигрываит только прямые ссылки на аудиофайлы")
+@kgb.command(description="Не может проигрывать музыку с ютуба\nМожет проигрывать только прямые ссылки на аудиофайлы")
+@helpCategory('music')
 async def playaudio(ctx, url):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1387,6 +1407,7 @@ async def playaudio(ctx, url):
     await voice_client.disconnect()
 
 @kgb.command(description="Может проигрывать музыку только с ютуба")
+@helpCategory('music')
 async def play(ctx, url):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1420,6 +1441,7 @@ async def play(ctx, url):
     await voice_client.disconnect()
 
 @kgb.command(description="Выгоняет бота из войс канала")
+@helpCategory('music')
 async def leave(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1427,6 +1449,7 @@ async def leave(ctx):
         await ctx.voice_client.disconnect()
 
 @kgb.command(description='Вышлет вам код дискорд бота "SudoBot"')
+@helpCategory('misc')
 async def code(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1435,6 +1458,7 @@ async def code(ctx):
     await ctx.send(file=file)
 
 @kgb.command(description='Гадает по имени')
+@helpCategory('fun')
 async def info(ctx, *, name):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1462,6 +1486,7 @@ async def info(ctx, *, name):
         await ctx.send('Ошибка.')
 
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
+@helpCategory('config')
 async def sub(ctx, arg=None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1488,6 +1513,7 @@ def remove_channel(channel_id):
                 file.write(id)
 
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
+@helpCategory('scratch')
 async def scratch_user(ctx, username):
     if isinstance(ctx.channel, discord.DMChannel):
         return
