@@ -32,13 +32,13 @@ kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_comm
 kgb.persistent_views_added = False
 kgb.remove_command("help")
 
-GUILD_SEEK_FILENAME = "guild_seek.json"
+GUILD_SEEK_FILENAME = "data/guild_seek.json"
 
 HELP_EMB: typing.Union[discord.Embed, None] = None
 HELP_CAT_EMB: typing.Union[list[discord.Embed], None] = None
 
-if not os.path.isfile('guild_seek.json'):
-    with open('guild_seek.json', 'w', encoding='utf-8') as f:
+if not os.path.isfile('data/guild_seek.json'):
+    with open('data/guild_seek.json', 'w', encoding='utf-8') as f:
         f.write('{}')
 
 async def change_status():
@@ -130,7 +130,7 @@ def get_guild_names():
     return sorted([guild.name for guild in kgb.guilds])
 async def update_guild_names():
     guild_names = get_guild_names()
-    with open("guild_names.json", "w", encoding='utf-8') as f:
+    with open("data/guild_names.json", "w", encoding='utf-8') as f:
         json.dump(guild_names, f, ensure_ascii=False, indent=4)
       
 def no_format(user):
@@ -138,18 +138,18 @@ def no_format(user):
         return f"{user.name}#{user.discriminator}"
     return user.name
 try:
-    with open("channels.json", "r") as f:
+    with open("data/channels.json", "r") as f:
         channels = json.load(f)
 except FileNotFoundError:
     channels = {}
   
-if not os.path.exists('warn.json'):
-    with open('warn.json', 'w') as f:json.dump({}, f)
+if not os.path.exists('data/warn.json'):
+    with open('data/warn.json', 'w') as f:json.dump({}, f)
       
-with open('warn.json', 'r') as f:warnings = json.load(f)
+with open('data/warn.json', 'r') as f:warnings = json.load(f)
   
-if not os.path.exists('stanwarns.json'):
-    with open('stanwarns.json', 'w') as f:f.write('{}')
+if not os.path.exists('data/stanwarns.json'):
+    with open('data/stanwarns.json', 'w') as f:f.write('{}')
 
 @kgb.event
 async def on_ready():
@@ -177,7 +177,7 @@ async def on_member_join(member):
 @kgb.event
 async def on_message(message):
     if message.channel.id == 1067091686725001306:
-        with open('retr.txt', 'r') as file:
+        with open('static_data/retr.txt', 'r') as file:
             channel_ids = file.readlines()
             channel_ids = [id.strip() for id in channel_ids]
 
@@ -648,7 +648,7 @@ async def welcome(ctx, *, arg=None):
     guild_id = str(ctx.guild.id)
     if arg == "off":
         channels.pop(guild_id, None)
-        with open("channels.json", "w") as f:
+        with open("data/channels.json", "w") as f:
             json.dump(channels, f)
         await ctx.send(embed=discord.Embed(
             title="Приветствия выключены:",
@@ -658,7 +658,7 @@ async def welcome(ctx, *, arg=None):
     else:
         channel_id = str(ctx.channel.id)
         channels[guild_id] = channel_id
-        with open("channels.json", "w") as f:
+        with open("data/channels.json", "w") as f:
             json.dump(channels, f)
         await ctx.send(embed=discord.Embed(
             title="Приветствия включены:",
@@ -743,7 +743,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
         ))
         return
 
-    with open('warn.json', 'r') as f:
+    with open('data/warn.json', 'r') as f:
         warns = json.load(f)
 
     if guild_id not in warns:
@@ -757,7 +757,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
 
     total_warns = warns[guild_id][user_id]
 
-    with open('stanwarns.json', 'r') as f:
+    with open('data/stanwarns.json', 'r') as f:
         stanwarns = json.load(f)
 
     if guild_id not in stanwarns:
@@ -792,7 +792,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
             ))
 
             del warns[guild_id][user_id]
-            with open('warn.json', 'w') as f: 
+            with open('data/warn.json', 'w') as f: 
                 json.dump(warns, f)
             return
 
@@ -802,7 +802,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
           color=discord.Color(0xFF0000)
         ))
 
-    with open('warn.json', 'w') as f: 
+    with open('data/warn.json', 'w') as f: 
         json.dump(warns, f)
 
     await ctx.send(embed = discord.Embed(
@@ -828,7 +828,7 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
         ))
         return
       
-    with open('stanwarns.json', 'r') as f:
+    with open('data/stanwarns.json', 'r') as f:
         stanwarns = json.load(f)
 
     if guild not in stanwarns:
@@ -839,7 +839,7 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
         ))
         return
 
-    with open('warn.json', 'r') as f:
+    with open('data/warn.json', 'r') as f:
         warns = json.load(f)
 
     if guild not in warns:
@@ -869,7 +869,7 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
     warns[guild][user] -= count
     total_warns = warns[guild][user]
 
-    with open('warn.json', 'w') as f:
+    with open('data/warn.json', 'w') as f:
         json.dump(warns, f)
 
     await ctx.send(embed = discord.Embed(
@@ -895,10 +895,10 @@ async def warnings(ctx, member: discord.Member):
         ))
         return
 
-    with open('warn.json', 'r') as f:
+    with open('data/warn.json', 'r') as f:
         warns = json.load(f)
     
-    with open('stanwarns.json', 'r') as f:
+    with open('data/stanwarns.json', 'r') as f:
         stanwarns = json.load(f)
 
     if guild not in stanwarns:
@@ -940,7 +940,7 @@ async def configwarn(ctx, limit: int, warn_type: str):
       return
     guild_id = str(ctx.guild.id)
 
-    with open('stanwarns.json', 'r') as f:
+    with open('data/stanwarns.json', 'r') as f:
         stanwarns = json.load(f)
 
     if guild_id not in stanwarns:
@@ -960,7 +960,7 @@ async def configwarn(ctx, limit: int, warn_type: str):
         ))
         return
 
-    with open('stanwarns.json', 'w') as f:
+    with open('data/stanwarns.json', 'w') as f:
         json.dump(stanwarns, f)
 
     await ctx.send(embed = discord.Embed(
@@ -1288,7 +1288,7 @@ async def role(ctx, *, role: discord.Role):
 async def quote(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
-    fortun = fortune.get_random_fortune('fortune')
+    fortun = fortune.get_random_fortune('static_data/fortune')
     await ctx.send(f"```{fortun}```")
 
 @kgb.command(description="Выдаст рандомную шутку про Штирлица")
@@ -1296,7 +1296,7 @@ async def quote(ctx):
 async def shtr(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
-    shtr = fortune.get_random_fortune('shtirlitz')
+    shtr = fortune.get_random_fortune('static_data/shtirlitz')
     await ctx.send(f"```{shtr}```")
 
 @kgb.command(description="0x00000000")
@@ -1456,7 +1456,7 @@ async def leave(ctx):
 async def code(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
-    file_path = 'sudocode.py'
+    file_path = 'static_data/sudocode.py'
     file = discord.File(file_path)
     await ctx.send(file=file)
 
@@ -1503,14 +1503,14 @@ async def sub(ctx, arg=None):
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
 
 def add_channel(channel_id):
-    with open('retr.txt', 'a') as file:
+    with open('static_data/retr.txt', 'a') as file:
         file.write(channel_id + '\n')
 
 def remove_channel(channel_id):
-    with open('retr.txt', 'r') as file:
+    with open('static_data/retr.txt', 'r') as file:
         channel_ids = file.readlines()
 
-    with open('retr.txt', 'w') as file:
+    with open('static_data/retr.txt', 'w') as file:
         for id in channel_ids:
             if id.strip() != channel_id:
                 file.write(id)
