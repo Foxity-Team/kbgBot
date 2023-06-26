@@ -546,6 +546,10 @@
                 "discriminator": "0"
             },
             {
+                "name": "timur_kutuev",
+                "discriminator": "0"
+            },
+            {
                 "name": "! ! Iguro Obama",
                 "discriminator": "9624"
             },
@@ -1680,10 +1684,6 @@
             {
                 "name": "нурбол",
                 "discriminator": "4924"
-            },
-            {
-                "name": "timur_kutuev",
-                "discriminator": "0"
             },
             {
                 "name": "glebefimev",

@@ -20,6 +20,7 @@ import fortune
 import time
 import ffmpeg
 import yt_dlp
+import typing
 
 from categories import buildHelpEmbed, helpCategory
 
@@ -31,7 +32,7 @@ kgb.remove_command("help")
 
 GUILD_SEEK_FILENAME = "guild_seek.json"
 
-HELP_EMB: discord.Embed | None = None
+HELP_EMB: typing.Union[discord.Embed, None] = None
 
 if not os.path.isfile('guild_seek.json'):
     with open('guild_seek.json', 'w', encoding='utf-8') as f:
