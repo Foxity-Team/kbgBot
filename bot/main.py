@@ -21,6 +21,8 @@ import time
 import ffmpeg
 import yt_dlp
 
+from categories import buildHelpEmbed, helpCategory
+
 prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
