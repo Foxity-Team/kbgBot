@@ -289,7 +289,8 @@ async def help(ctx, *, query=None):
             return
 
         try:
-            await ctx.send(HELP_CAT_EMB[int(query) - 1])
+            await ctx.send(embed=HELP_CAT_EMB[int(query) - 1])
+            return
         except KeyError:
             embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
             await ctx.send(embed=embed)
