@@ -1,8 +1,11 @@
 import discord
+from discord.ext import commands
 import discord.utils
+from discord.ext.commands import BadArgument
 import asyncio
 import random
 import traceback
+from difflib import get_close_matches
 import os
 import requests
 import json
@@ -11,17 +14,12 @@ import io
 import wikipediaapi
 import wikipedia
 import unidecode
+from datetime import datetime, timedelta
 import typing
 import fortune
 import time
 import ffmpeg
 import yt_dlp
-
-from functools import reduce
-from datetime import datetime, timedelta
-from difflib import get_close_matches
-from discord.ext.commands import BadArgument
-from discord.ext import commands
 
 prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
@@ -30,39 +28,6 @@ kgb.persistent_views_added = False
 kgb.remove_command("help")
 
 GUILD_SEEK_FILENAME = "guild_seek.json"
-
-class KgbCategory:
-    def __init__(self, name: str):
-        self._name = name
-        self._commands: list[str] = []
-
-    def getName(self) -> str: return self._name
-    def getCommands(self) -> list[str]: return self._commands
-    def addCommand(self, command: str): self._commands.append(command)
-    def intoEmbed(self, embed: discord.Embed) -> discord.Embed:
-        embed.add_field(name = self._name, value=reduce(lambda v, el: f'{v} `{el}`', self._commands, ''), inline=False)
-        return embed
-
-EMBED_CONTENT = {
-    'info': KgbCategory('📃Просмотр иформации'),
-    'games': KgbCategory('🎮Развлечение'),
-    'scratch': KgbCategory('😺Скретч:'),
-    'music': KgbCategory('🎵Музыка:'),
-    'rp': KgbCategory('🎭Рп:'),
-    'moderation': KgbCategory('🛡️Модерация:'),
-    'config': KgbCategory('⚙️Конфигурации:'),
-    'misc': KgbCategory('🛠Остальое'),
-}
-        embed.add_field(name = "📃Просмотр иформации:", value="`banlist` `server` `channel` `category` `role` `info`\n`warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
-        embed.add_field(name = "🎮Развлечение:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade`\n`comment` `rand` `wiki` `tt` `tc` `quote` `shtr` `horny`", inline=False)
-        embed.add_field(name = "😺Скретч:", value=" `scratch_user`", inline=False)
-        embed.add_field(name = "🎵Музыка:", value="`play` `playaudio` `leave`", inline=False)
-        embed.add_field(name = "🎭Рп:", value="`hug` `kiss` `hit` `lick` `hi` `pet`", inline=False)
-        embed.add_field(name = "🛡️Модерация:", value="`ban` `unban` `kick` `clear` `warn` `unwarn` `poll`", inline=False)
-        embed.add_field(name = "⚙️Конфигурации:", value="`configwarn` `welcome` `sub`", inline=False)
-        embed.add_field(name = "🛠Остальное:", value="`invite` `ping` `verlist` `thank` `null` `cipher` `code`", inline=False)
-        embed.add_field(name = "Что бы узнать что делает команда напишите: ", value='`kgb!help (команда)`', inline=False)
-
 
 if not os.path.isfile('guild_seek.json'):
     with open('guild_seek.json', 'w', encoding='utf-8') as f:
@@ -296,40 +261,50 @@ async def on_guild_join(guild: discord.Guild):
             await channel.send(embed=embed)
             break
   
-@kgb.command(description = "Выведет список команд")
-async def help(ctx, command=None):
+@kgb.command(description="Выведет список команд или информацию о команде")
+async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
-      return
-    all_commands = kgb.commands
-    num_commands = len(all_commands)
-    if command is None:
-        embed = discord.Embed(title="Лист команд:", description=f"Всего команд: {num_commands-4}\n***PREFIX*** - `kgb!`", color = discord.Colour(0x000000))
-        embed.add_field(name = "📃Просмотр иформации:", value="`banlist` `server` `channel` `category` `role` `info`\n`warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
-        embed.add_field(name = "🎮Развлечение:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade`\n`comment` `rand` `wiki` `tt` `tc` `quote` `shtr` `horny`", inline=False)
-        embed.add_field(name = "😺Скретч:", value=" `scratch_user`", inline=False)
-        embed.add_field(name = "🎵Музыка:", value="`play` `playaudio` `leave`", inline=False)
-        embed.add_field(name = "🎭Рп:", value="`hug` `kiss` `hit` `lick` `hi` `pet`", inline=False)
-        embed.add_field(name = "🛡️Модерация:", value="`ban` `unban` `kick` `clear` `warn` `unwarn` `poll`", inline=False)
-        embed.add_field(name = "⚙️Конфигурации:", value="`configwarn` `welcome` `sub`", inline=False)
-        embed.add_field(name = "🛠Остальное:", value="`invite` `ping` `verlist` `thank` `null` `cipher` `code`", inline=False)
-        embed.add_field(name = "Что бы узнать что делает команда напишите: ", value='`kgb!help (команда)`', inline=False)
-        embed.set_thumbnail(url = "https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
+        return
+
+    if query is None:
+        embed = discord.Embed(title="Категории команд:", color=discord.Colour(0x000000))
+        embed.add_field(name="1. 📃 Просмотр информации", value="Команды: `banlist` `server` `channel` `category` `role` `info` `warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
+        embed.add_field(name="2. 🎮 Развлечение", value="Команды: `cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade` `comment` `rand` `wiki` `tt` `tc` `quote` `shtr` `horny`", inline=False)
+        embed.add_field(name="3. 😺 Скретч", value="Команды: `scratch_user`", inline=False)
+        embed.add_field(name="4. 🎵 Музыка", value="Команды: `play` `playaudio` `leave`", inline=False)
+        embed.add_field(name="5. 🎭 РП", value="Команды: `hug` `kiss` `hit` `lick` `hi` `pet`", inline=False)
+        embed.add_field(name="6. 🛡️ Модерация", value="Команды: `ban` `unban` `kick` `clear` `warn` `unwarn` `poll`", inline=False)
+        embed.add_field(name="7. ⚙️ Конфигурации", value="Команды: `configwarn` `welcome` `sub`", inline=False)
+        embed.add_field(name="8. 🛠 Остальное", value="Команды: `invite` `ping` `verlist` `thank` `null` `cipher` `code`", inline=False)
+        embed.add_field(name="Использование:", value="Для получения списка команд из категории, используйте `kgb!help (номер категории)`. Например: `kgb!help 1`", inline=False)
+        embed.add_field(name="Для получения информации о конкретной команде, используйте `kgb!help (команда)`", value="Например: `kgb!help ban`", inline=False)
+        embed.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
         embed.set_footer(text="Neso Hiroshi#3080", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
         await ctx.send(embed=embed)
-    else:
-        cmd = kgb.get_command(command)
-        if cmd is None:
-            embed = discord.Embed(
-              title="Ошибка:", 
-              description=f"Команда `{command}` не найдена",
-            color = discord.Colour(0xFF0000)
-            )
+    elif query.isdigit():
+        category_number = int(query)
+        if category_number == 1:
+            embed = discord.Embed(title="Категория: Просмотр информации", color=discord.Colour(0x000000))
+            embed.add_field(name="Команды:", value="`banlist` `server` `channel` `category` `role` `info` `warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
+            await ctx.send(embed=embed)
+        elif category_number == 2:
+            embed = discord.Embed(title="Категория: Развлечение", color=discord.Colour(0x000000))
+            embed.add_field(name="Команды:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade` `comment` `rand` `wiki` `tt` `tc` `quote` `shtr` `horny`", inline=False)
+            await ctx.send(embed=embed)
+        # позже добавлю
         else:
-            embed = discord.Embed(title="Описание команды:", description=cmd.description, color = discord.Colour(0x000000))
-            if cmd.aliases:
-                aliases = ', '.join(cmd.aliases)
+            embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
+            await ctx.send(embed=embed)
+    else:
+        command = kgb.get_command(query)
+        if command is None:
+            embed = discord.Embed(title="Ошибка:", description=f"Команда `{query}` не найдена.", color=discord.Colour(0xFF0000))
+        else:
+            embed = discord.Embed(title="Описание команды:", description=command.description, color=discord.Colour(0x000000))
+            if command.aliases:
+                aliases = ', '.join(command.aliases)
                 embed.add_field(name="Альтернативные названия:", value=aliases, inline=False)
-            usage = f"kgb!{cmd.name} {cmd.signature}"
+            usage = f"kgb!{command.name} {command.signature}"
             embed.add_field(name="Использование:", value=f"`{usage}`", inline=False)
         await ctx.send(embed=embed)
       
