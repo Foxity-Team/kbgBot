@@ -18,8 +18,14 @@ class KgbCategory:
         return embed
 
     def getData(self) -> tuple[str, str]:
-        return (self._name,
-               reduce(lambda v,e: f'{v} `{e}`', self._commands, ''))
+        outCommands = ''
+        for i, val in enumerate(self._commands):
+            if i % 5 == 0:
+                outCommands = f'{outCommands} `{val}`\n'
+            else:
+                outCommands = f'{outCommands} `{val}`'
+
+        return self._name, outCommands
 
 HELP_CATEGORIES = {
     'info'      : KgbCategory('📃 Просмотр информации'),
