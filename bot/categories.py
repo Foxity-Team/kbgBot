@@ -46,8 +46,8 @@ def buildHelpEmbed() -> Embed:
     emb = Embed(title="Категории команд:", color=Colour(0x000000))
 
     for i, categ in enumerate(HELP_CATEGORIES.values()):
-        catName, catVal = categ.getData()
-        emb.add_field(name=f'{i+1}. {catName}', value=catVal, inline=False)
+        catName, _ = categ.getData()
+        emb.add_field(name=f'{i+1}. {catName}', value='', inline=False)
 
     emb.add_field(name="Что бы узнать команді из категории, напишите:", value="`kgb!help (цифра категории)`", inline=False)
     emb.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
