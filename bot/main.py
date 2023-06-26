@@ -177,7 +177,7 @@ async def on_member_join(member):
 @kgb.event
 async def on_message(message):
     if message.channel.id == 1067091686725001306:
-        with open('static_data/retr.txt', 'r') as file:
+        with open('data/retr.txt', 'r') as file:
             channel_ids = file.readlines()
             channel_ids = [id.strip() for id in channel_ids]
 
@@ -1503,14 +1503,14 @@ async def sub(ctx, arg=None):
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
 
 def add_channel(channel_id):
-    with open('static_data/retr.txt', 'a') as file:
+    with open('data/retr.txt', 'a') as file:
         file.write(channel_id + '\n')
 
 def remove_channel(channel_id):
-    with open('static_data/retr.txt', 'r') as file:
+    with open('data/retr.txt', 'r') as file:
         channel_ids = file.readlines()
 
-    with open('static_data/retr.txt', 'w') as file:
+    with open('data/retr.txt', 'w') as file:
         for id in channel_ids:
             if id.strip() != channel_id:
                 file.write(id)
