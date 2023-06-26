@@ -284,12 +284,12 @@ async def help(ctx, *, query=None):
     elif query.isdigit():
         category_number = int(query)
         if category_number == 1:
-            embed = discord.Embed(title="Категория: Просмотр информации", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`banlist` `server` `channel` `category` `role` `info` `warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
+            embed = discord.Embed(title="📃Просмотр информации", color=discord.Colour(0x000000))
+            embed.add_field(name="Команды:", value="`banlist` `server` `channel` `category` `role` /n`warnings` `user` `avatar` `seek_user` `seek_server`", inline=False)
             await ctx.send(embed=embed)
         elif category_number == 2:
             embed = discord.Embed(title="Категория: Развлечение", color=discord.Colour(0x000000))
-            embed.add_field(name="Команды:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade` `comment` `rand` `wiki` `tt` `tc` `quote` `shtr` `horny`", inline=False)
+            embed.add_field(name="Команды:", value="`cat` `dog` `fox` `ball` `coin` `hack` `hackp` `comrade` `comment` /n`rand` `wiki` `tt` `tc` `quote` `shtr` `horny` `info`", inline=False)
             await ctx.send(embed=embed)
         # позже добавлю
         else:
