@@ -49,7 +49,7 @@ def buildHelpEmbed() -> Embed:
         catName, _ = categ.getData()
         emb.add_field(name=f'{i+1}. {catName}', value='', inline=False)
 
-    emb.add_field(name="Что бы узнать команди из категории, напишите:", value="`kgb!help (цифра категории)`", inline=False)
+    emb.add_field(name="Что бы узнать команды из категории, напишите:", value="`kgb!help (цифра категории)`", inline=False)
     emb.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
     emb.set_footer(text="communist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
     
@@ -60,6 +60,9 @@ def buildCategoryEmbeds() -> list[Embed]:
     for categ in HELP_CATEGORIES.values():
         emb = Embed(title=f"Категория: {categ.getName()}", color=Colour(0x000000))
         emb.add_field(name="Команды:", value=categ.getData()[1], inline=False)
+        emb.add_field(name="Что бы узнать, что делает команда, напишите:", value="`kgb!help (команда)`", inline=False)
+        emb.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
+        emb.set_footer(text="communist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
         embs.append(emb)
 
     return embs
