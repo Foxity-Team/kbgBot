@@ -266,8 +266,8 @@ async def on_guild_join(guild: discord.Guild):
             await channel.send(embed=embed)
             break
   
-@helpCategory('info')
 @kgb.command(description="Выведет список команд или информацию о команде")
+@helpCategory('info')
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -316,8 +316,8 @@ translit_table = str.maketrans(translit, cyrillic)
 
 wiki = wikipediaapi.Wikipedia('ru')
   
-@helpCategory('fun')
 @kgb.command(description = "Кот")
+@helpCategory('fun')
 async def cat(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -328,8 +328,8 @@ async def cat(ctx):
     embed.set_footer(text=data['fact'])
     await ctx.send(embed=embed)
   
-@helpCategory('fun')
 @kgb.command(description = "Собака")
+@helpCategory('fun')
 async def dog(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -340,8 +340,8 @@ async def dog(ctx):
     embed.set_image(url=data["image"])
     await ctx.send(embed=embed)
   
-@helpCategory('fun')
 @kgb.command(description = "Лис")
+@helpCategory('fun')
 async def fox(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -352,8 +352,8 @@ async def fox(ctx):
     embed.set_footer(text=data['fact'])
     await ctx.send(embed=embed)
   
-@helpCategory('misc')
 @kgb.command(description = "Выключает бота(только для разработчика)")
+@helpCategory('misc')
 async def killbot(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
      return
@@ -372,8 +372,8 @@ async def killbot(ctx):
       color = discord.Colour(0xFF0000)
     ))
     
-@helpCategory('fun')
 @kgb.command(description = "Выводит шуточное сообщение о: \nУспешном/неуспешном взломе пользователя")
+@helpCategory('fun')
 async def hack(ctx, *, member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -391,8 +391,8 @@ async def hack(ctx, *, member):
           color = discord.Color(0x000000)
         ))
       
-@helpCategory('fun')
 @kgb.command(description = "Гадальный шар")
+@helpCategory('fun')
 async def ball(ctx, *, question):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -403,9 +403,9 @@ async def ball(ctx, *, question):
     color = discord.Color(0x000000)
   ))
   
-@helpCategory('moderation')
 @kgb.command(description = "Бан пользователя")
 @commands.has_permissions(ban_members=True)
+@helpCategory('moderation')
 async def ban(ctx, member: discord.Member = None, time=None, *, reason: str = None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -442,9 +442,9 @@ async def ban(ctx, member: discord.Member = None, time=None, *, reason: str = No
           color=discord.Color(0x000000)
         ))
       
-@helpCategory('moderation')
 @kgb.command(description = "Покажет всех забаненных пользователей этого сервера")
 @commands.has_permissions(ban_members = True)
+@helpCategory('moderation')
 async def banlist(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
      return
@@ -466,9 +466,9 @@ async def banlist(ctx):
       color = discord.Color(0x000000)
     ))
     
-@helpCategory('moderation')
 @kgb.command(description = "Разбан пользователя")
 @commands.has_permissions(ban_members = True)
+@helpCategory('moderation')
 async def unban(ctx, *, member):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -484,8 +484,8 @@ async def unban(ctx, *, member):
         color = discord.Color(0x000000)
       ))
       
-@helpCategory('moderation')
 @kgb.command(description = "Удаляет сообщения")
+@helpCategory('moderation')
 async def clear(ctx, amount: int):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -503,9 +503,9 @@ async def clear(ctx, amount: int):
         color = discord.Color(0xFF0000)
     ))
     
-@helpCategory('moderation')
 @kgb.command(description = "Кик пользователя")
 @commands.has_permissions(kick_members=True)
+@helpCategory('moderation')
 async def kick(ctx, member: discord.Member = None, *, reason:str =None):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -541,8 +541,8 @@ async def kick(ctx, member: discord.Member = None, *, reason:str =None):
       color = discord.Color(0x000000)
     ))
     
-@helpCategory('info')
 @kgb.command(description = "Покажет список версий бота" )
+@helpCategory('info')
 async def verlist(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -552,8 +552,8 @@ async def verlist(ctx):
     color = discord.Color(0x000000)
   ))
   
-@helpCategory('fun')
 @kgb.command(description = ")")
+@helpCategory('fun')
 async def love(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -563,8 +563,8 @@ async def love(ctx):
     color = discord.Color(0xff7089)
   ))
   
-@helpCategory('fun')
 @kgb.command(description = "шифр")
+@helpCategory('fun')
 async def cipher(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -579,8 +579,8 @@ async def cipher(ctx):
     black_embed = discord.Embed(color=0x000000, description="20-9-23-5")
     await ctx.author.send(embed=black_embed)
   
-@helpCategory('fun')
 @kgb.command(description = "Создаёт фейковый ютуб комментарий")
+@helpCategory('fun')
 async def comment(ctx, *, commint):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -599,8 +599,8 @@ async def comment(ctx, *, commint):
                   color=discord.Color(0x000000)
                 ).set_image(url="attachment://youtube_comment.gif"), file=discord.File(imageData, 'youtube_comment.gif'))
               
-@helpCategory('fun')
 @kgb.command(description = "Список благодарностей")
+@helpCategory('fun')
 async def thank(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -610,8 +610,8 @@ async def thank(ctx):
     color = discord.Color(0xffff00)
   ))
   
-@helpCategory('info')
 @kgb.command(description = "Даёт информацию о сервере")
+@helpCategory('info')
 async def server(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -636,9 +636,9 @@ async def server(ctx):
     embed.add_field(name="Регион сервера:", value=region, inline=True)
     await ctx.send(embed=embed)
   
-@helpCategory('config')
 @kgb.command(description="Задает канал для приветствия пользователей\n(написать в канал куда будут отправляться приветствия)\nЕсли хотите выключить приветственное сообщение, \nТо в качестве аргумета напишите: off")
 @commands.has_permissions(administrator=True)
+@helpCategory('config')
 async def welcome(ctx, *, arg=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -663,8 +663,8 @@ async def welcome(ctx, *, arg=None):
             color=discord.Color(0x000000)
         ))
   
-@helpCategory('info')
 @kgb.command(description = "Покажет аватар пользователя")
+@helpCategory('info')
 async def avatar(ctx, user: discord.User=None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -680,8 +680,8 @@ async def avatar(ctx, user: discord.User=None):
     embed.set_image(url=user.avatar.url)
     await ctx.send(embed=embed)
   
-@helpCategory('info')
 @kgb.command(description = "Даёт информацию о пользователе")
+@helpCategory('info')
 async def user(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -704,8 +704,8 @@ async def user(ctx, member: discord.Member):
     embed.add_field(name="Айди:", value=member_id, inline=False)
     await ctx.send(embed=embed)
   
-@helpCategory('fun')
 @kgb.command(description = "Подбросит монетку")
+@helpCategory('fun')
 async def coin(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -716,9 +716,9 @@ async def coin(ctx):
           color = discord.Color(0x000000)
         ))
   
-@helpCategory('moderation')
 @kgb.command(description = "Выдаст предупреждение пользователю")
 @commands.has_permissions(administrator=True)
+@helpCategory('moderation')
 async def warn(ctx, member: discord.Member, count: int=1):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -808,9 +808,9 @@ async def warn(ctx, member: discord.Member, count: int=1):
               color = discord.Color(0x000000)
             ))
 
-@helpCategory('moderation')
 @kgb.command(description = "Снимет предупреждение пользователя")
 @commands.has_permissions(administrator=True)
+@helpCategory('moderation')
 async def unwarn(ctx, member: discord.Member, count: int = 1):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -875,9 +875,9 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
               color = discord.Color(0x000000)
             ))
 
-@helpCategory('moderation')
 @kgb.command(description = "Покажет сколько предупреждений у пользователя")
 @commands.has_permissions(administrator=True)
+@helpCategory('moderation')
 async def warnings(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -929,9 +929,9 @@ async def warnings(ctx, member: discord.Member):
               color = discord.Color(0x000000)
             ))
 
-@helpCategory('config')
 @kgb.command(description = "Установит лимит предупреждений и действия после него")
 @commands.has_permissions(administrator=True)
+@helpCategory('config')
 async def configwarn(ctx, limit: int, warn_type: str):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -966,8 +966,8 @@ async def configwarn(ctx, limit: int, warn_type: str):
               color = discord.Color(0x000000)
             ))
 
-@helpCategory('misc')
 @kgb.command(description="Пригласить бота и другие полезные ссылки")
+@helpCategory('misc')
 async def invite(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -978,8 +978,8 @@ async def invite(ctx):
     embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах")
     await ctx.send(embed=embed)
 
-@helpCategory('info')
 @kgb.command(description="Ищет пользователей по их примерному нику на всех серверах, где присутствует бот")
+@helpCategory('info')
 async def seek_user(ctx, *, query):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1004,8 +1004,8 @@ async def seek_user(ctx, *, query):
             color=discord.Color(0x000000)
         ))
 
-@helpCategory('info')
 @kgb.command(description="Ищет сервер, на котором находится пользователь по его точному нику, на всех серверах где присутствует бот ")
+@helpCategory('info')
 async def seek_server(ctx, *, user_name):
     if isinstance(ctx.channel, discord.DMChannel):
       return
