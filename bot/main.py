@@ -1571,4 +1571,3 @@ async def nasa(ctx):
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
-#kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
