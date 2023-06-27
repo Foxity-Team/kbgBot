@@ -1545,7 +1545,7 @@ async def scratch_user(ctx, username):
 
 @kgb.command()
 async def generate(ctx):
-    image_url = 'https://thispersondoesnotexist.com/image'
+    image_url = 'https://thispersondoesnotexist.com'
     response = requests.get(image_url)
 
     await ctx.send(file=discord.File(response.content, 'generated_image.jpg'))
