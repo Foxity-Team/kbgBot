@@ -344,11 +344,6 @@ async def help(ctx, *, query=None):
         usage = f"kgb!{command.name} {command.signature}"
         embed.add_field(name="Использование:", value=f"`{usage}`", inline=False)
     await ctx.send(embed=embed)
-      
-cyrillic = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-translit = "abvgdeejzijklmnoprstufhzcss_y_eua"
-cyrillic_table = str.maketrans(cyrillic, translit)
-translit_table = str.maketrans(translit, cyrillic)
 
 wiki = wikipediaapi.Wikipedia('ru')
   
@@ -1108,30 +1103,6 @@ async def rand(ctx, num1, num2=None):
             color=discord.Color(0x000000)
         ))
 
-@kgb.command(description='Переведёт кириллицу в транслит')
-@helpCategory('fun')
-async def tt(ctx, *, text):
-    if isinstance(ctx.channel, discord.DMChannel):
-      return
-    translit_text = unidecode.unidecode(text)
-    await ctx.send(embed=discord.Embed(
-            title="Перевод на транслит:",
-            description=translit_text,
-            color=discord.Color(0x000000)
-        ))
-
-@kgb.command(description='Переведёт транслитъ в кириллицу')
-@helpCategory('fun')
-async def tc(ctx, *, text: str):
-    if isinstance(ctx.channel, discord.DMChannel):
-      return
-    cyrillic_text = text.translate(translit_table)
-    await ctx.send(embed=discord.Embed(
-            title="Перевод на кирилицу",
-            description=cyrillic_text,
-            color=discord.Color(0x000000)
-        ))
-
 @kgb.command(description='Ищет статью на вики')
 @helpCategory('fun')
 async def wiki(ctx, *, query):
@@ -1675,6 +1646,116 @@ async def balabola(ctx, *, prompt):
 
     async with ctx.typing():
         await get()
+
+def translit_to_cyrillic(text):
+    translit_table = {
+        'a': 'а',
+        'b': 'б',
+        'v': 'в',
+        'g': 'г',
+        'd': 'д',
+        'e': 'е',
+        'yo': 'ё',
+        'zh': 'ж',
+        'z': 'з',
+        'i': 'и',
+        'y': 'й',
+        'k': 'к',
+        'l': 'л',
+        'm': 'м',
+        'n': 'н',
+        'o': 'о',
+        'p': 'п',
+        'r': 'р',
+        's': 'с',
+        't': 'т',
+        'u': 'у',
+        'f': 'ф',
+        'h': 'х',
+        'ts': 'ц',
+        'ch': 'ч',
+        'sh': 'ш',
+        'shch': 'щ',
+        'e': 'ъ',
+        'y': 'ы',
+        'yu': 'ю',
+        'ya': 'я',
+    }
+    cyrillic_text = ''
+    words = text.split()
+    for word in words:
+        if word in translit_table:
+            cyrillic_text += translit_table[word]
+        else:
+            cyrillic_text += word
+        cyrillic_text += ' '
+    return cyrillic_text.strip()
+
+def cyrillic_to_translit(text):
+    cyrillic_table = {
+        'а': 'a',
+        'б': 'b',
+        'в': 'v',
+        'г': 'g',
+        'д': 'd',
+        'е': 'e',
+        'ё': 'yo',
+        'ж': 'zh',
+        'з': 'z',
+        'и': 'i',
+        'й': 'y',
+        'к': 'k',
+        'л': 'l',
+        'м': 'm',
+        'н': 'n',
+        'о': 'o',
+        'п': 'p',
+        'р': 'r',
+        'с': 's',
+        'т': 't',
+        'у': 'u',
+        'ф': 'f',
+        'х': 'h',
+        'ц': 'ts',
+        'ч': 'ch',
+        'ш': 'sh',
+        'щ': 'shch',
+        'ъ': 'e',
+        'ы': 'y',
+        'ь': '',
+        'э': 'e',
+        'ю': 'yu',
+        'я': 'ya',
+    }
+    translit_text = ''
+    for char in text:
+        if char in cyrillic_table:
+            translit_text += cyrillic_table[char]
+        else:
+            translit_text += char
+    return translit_text
+
+@bot.command(description='Переводит текст с кириллицы на транслит или с транслита на кириллицу')
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def t(ctx, option: str, *, text: str):
+    if isinstance(ctx.channel, discord.DMChannel):
+        return
+
+    if option.lower() == 't':
+        translit_text = translit_to_cyrillic(text) 
+        title = 'Перевод на транслит:'
+    elif option.lower() == 'c':
+        translit_text = cyrillic_to_translit(text) 
+        title = 'Перевод на кириллицу:'
+    else:
+        await ctx.send('Неправильно указана опция. Используйте "t" или "c".')
+        return
+
+    await ctx.send(embed=discord.Embed(
+        title=title,
+        description=translit_text,
+        color=discord.Color(0x000000)
+    ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
