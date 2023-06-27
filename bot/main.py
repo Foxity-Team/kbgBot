@@ -1600,7 +1600,7 @@ async def porfir(ctx, *, promt):
       return
     api_url = 'https://pelevin.gpt.dobro.ai/generate/'
     data = {
-        'prompt': prompt,
+        'prompt': promt,
         'length': random.randint(10, 50)
     }
     
