@@ -1647,7 +1647,7 @@ async def balabola(ctx, *, prompt):
     async with ctx.typing():
         await get()
 
-@bot.command(description='Переведёт кириллицу в транслит или транслит в кириллицу')
+@kgb.command(description='Переведёт кириллицу в транслит или транслит в кириллицу')
 @helpCategory('fun')
 async def translit(ctx, option: str, lang_code: str, *, text: str):
     if isinstance(ctx.channel, discord.DMChannel):
