@@ -1590,7 +1590,7 @@ async def insult(ctx):
 
 @kgb.command()
 @helpCategory('fun')
-async def porfir(ctx, *, promt):
+async def porfir(ctx, *, prompt):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     api_url = 'https://pelevin.gpt.dobro.ai/generate/'
