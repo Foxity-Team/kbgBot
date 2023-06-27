@@ -1544,6 +1544,16 @@ async def scratch_user(ctx, username):
     except requests.exceptions.RequestException as e:
         print("Error:", e)
 
+@kgb.command()
+@helpCategory('fun')
+async def person(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
+    image_url = 'https://thispersondoesnotexist.com'
+    response = requests.get(image_url)
+
+    await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
