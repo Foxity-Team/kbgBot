@@ -1544,14 +1544,11 @@ async def scratch_user(ctx, username):
         print("Error:", e)
 
 @kgb.command()
-@helpCategory('fun')
-async def person(ctx):
+async def generate(ctx):
     image_url = 'https://thispersondoesnotexist.com/image'
-    response = requests.get(image_url, stream=True)
+    response = requests.get(image_url)
 
-    image_data = io.BytesIO(response.content)
-
-    await ctx.send(file=discord.File(image_data, 'generated_image.jpg'))
+    await ctx.send(file=discord.File(response.content, 'generated_image.jpg'))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
