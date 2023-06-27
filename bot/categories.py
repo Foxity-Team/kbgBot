@@ -66,7 +66,7 @@ def buildHelpEmbed() -> Embed:
 
 def buildCategoryEmbeds() -> list[Embed]:
     embs = []
-    for categ in HELP_CATEGORIES.values():
+    for categ in filter(lambda v: not v.isHidden(), HELP_CATEGORIES.values()):
         emb = Embed(title=f"Категория: {categ.getName()}", color=Colour(0x000000))
         emb.add_field(name="Команды:", value=categ.getData()[1], inline=False)
         emb.add_field(name="Что бы узнать, что делает команда, \nНапишите:", value="`kgb!help (команда)`", inline=False)
