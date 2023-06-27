@@ -1568,6 +1568,16 @@ async def nasa(ctx):
 
     await ctx.send(embed=embed)
 
+@kgb.command()
+async def insult(ctx):
+    url = "https://evilinsult.com/generate_insult.php?lang=ru&type=json"
+    response = requests.get(url)
+    data = response.json()
+
+    insult = data['insult']
+
+    await ctx.send(insult)
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
