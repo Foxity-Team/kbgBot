@@ -1669,6 +1669,28 @@ async def translit(ctx, option: str, lang_code: str, *, text: str):
         color=discord.Color(0x000000)
     ))
 
+@kgb.command(description = "Перезапускает бота(только для разработчика)")
+@helpCategory('secret')
+async def reload(ctx):
+  if isinstance(ctx.channel, discord.DMChannel): return
+
+  if ctx.author.id == 745674921774153799:
+    await ctx.send(embed = discord.Embed(
+      title = 'Пожалуйста подождите:',
+      description = "Бот перезагрузится через 3 секунды!",
+      color = discord.Colour(0x000000)
+    ))
+    await asyncio.sleep(3)
+    await kgb.close()
+    exit(1)
+  else:
+    await ctx.send(embed = discord.Embed(
+      title = 'Ошибка:',
+      description = "Эта команда только для разработчиков!",
+      color = discord.Colour(0xFF0000)
+    ))
+
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
