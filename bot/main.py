@@ -1674,15 +1674,15 @@ async def translit(ctx, option: str, lang_code: str, *, text: str):
 async def reload(ctx):
   if isinstance(ctx.channel, discord.DMChannel): return
 
-  if ctx.author.id == 745674921774153799:
+  if ctx.author.id == 745674921774153799 or ctx.author.id == 999606704541020200:
     await ctx.send(embed = discord.Embed(
       title = 'Пожалуйста подождите:',
       description = "Бот перезагрузится через 3 секунды!",
       color = discord.Colour(0x000000)
     ))
     await asyncio.sleep(3)
-    await kgb.close()
     exit(1)
+    await kgb.close()
   else:
     await ctx.send(embed = discord.Embed(
       title = 'Ошибка:',
