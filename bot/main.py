@@ -1589,22 +1589,23 @@ async def insult(ctx):
         ))
 
 @kgb.command()
-async def porfir(ctx, prompt):
-    api_url = 'https://api.porfirevich.com/generate/'
-    params = {
-        'length': 30,
-        'model': 'xlarge',
-        'prompt': prompt
+@helpCategory('fun')
+async def porfir(ctx, promt):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
+    api_url = 'https://pelevin.gpt.dobro.ai/generate/'
+    data = {
+        'prompt': prompt,
+        'length': random.randint(10, 50)
     }
-    response = requests.get(api_url, params=params)
+    response = requests.post(api_url, json=data)
     
     if response.status_code == 200:
         data = response.json()
-        generated_text = data['text']
+        generated_text = data['replies'][0]
         await ctx.send(generated_text)
     else:
         await ctx.send("Произошла ошибка при получении данных от API Профирьевича.")
-
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
