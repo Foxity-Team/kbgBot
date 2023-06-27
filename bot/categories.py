@@ -35,7 +35,7 @@ HELP_CATEGORIES = {
     'scratch'   : KgbCategory('😺 Скретч'),
     'music'     : KgbCategory('🎵 Музыка'),
     'rp'        : KgbCategory('🎭 РП'),
-    'hidden'    : KgbCategory('Спрятано', hidden=True),
+    'secret'    : KgbCategory('☢️ Secret', hidden=True),
     'moderation': KgbCategory('🛡️ Модерация'),
     'config'    : KgbCategory('⚙️ Конфигурации'),
     'misc'      : KgbCategory('🛠 Остальное'),
