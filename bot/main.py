@@ -59,9 +59,6 @@ class DiscordHandler(logging.Handler):
         log_entry = self.format(record)
         asyncio.ensure_future(self.send_log_message(log_entry))
 
-handler = DiscordHandler(channel_id=1067069690066767924)
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
 
 async def change_status():
     statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
@@ -1638,3 +1635,7 @@ async def porfir(ctx, *, prompt):
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
+
+handler = DiscordHandler(channel_id=1067069690066767924)
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
