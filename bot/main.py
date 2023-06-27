@@ -19,7 +19,6 @@ import typing
 import fortune
 import time
 import ffmpeg
-import logging
 import yt_dlp
 import typing
 
@@ -42,26 +41,6 @@ HELP_CAT_EMB: typing.Union[list[discord.Embed], None] = None
 if not os.path.isfile('data/guild_seek.json'):
     with open('data/guild_seek.json', 'w', encoding='utf-8') as f:
         f.write('{}')
-
-logger = logging.getLogger('discord')
-logger.setLevel(logging.INFO)
-
-class DiscordHandler(logging.Handler):
-    def __init__(self, channel_id):
-        self.channel_id = channel_id
-        super().__init__()
-
-    async def send_log_message(self, message):
-        channel = kgb.get_channel(self.channel_id)
-        await channel.send(message)
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        asyncio.ensure_future(self.send_log_message(log_entry))
-
-handler = DiscordHandler(channel_id=1067069690066767924)
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
 
 async def change_status():
     statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
