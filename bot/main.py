@@ -389,7 +389,7 @@ async def fox(ctx):
     await ctx.send(embed=embed)
   
 @kgb.command(description = "Выключает бота(только для разработчика)")
-@helpCategory('misc')
+@helpCategory('secret')
 async def killbot(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
      return
@@ -584,11 +584,12 @@ async def verlist(ctx):
     return
   await ctx.send(embed = discord.Embed(
     title = "Список версий:",
-    description = "0.1.0 \n0.2.0 \n0.3.0 \n0.4.0 \n0.5.0 \n0.6.0 \n0.6.3 \n0.6.4 \n1.0 \n1.1 \n1.2 \n1.2.5 \n1.3 \n1.5 \n1.5.5 \n1.6 \n1.7 \n1.8 \n2.0(нынешняя)",
+    description = "0.1.0 \n0.2.0 \n0.3.0 \n0.4.0 \n0.5.0 \n0.6.0 \n0.6.3 \n0.6.4 \n1.0 \n1.1 \n1.2 \n1.2.5 \n1.3 \n1.5 \n1.5.5 \n1.6 \n1.7 \n1.8 \n2.0 \n2.5(нынешняя)",
     color = discord.Color(0x000000)
   ))
   
 @kgb.command(description = ")")
+@helpCategory('secret')
 async def love(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -1158,6 +1159,7 @@ async def wiki(ctx, *, query):
         ))
 
 @kgb.command(description = ")")
+@helpCategory('secret')
 async def hentai(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -1332,6 +1334,7 @@ async def shtr(ctx):
     await ctx.send(f"```{shtr}```")
 
 @kgb.command(description="0x00000000")
+@helpCategory('secret')
 async def null(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
