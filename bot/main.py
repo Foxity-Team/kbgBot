@@ -1735,8 +1735,9 @@ def cyrillic_to_translit(text):
             translit_text += char
     return translit_text
 
-@bot.command(description='Переводит текст с кириллицы на транслит или с транслита на кириллицу')
+@kgb.command(description='Переводит текст с кириллицы на транслит или с транслита на кириллицу')
 @commands.cooldown(1, 5, commands.BucketType.user)
+@helpCategory('fun')
 async def t(ctx, option: str, *, text: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
