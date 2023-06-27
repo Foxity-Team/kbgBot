@@ -1555,7 +1555,10 @@ async def person(ctx):
     await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
 @kgb.command()
+@helpCategory('fun')
 async def nasa(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
     url = "https://api.nasa.gov/planetary/apod"
     params = {
         "api_key": "oEUDnRapyzulvTNbWimSBmFldgwMZt5ZZgU547Xf" 
@@ -1569,14 +1572,21 @@ async def nasa(ctx):
     await ctx.send(embed=embed)
 
 @kgb.command()
+@helpCategory('fun')
 async def insult(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
     url = "https://evilinsult.com/generate_insult.php?lang=ru&type=json"
     response = requests.get(url)
     data = response.json()
 
     insult = data['insult']
 
-    await ctx.send(insult)
+    await ctx.send(embed = discord.Embed(
+          title = insult,
+          description = "",
+          color = discord.Color(0x000000)
+        ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
