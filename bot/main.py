@@ -1553,6 +1553,20 @@ async def person(ctx):
 
     await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
+@kgb.command()
+async def nasa(ctx):
+    url = "https://api.nasa.gov/planetary/apod"
+    params = {
+        "api_key": "oEUDnRapyzulvTNbWimSBmFldgwMZt5ZZgU547Xf" 
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    embed = discord.Embed(title=data['title'], description=data['explanation'], color=discord.Color.dark_blue())
+    embed.set_image(url=data['url'])
+
+    await ctx.send(embed=embed)
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
