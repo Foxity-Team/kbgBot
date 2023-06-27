@@ -22,15 +22,16 @@ import ffmpeg
 import yt_dlp
 import typing
 
+from os import getenv
+from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
-
-from categories import buildHelpEmbed, helpCategory
 
 prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
 kgb.persistent_views_added = False
 kgb.remove_command("help")
+load_dotenv()
 
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
 
@@ -1545,4 +1546,5 @@ async def scratch_user(ctx, username):
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
-kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
+kgb.run(getenv('DISCORD_TOKEN', ''))
+#kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
