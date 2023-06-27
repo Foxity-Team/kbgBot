@@ -59,7 +59,7 @@ class DiscordHandler(logging.Handler):
         log_entry = self.format(record)
         asyncio.ensure_future(self.send_log_message(log_entry))
 
-handler = DiscordHandler(channel_id=1067074064180588625)
+handler = DiscordHandler(channel_id=1067069690066767924)
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
