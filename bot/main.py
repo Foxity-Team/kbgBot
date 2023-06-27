@@ -22,7 +22,7 @@ import ffmpeg
 import yt_dlp
 import typing
 import logging
-
+import transliterate
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
@@ -1647,106 +1647,17 @@ async def balabola(ctx, *, prompt):
     async with ctx.typing():
         await get()
 
-def translit_to_cyrillic(text):
-    translit_table = {
-        'a': 'а',
-        'b': 'б',
-        'v': 'в',
-        'g': 'г',
-        'd': 'д',
-        'e': 'е',
-        'yo': 'ё',
-        'zh': 'ж',
-        'z': 'з',
-        'i': 'и',
-        'y': 'й',
-        'k': 'к',
-        'l': 'л',
-        'm': 'м',
-        'n': 'н',
-        'o': 'о',
-        'p': 'п',
-        'r': 'р',
-        's': 'с',
-        't': 'т',
-        'u': 'у',
-        'f': 'ф',
-        'h': 'х',
-        'ts': 'ц',
-        'ch': 'ч',
-        'sh': 'ш',
-        'shch': 'щ',
-        'e': 'ъ',
-        'y': 'ы',
-        'yu': 'ю',
-        'ya': 'я',
-    }
-    cyrillic_text = ''
-    words = text.split()
-    for word in words:
-        if word in translit_table:
-            cyrillic_text += translit_table[word]
-        else:
-            cyrillic_text += word
-        cyrillic_text += ' '
-    return cyrillic_text.strip()
-
-def cyrillic_to_translit(text):
-    cyrillic_table = {
-        'а': 'a',
-        'б': 'b',
-        'в': 'v',
-        'г': 'g',
-        'д': 'd',
-        'е': 'e',
-        'ё': 'yo',
-        'ж': 'zh',
-        'з': 'z',
-        'и': 'i',
-        'й': 'y',
-        'к': 'k',
-        'л': 'l',
-        'м': 'm',
-        'н': 'n',
-        'о': 'o',
-        'п': 'p',
-        'р': 'r',
-        'с': 's',
-        'т': 't',
-        'у': 'u',
-        'ф': 'f',
-        'х': 'h',
-        'ц': 'ts',
-        'ч': 'ch',
-        'ш': 'sh',
-        'щ': 'shch',
-        'ъ': 'e',
-        'ы': 'y',
-        'ь': '',
-        'э': 'e',
-        'ю': 'yu',
-        'я': 'ya',
-    }
-    translit_text = ''
-    for char in text:
-        if char in cyrillic_table:
-            translit_text += cyrillic_table[char]
-        else:
-            translit_text += char
-    return translit_text
-
-@kgb.command(description='Переводит текст с кириллицы на транслит или с транслита на кириллицу')
-@commands.cooldown(1, 5, commands.BucketType.user)
-@helpCategory('fun')
-async def t(ctx, option: str, *, text: str):
+@kgb.command(description='Переведёт кириллицу в транслит и обратно')
+@helpCategory('neuro')
+async def translit(ctx, option: str, *, text: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
 
     if option.lower() == 't':
-        translit_text = translit_to_cyrillic(text) 
+        translit_text = transliterate.translit(text, reversed=True)  # Переводим с кириллицы на транслит
         title = 'Перевод на транслит:'
     elif option.lower() == 'c':
-        translit_text = cyrillic_to_translit(text) 
+        translit_text = transliterate.translit(text, reversed=False)  # Переводим с транслита на кириллицу
         title = 'Перевод на кириллицу:'
     else:
         await ctx.send('Неправильно указана опция. Используйте "t" или "c".')
