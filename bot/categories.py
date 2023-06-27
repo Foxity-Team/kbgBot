@@ -32,6 +32,7 @@ class KgbCategory:
 HELP_CATEGORIES = {
     'info'      : KgbCategory('📃 Просмотр информации'),
     'fun'       : KgbCategory('🎮 Развлечение'),
+    'neuro'     : KgbCategory('🖥️ Нейросети'),
     'scratch'   : KgbCategory('😺 Скретч'),
     'music'     : KgbCategory('🎵 Музыка'),
     'rp'        : KgbCategory('🎭 РП'),
