@@ -64,14 +64,17 @@ def buildHelpEmbed() -> Embed:
     
     return emb
 
-def buildCategoryEmbeds() -> list[Embed]:
-    embs = []
-    for categ in filter(lambda v: not v.isHidden(), HELP_CATEGORIES.values()):
+def buildCategoryEmbeds() -> tuple[list[Embed], dict[str, Embed]]:
+    def addEmbed(categ: KgbCategory) -> Embed:
         emb = Embed(title=f"Категория: {categ.getName()}", color=Colour(0x000000))
         emb.add_field(name="Команды:", value=categ.getData()[1], inline=False)
         emb.add_field(name="Что бы узнать, что делает команда, \nНапишите:", value="`kgb!help (команда)`", inline=False)
         emb.set_thumbnail(url="https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png")
         emb.set_footer(text="communist_fox", icon_url="https://media.discordapp.net/attachments/1068579157493153863/1094468823542943765/R44rlXiYjWw.jpg?width=425&height=425")
         embs.append(emb)
+        return emb
 
-    return embs
+    embs = [addEmbed(categ) for categ in filter(lambda v: not v.isHidden(), HELP_CATEGORIES.values())]
+    embsHidden = {val: addEmbed(categ) for val, categ in HELP_CATEGORIES.items()}
+
+    return embs, embsHidden

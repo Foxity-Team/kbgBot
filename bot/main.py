@@ -41,6 +41,7 @@ GUILD_SEEK_FILENAME = "data/guild_seek.json"
 
 HELP_EMB: typing.Union[discord.Embed, None] = None
 HELP_CAT_EMB: typing.Union[list[discord.Embed], None] = None
+HELP_CAT_HIDDEN: typing.Union[dict[str, discord.Embed], None] = None
 
 if not os.path.isfile('data/guild_seek.json'):
     with open('data/guild_seek.json', 'w', encoding='utf-8') as f:
@@ -324,6 +325,13 @@ async def help(ctx, *, query=None):
             embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
             await ctx.send(embed=embed)
             return
+
+    try:
+        if not HELP_CAT_HIDDEN is None:
+            await ctx.send(embed=HELP_CAT_HIDDEN[query])
+            return
+    except KeyError:
+        pass
 
     command = kgb.get_command(query)
     if command is None:
@@ -1666,5 +1674,5 @@ async def balabola(ctx, *, prompt):
         await get()
 
 HELP_EMB = buildHelpEmbed()
-HELP_CAT_EMB = buildCategoryEmbeds()
+HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
