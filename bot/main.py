@@ -250,6 +250,11 @@ async def on_command_error(ctx, exc):
     ))
   else:
     traceback.print_exception(type(exc), exc, exc.__traceback__)
+    await ctx.reply(embed = discord.Embed(
+        title = "Ошибка:",
+        description = exc,
+        color = discord.Colour(0xFF0000)
+    ))
     
 @kgb.event
 async def on_guild_join(guild: discord.Guild):
@@ -1595,7 +1600,7 @@ async def porfir(ctx, *, prompt):
       return
     api_url = 'https://pelevin.gpt.dobro.ai/generate/'
     data = {
-        'prompt': prompt,
+        'prompt': promt,
         'length': random.randint(10, 50)
     }
     
