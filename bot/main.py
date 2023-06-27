@@ -167,6 +167,10 @@ if not os.path.exists('data/stanwarns.json'):
 
 @kgb.event
 async def on_ready():
+    handler = DiscordHandler(channel_id=1067074064180588625)
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
+
     print('Бот в полной боевой готовности!')
     kgb.loop.create_task(change_status())
     await update_guild_names()
@@ -1635,6 +1639,3 @@ HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
 
-handler = DiscordHandler(channel_id=1067069690066767924)
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
