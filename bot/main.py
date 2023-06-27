@@ -1544,7 +1544,10 @@ async def scratch_user(ctx, username):
         print("Error:", e)
 
 @kgb.command()
-async def generate(ctx):
+@helpCategory('fun')
+async def person(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
     image_url = 'https://thispersondoesnotexist.com'
     response = requests.get(image_url)
 
