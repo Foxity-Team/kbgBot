@@ -1549,7 +1549,10 @@ async def person(ctx):
     image_url = 'https://thispersondoesnotexist.com/image'
     response = requests.get(image_url, stream=True)
 
-    await ctx.send(file=discord.File(response.raw, 'generated_image.jpg'))
+    image_data = io.BytesIO(response.content)
+
+    await ctx.send(file=discord.File(image_data, 'generated_image.jpg'))
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run("MTA2MTkwNzkyNzg4MDk3NDQwNg.GTWh37.Wg-hRJ1ZanGzTpP2q0VCyRTkNRs9LUaxsSODSk")
