@@ -19,9 +19,9 @@ import typing
 import fortune
 import time
 import ffmpeg
-import logging
 import yt_dlp
 import typing
+import logging
 
 from os import getenv
 from dotenv import load_dotenv
@@ -58,7 +58,6 @@ class DiscordHandler(logging.Handler):
     def emit(self, record):
         log_entry = self.format(record)
         asyncio.ensure_future(self.send_log_message(log_entry))
-
 
 async def change_status():
     statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
