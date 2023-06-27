@@ -1548,7 +1548,7 @@ async def generate(ctx):
     image_url = 'https://thispersondoesnotexist.com'
     response = requests.get(image_url)
 
-    await ctx.send(file=discord.File(response.content, 'generated_image.jpg'))
+    await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
