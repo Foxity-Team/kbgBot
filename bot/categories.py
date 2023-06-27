@@ -3,12 +3,14 @@ from discord import Embed, Colour
 from functools import reduce
 
 class KgbCategory:
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, hidden=False) -> None:
         self._name = name
+        self._hidden = hidden
         self._commands: set[str] = set()
 
     def getName(self) -> str: return self._name
     def getCommands(self) -> set[str]: return self._commands
+    def isHidden(self) -> bool: return self._hidden
 
     def addCommand(self, command: str) -> None:
         self._commands.add(command)
@@ -33,6 +35,7 @@ HELP_CATEGORIES = {
     'scratch'   : KgbCategory('😺 Скретч'),
     'music'     : KgbCategory('🎵 Музыка'),
     'rp'        : KgbCategory('🎭 РП'),
+    'hidden'    : KgbCategory('Спрятано', hidden=True),
     'moderation': KgbCategory('🛡️ Модерация'),
     'config'    : KgbCategory('⚙️ Конфигурации'),
     'misc'      : KgbCategory('🛠 Остальное'),
@@ -51,7 +54,7 @@ def helpCategory(categoryName: str) -> Callable:
 def buildHelpEmbed() -> Embed:
     emb = Embed(title="Категории команд:", color=Colour(0x000000))
 
-    for i, categ in enumerate(HELP_CATEGORIES.values()):
+    for i, categ in enumerate(filter(lambda v: not v.isHidden(),HELP_CATEGORIES.values())):
         catName, _ = categ.getData()
         emb.add_field(name=f'{i+1}. {catName}', value='', inline=False)
 
