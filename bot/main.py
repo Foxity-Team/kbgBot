@@ -26,6 +26,9 @@ import logging
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
+from balaboba import Balaboba
+
+bb = Balaboba()
 
 prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
@@ -44,7 +47,7 @@ if not os.path.isfile('data/guild_seek.json'):
         f.write('{}')
 
 logger = logging.getLogger('discord')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
 
 class DiscordHandler(logging.Handler):
     def __init__(self, channel_id):
@@ -171,7 +174,7 @@ async def on_ready():
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
 
-    print('Бот в полной боевой готовности!')
+    logger.info('Бот в полной боевой готовности!')
     kgb.loop.create_task(change_status())
     await update_guild_names()
     while True:
@@ -1619,23 +1622,49 @@ async def insult(ctx):
 async def porfir(ctx, *, prompt):
     if isinstance(ctx.channel, discord.DMChannel):
       return
-    api_url = 'https://pelevin.gpt.dobro.ai/generate/'
-    data = {
-        'prompt': prompt,
-        'length': random.randint(10, 50)
-    }
     
-    async with ctx.typing():
-        response = requests.post(api_url, json=data)
+    async def get():
+        api_url = 'https://pelevin.gpt.dobro.ai/generate/'
+        data = {
+            'prompt': prompt,
+            'length': random.randint(10, 50)
+        }
+        try:
+            response = requests.post(api_url, json=data, timeout=30)
+        except requests.ConnectTimeout:
+            await ctx.reply(embed = discord.Embed(
+                  title = 'Ошибка:',
+                  description = 'Превышено время ожидания',
+                  color = discord.Color(0xFF0000)
+                ))
+            return
+
         
         if response.status_code == 200:
             data = response.json()
             generated_text = data['replies'][0]
-            await ctx.send(generated_text)
+            await ctx.send(f'`{prompt}{generated_text}`')
         else:
-            await ctx.send("Произошла ошибка при получении данных от API Профирьевича.")
+            await ctx.send(f"Произошла ошибка при получении данных от API Профирьевича. Код ошибки: {response.status_code}")
+
+    async with ctx.typing():
+        await get()
+
+@kgb.command()
+@helpCategory('fun')
+async def balabola(ctx, *, prompt):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
+    
+    text_types = bb.get_text_types(language="ru")
+    async def get():
+        response = bb.balaboba(prompt, text_type=text_types[0])
+        
+        await ctx.send(f'```\n{response}\n```')
+
+    async with ctx.typing():
+        await get()
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
-
