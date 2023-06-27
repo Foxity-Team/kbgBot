@@ -1647,17 +1647,17 @@ async def balabola(ctx, *, prompt):
     async with ctx.typing():
         await get()
 
-@kgb.command(description='Переведёт кириллицу в транслит и обратно')
-@helpCategory('neuro')
-async def translit(ctx, option: str, *, text: str):
+@bot.command(description='Переведёт кириллицу в транслит или транслит в кириллицу')
+@helpCategory('fun')
+async def translit(ctx, option: str, lang_code: str, *, text: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
 
     if option.lower() == 't':
-        translit_text = transliterate.translit(text, reversed=True)  # Переводим с кириллицы на транслит
+        translit_text = transliterate.translit(text, lang_code, reversed=True)
         title = 'Перевод на транслит:'
     elif option.lower() == 'c':
-        translit_text = transliterate.translit(text, reversed=False)  # Переводим с транслита на кириллицу
+        translit_text = transliterate.translit(text, lang_code, reversed=False)
         title = 'Перевод на кириллицу:'
     else:
         await ctx.send('Неправильно указана опция. Используйте "t" или "c".')
