@@ -1588,6 +1588,24 @@ async def insult(ctx):
           color = discord.Color(0x000000)
         ))
 
+@kgb.command()
+async def porfir(ctx, prompt):
+    api_url = 'https://api.porfirevich.com/generate/'
+    params = {
+        'length': 30,
+        'model': 'xlarge',
+        'prompt': prompt
+    }
+    response = requests.get(api_url, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        generated_text = data['text']
+        await ctx.send(generated_text)
+    else:
+        await ctx.send("Произошла ошибка при получении данных от API Профирьевича.")
+
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
