@@ -578,7 +578,7 @@ async def kick(ctx, member: discord.Member = None, *, reason:str =None):
     ))
     
 @kgb.command(description = "Покажет список версий бота" )
-@helpCategory('misc')
+@helpCategory('secret')
 async def verlist(ctx):
   if isinstance(ctx.channel, discord.DMChannel):
     return
@@ -1584,8 +1584,8 @@ async def scratch_user(ctx, username):
     except requests.exceptions.RequestException as e:
         print("Error:", e)
 
-@kgb.command()
-@helpCategory('fun')
+@kgb.command(description="Нейросеть которая рисует несуществующих людей")
+@helpCategory('neuro')
 async def person(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1594,7 +1594,7 @@ async def person(ctx):
 
     await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
-@kgb.command()
+@kgb.command(description="Интересное о Космосе")
 @helpCategory('fun')
 async def nasa(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
@@ -1611,7 +1611,7 @@ async def nasa(ctx):
 
     await ctx.send(embed=embed)
 
-@kgb.command()
+@kgb.command(description="Генератор оскарблений")
 @helpCategory('fun')
 async def insult(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
@@ -1628,8 +1628,8 @@ async def insult(ctx):
           color = discord.Color(0x000000)
         ))
 
-@kgb.command()
-@helpCategory('fun')
+@kgb.command(description="Генератор бреда Порфирьевич")
+@helpCategory('neuro')
 async def porfir(ctx, *, prompt):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1661,8 +1661,8 @@ async def porfir(ctx, *, prompt):
     async with ctx.typing():
         await get()
 
-@kgb.command()
-@helpCategory('fun')
+@kgb.command(description="Генератор бреда Балабоба")
+@helpCategory('neuro')
 async def balabola(ctx, *, prompt):
     if isinstance(ctx.channel, discord.DMChannel):
       return
