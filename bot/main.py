@@ -579,7 +579,7 @@ async def verlist(ctx):
     return
   await ctx.send(embed = discord.Embed(
     title = "Список версий:",
-    description = ver
+    description = ver,
     color = discord.Color(0x000000)
   ))
   
