@@ -579,7 +579,7 @@ async def verlist(ctx):
     return
   await ctx.send(embed = discord.Embed(
     title = "Список версий:",
-    description = "0.1.0 \n0.2.0 \n0.3.0 \n0.4.0 \n0.5.0 \n0.6.0 \n0.6.3 \n0.6.4 \n1.0 \n1.1 \n1.2 \n1.2.5 \n1.3 \n1.5 \n1.5.5 \n1.6 \n1.7 \n1.8 \n2.0 \n2.5(нынешняя)",
+    description = ver
     color = discord.Color(0x000000)
   ))
   
@@ -599,7 +599,7 @@ async def love(ctx):
 async def cipher(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
-    url1 = 'https://media.discordapp.net/attachments/977992655466270730/1073628659417632828/qr-code.png?width=425&height=425'
+    url1 = cipherURL
     response1 = requests.get(url1)
     if response1.status_code != 200:
         await ctx.send('Ошибка загрузки изображения')
@@ -1045,13 +1045,13 @@ async def seek_server(ctx, *, user_name):
         guild_seek = json.load(f)
 
     found_servers = []
-    count = 0  # добавляем переменную для подсчета найденных серверов
+    count = 0  
     for guild_id, guild_info in guild_seek.items():
         for user in guild_info['users']:
             if user_name.lower() == f"{user['name']}".lower():
                 guild = kgb.get_guild(int(guild_id))
                 found_servers.append(guild.name)
-                count += 1  # увеличиваем переменную на 1 при каждом найденном сервере
+                count += 1
 
     if not found_servers:
         await ctx.send(embed=discord.Embed(
@@ -1310,7 +1310,7 @@ async def null(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     embed = discord.Embed(title="NULL OF PROJECT", color=0x00000000)
-    embed.set_image(url='https://media.discordapp.net/attachments/1067069690066767924/1095385824247423120/SPOILER_image.png')
+    embed.set_image(url=secretURL)
     await ctx.reply(embed=embed)
 
 @kgb.command(description="Хорни карта")
@@ -1357,17 +1357,17 @@ async def comrade(ctx, member: discord.Member = None):
                     await ctx.send('No horny :(')
                 await session.close()
 
-#@kgb.command(description='Чатбот')
-#async def chatbot(ctx, *, message):
-#    if isinstance(ctx.channel, discord.DMChannel):
-#      return
-#    response = requests.get('https://some-random-api.com/chatbot', params={
-#        'message': message,
-#        'key': 'wlkMplI6cPas78JtMwzKpwgO5EqNUw7fsXtpm2bmLE332cuHN3VZXIs17QdQ0pi1'
-#    })
-#    data = response.json()
-#    response_message = data
-#    await ctx.send(response_message)
+@kgb.command(description='Чатбот')
+async def chatbot(ctx, *, message):
+    if isinstance(ctx.channel, discord.DMChannel):
+      return
+    response = requests.get('https://some-random-api.com/chatbot', params={
+        'message': message,
+        'key': chatbotKEY
+    })
+    data = response.json()
+    response_message = data
+    await ctx.send(response_message)
 
 @kgb.command(description="Взлом пентагона")
 @helpCategory('fun')
@@ -1572,7 +1572,7 @@ async def nasa(ctx):
       return
     url = "https://api.nasa.gov/planetary/apod"
     params = {
-        "api_key": "oEUDnRapyzulvTNbWimSBmFldgwMZt5ZZgU547Xf" 
+        "api_key":  nasaKEY
     }
     response = requests.get(url, params=params)
     data = response.json()
