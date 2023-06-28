@@ -283,7 +283,7 @@ async def on_command_error(ctx, exc):
     
 @kgb.event
 async def on_guild_join(guild: discord.Guild):
-    url = "https://media.discordapp.net/attachments/1068579157493153863/1094662619211780096/Bez_nazvania2_20230409092059.png"
+    url = on_guild_join_pic
     embed = discord.Embed(title = "Hello, comrades!", color = 0xff0000)
     embed.set_image(url = url)
     for channel in guild.text_channels:
