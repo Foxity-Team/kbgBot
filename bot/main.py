@@ -31,7 +31,6 @@ from config import *
 
 bb = Balaboba()
 
-prefix = ["kgb!", "$sudo ", "please, dear bot, take me a", "aid!"]
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
 kgb.persistent_views_added = False
