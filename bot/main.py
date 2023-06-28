@@ -27,6 +27,7 @@ from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
+from config import *
 
 bb = Balaboba()
 
