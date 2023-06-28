@@ -171,7 +171,7 @@ if not os.path.exists('data/stanwarns.json'):
 
 @kgb.event
 async def on_ready():
-    handler = DiscordHandler(channel_id=1067074064180588625)
+    handler = DiscordHandler(channel_id=1123467774098935828)
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
 
