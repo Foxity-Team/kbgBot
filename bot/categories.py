@@ -1,6 +1,7 @@
 from typing import Callable
 from discord import Embed, Colour
 from functools import reduce
+from config import *
 
 class KgbCategory:
     def __init__(self, name: str, hidden=False) -> None:
