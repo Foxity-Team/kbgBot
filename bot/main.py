@@ -1625,7 +1625,7 @@ async def porfir(ctx, *, prompt):
         if response.status_code == 200:
             data = response.json()
             generated_text = data['replies'][0]
-            await ctx.send(f'`{prompt}{generated_text}`')
+            await ctx.send(f```\n`{prompt}{generated_text}\n```')
         else:
             await ctx.send(f"Произошла ошибка при получении данных от API Профирьевича. Код ошибки: {response.status_code}")
 
