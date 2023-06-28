@@ -6,4 +6,4 @@ secretURL = 'https://media.discordapp.net/attachments/1067069690066767924/109538
 nasaKEY = "oEUDnRapyzulvTNbWimSBmFldgwMZt5ZZgU547Xf"
 chatbotKEY = 'wlkMplI6cPas78JtMwzKpwgO5EqNUw7fsXtpm2bmLE332cuHN3VZXIs17QdQ0pi1'
 cipherURL = 'https://media.discordapp.net/attachments/977992655466270730/1073628659417632828/qr-code.png?width=425&height=425'
-ver = "0.1.0 \n0.2.0 \n0.3.0 \n0.4.0 \n0.5.0 \n0.6.0 \n0.6.3 \n0.6.4 \n1.0 \n1.1 \n1.2 \n1.2.5 \n1.3 \n1.5 \n1.5.5 \n1.6 \n1.7 \n1.8 \n2.0 \n2.5(нынешняя)",
+ver = "0.1.0 \n0.2.0 \n0.3.0 \n0.4.0 \n0.5.0 \n0.6.0 \n0.6.3 \n0.6.4 \n1.0 \n1.1 \n1.2 \n1.2.5 \n1.3 \n1.5 \n1.5.5 \n1.6 \n1.7 \n1.8 \n2.0 \n2.5(нынешняя)"
