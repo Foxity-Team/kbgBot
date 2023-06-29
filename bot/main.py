@@ -44,7 +44,7 @@ if isfile(genaiDataPath):
 else:
     genData = {}
 
-genAi = markov.MarkovGen(genData)
+genAiArray = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData.items()}
 msgCounter = 0
 
 print("AdventurerUp Corporation")
@@ -236,14 +236,19 @@ async def on_message(message):
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
 
-    genAi.addMessage(message.content)
+    channelId = str(message.channel.id)
+    if channelId in genAiArray and genAiArray[channelId].config['read']:
+        genAiArray[channelId].addMessage(message.content)
     
     global msgCounter
     msgCounter = msgCounter + 1
 
     if msgCounter % 10 == 0:
         with open(genaiDataPath, 'w') as f:
-            json.dump(genAi.dumpState(), f)
+            json.dump({k: {
+                'state': v.dumpState(),
+                'config': v.config,
+            } for k,v in genAiArray.items()}, f)
 
     await kgb.process_commands(message)
 
@@ -1717,16 +1722,59 @@ async def reload(ctx):
       color = discord.Colour(0xFF0000)
     ))
 
-@kgb.command(description="Генерирует текст как гена.\nЧто бы начать генерацию и сохранение сообщение,\nПропишите: kgb!genconfig")
+@kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
 async def gen(ctx):
-    #тут проверка нужно что если канал не содержиться в файле генконфига то бот напоминает чтоб они прописали эту команду чтоб бот занёс канал в список тех каналов где он может читать сообщения
-    await ctx.send(f"```{genAi.generate()}```")
+    channelId = str(ctx.channel.id)
+    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
+        await ctx.send(embed=discord.Embed(
+                title="Ошибка:",
+                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                color=discord.Colour(0xFF0000)
+        ))
+        return
 
-@kgb.command(description="Добавляет канал в список каналов где разрешено сохранять сообщения и их генерировать")
+    await ctx.send(f'```genAiArray[channelId].generate()```')
+
+@kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение")
 @helpCategory('config')
-async def genconfig(ctx):
-    await ctx.send("Заглушка типа")
+async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
+    optionKeys = ''.join([f'`{key}` ' for key in markov.DEFAULT_CONFIG])
+
+    def strToBool(inp: str) -> bool: return inp.lower() == 'true'
+
+    if isinstance(ctx.channel, discord.DMChannel): return
+    
+    channelId = str(ctx.channel.id)
+
+    if channelId not in genAiArray:
+        if value: genAiArray[channelId] = markov.MarkovGen()
+        else:
+            if option not in markov.DEFAULT_CONFIG:
+                await ctx.send(embed=discord.Embed(
+                    title='Ошибка:',
+                    description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+                    color=discord.Colour(0xFF0000)
+                ))
+                return
+
+            await ctx.send(f'Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`')
+            return
+
+    genAi = genAiArray[channelId]
+    if option not in genAi.config:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+            color=discord.Colour(0xFF0000)
+        ))
+        return
+
+    if value:
+        genAi.config[option] = strToBool(value)
+        await ctx.send(f'Значение `{option}` было установлено в `{genAi.config[option]}`')
+    else: 
+        await ctx.send(f'Значение `{option}` равно `{genAi.config[option]}`')
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
