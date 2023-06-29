@@ -23,15 +23,19 @@ import yt_dlp
 import typing
 import logging
 import transliterate
+import markov
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
 from config import *
 
+
 bb = Balaboba()
 
 word_dict = []
+
+genAi = markov.MarkovGen()
 
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
@@ -222,14 +226,7 @@ async def on_message(message):
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
 
-    global word_dict
-    if message.author == kgb.user:
-        return
-    
-    words = message.content.lower().split()
-
-    if not message.content.lower().startswith('kgb!') and len(words) != 0:
-        word_dict.append(words)
+    genAi.addMessage(message.content)
 
     await kgb.process_commands(message)
 
@@ -1705,26 +1702,7 @@ async def reload(ctx):
 
 @kgb.command()
 async def gen(ctx):
-    out = ''
-    num = random.randint(0, len(word_dict) - 1)
-    world_val = word_dict[num]
-
-    print(word_dict)
-    
-    for word in world_val: out = out + word + ' '
-
-    while random.randint(1,2) == 1:
-        filtered_msgs = list(filter(lambda v: v[0] == world_val[-1], word_dict))
-        if len(filtered_msgs) == 0: break
-
-        world_val = filtered_msgs[random.randint(0, len(filtered_msgs) - 1)]
-
-        world_val_iter = iter(world_val)
-        next(world_val_iter)
-        for word in world_val_iter: out = out + word + ' '
-
-    if out != '':
-        await ctx.send(out)
+    await ctx.send(genAi.generate())
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
