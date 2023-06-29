@@ -232,9 +232,8 @@ async def on_message(message):
                     for attachment in message.attachments:
                         embed.set_image(url=attachment.url)
                 await channel.send(embed=embed)
-              
-    if message.content == "<@1061907927880974406>":
-        return await message.channel.send("Мой префикс - `kgb!`")
+
+    replied = False
 
     if not message.author == kgb.user:
         channelId = str(message.channel.id)
@@ -244,6 +243,7 @@ async def on_message(message):
                 for user in message.mentions:
                     if user.id == kgb.user.id:
                         await message.reply(genAiArray[channelId].generate())
+                        replied = True
                         break
         
         global msgCounter
@@ -255,6 +255,9 @@ async def on_message(message):
                     'state': v.dumpState(),
                     'config': v.config,
                 } for k,v in genAiArray.items()}, f)
+
+    if message.content == "<@1061907927880974406>" and not replied:
+        return await message.channel.send("Мой префикс - `kgb!`")
 
     await kgb.process_commands(message)
 
