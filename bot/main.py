@@ -44,7 +44,7 @@ if isfile(genaiDataPath):
 else:
     genData = {}
 
-genAiArray = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData}
+genAiArray = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData.items()}
 msgCounter = 0
 
 print("AdventurerUp Corporation")
@@ -1736,7 +1736,7 @@ async def gen(ctx):
     await ctx.send(genAiArray[channelId].generate())
 
 @kgb.command()
-async def genconfig(ctx, *, option: str, value: str):
+async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
     optionKeys = ''.join([f'`{key}` ' for key in markov.DEFAULT_CONFIG])
 
     def strToBool(inp: str) -> bool: return inp.lower() == 'true'
@@ -1751,26 +1751,28 @@ async def genconfig(ctx, *, option: str, value: str):
             if option not in markov.DEFAULT_CONFIG:
                 await ctx.send(embed=discord.Embed(
                     title='Ошибка:',
-                    description=f'Неизвестное значение {option}! Доступные значения: {optionKeys}'
+                    description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+                    color=discord.Colour(0xFF0000)
                 ))
                 return
 
-            await ctx.send(f'Значение `{option}` равно {markov.DEFAULT_CONFIG[option]}')
+            await ctx.send(f'Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`')
             return
 
     genAi = genAiArray[channelId]
     if option not in genAi.config:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=f'Неизвестное значение {option}! Доступные значения: {optionKeys}'
+            description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+            color=discord.Colour(0xFF0000)
         ))
         return
 
     if value:
         genAi.config[option] = strToBool(value)
-        await ctx.send(f'Значение {option} было установлено в {genAi.config[option]}')
+        await ctx.send(f'Значение `{option}` было установлено в `{genAi.config[option]}`')
     else: 
-        await ctx.send(f'Значение `{option}` равно {genAi.config[option]}')
+        await ctx.send(f'Значение `{option}` равно `{genAi.config[option]}`')
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
