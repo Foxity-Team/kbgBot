@@ -23,8 +23,6 @@ class MarkovGen:
 
             self.stateTable[val].add(samples[i + 1])
 
-        print(self.stateTable)
-
     def generate(self) -> str:
         if len(self.stateTable) == 0: raise ValueError('No messages recorded!')
 
