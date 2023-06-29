@@ -243,7 +243,7 @@ async def on_message(message):
 
     if msgCounter % 10 == 0:
         with open(genaiDataPath, 'w') as f:
-            json.dump(genAi.stateTable, f)
+            json.dump(genAi.dumpState(), f)
 
     await kgb.process_commands(message)
 

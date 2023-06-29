@@ -4,8 +4,8 @@ MRK_START = '__start'
 MRK_END = '__end'
 
 class MarkovGen:
-    def __init__(self, states: dict[str, set[str]] = {}) -> None:
-        self.stateTable: dict[str, set[str]] = states
+    def __init__(self, states: dict[str, list[str]] = {}) -> None:
+        self.stateTable: dict[str, set[str]] = {k: set(v) for k,v in states.items()}
 
     def addMessage(self, inpMsg: str) -> None:
         samples = [v.lower() for v in inpMsg.split() if v != MRK_START and v != MRK_END]
@@ -23,6 +23,9 @@ class MarkovGen:
 
             self.stateTable[val].add(samples[i + 1])
 
+    def dumpState(self) -> dict[str, list[str]]:
+        return {k: list(v) for k,v in self.stateTable.items()}
+
     def generate(self) -> str:
         if len(self.stateTable) == 0: raise ValueError('No messages recorded!')
 
@@ -32,7 +35,11 @@ class MarkovGen:
             nextVals = self.stateTable[out[-1]]
             out.append(random.choice(list(nextVals)))
 
-        return ''.join([str(token) + ' ' for token in out if token != MRK_START and token != MRK_END]).capitalize()
+        outString = ''.join([str(token) + ' ' for token in out if token != MRK_START and token != MRK_END])
+        if not outString.startswith('http'):
+            return outString.capitalize()
+        else:
+            return outString
 
 if __name__ == '__main__':
     generator = MarkovGen()
