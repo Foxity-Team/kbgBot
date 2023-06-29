@@ -228,7 +228,7 @@ async def on_message(message):
     
     words = message.content.lower().split()
 
-    if not message.content.lower().startswith('kgb!'):
+    if not message.content.lower().startswith('kgb!') and len(words) != 0:
         word_dict.append(words)
 
     await kgb.process_commands(message)
