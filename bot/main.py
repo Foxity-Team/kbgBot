@@ -1706,6 +1706,8 @@ async def gen(ctx):
     out = ''
     num = random.randint(0, len(word_dict) - 1)
     world_val = word_dict[num]
+
+    print(word_dict)
     
     for word in world_val: out = out + word + ' '
 
