@@ -44,7 +44,7 @@ if isfile(genaiDataPath):
 else:
     genData = {}
 
-genAi = markov.MarkovGen(genData)
+genAiArray = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData}
 msgCounter = 0
 
 print("AdventurerUp Corporation")
@@ -236,14 +236,19 @@ async def on_message(message):
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
 
-    genAi.addMessage(message.content)
+    channelId = str(message.channel.id)
+    if channelId in genAiArray and genAiArray[channelId].config['read']:
+        genAiArray[channelId].addMessage(message.content)
     
     global msgCounter
     msgCounter = msgCounter + 1
 
     if msgCounter % 10 == 0:
         with open(genaiDataPath, 'w') as f:
-            json.dump(genAi.dumpState(), f)
+            json.dump({k: {
+                'state': v.dumpState(),
+                'config': v.config,
+            } for k,v in genAiArray.items()}, f)
 
     await kgb.process_commands(message)
 
@@ -1719,7 +1724,53 @@ async def reload(ctx):
 
 @kgb.command()
 async def gen(ctx):
-    await ctx.send(genAi.generate())
+    channelId = str(ctx.channel.id)
+    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
+        await ctx.send(embed=discord.Embed(
+                title="Ошибка:",
+                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                color=discord.Colour(0xFF0000)
+        ))
+        return
+
+    await ctx.send(genAiArray[channelId].generate())
+
+@kgb.command()
+async def genconfig(ctx, *, option: str, value: str):
+    optionKeys = ''.join([f'`{key}` ' for key in markov.DEFAULT_CONFIG])
+
+    def strToBool(inp: str) -> bool: return inp.lower() == 'true'
+
+    if isinstance(ctx.channel, discord.DMChannel): return
+    
+    channelId = str(ctx.channel.id)
+
+    if channelId not in genAiArray:
+        if value: genAiArray[channelId] = markov.MarkovGen()
+        else:
+            if option not in markov.DEFAULT_CONFIG:
+                await ctx.send(embed=discord.Embed(
+                    title='Ошибка:',
+                    description=f'Неизвестное значение {option}! Доступные значения: {optionKeys}'
+                ))
+                return
+
+            await ctx.send(f'Значение `{option}` равно {markov.DEFAULT_CONFIG[option]}')
+            return
+
+    genAi = genAiArray[channelId]
+    if option not in genAi.config:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=f'Неизвестное значение {option}! Доступные значения: {optionKeys}'
+        ))
+        return
+
+    if value:
+        genAi.config[option] = strToBool(value)
+        await ctx.send(f'Значение {option} было установлено в {genAi.config[option]}')
+    else: 
+        await ctx.send(f'Значение `{option}` равно {genAi.config[option]}')
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()

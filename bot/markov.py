@@ -2,10 +2,15 @@ import random
 
 MRK_START = '__start'
 MRK_END = '__end'
+DEFAULT_CONFIG = {
+    'read': False,
+    'reply_on_mention': False,
+}
 
 class MarkovGen:
-    def __init__(self, states: dict[str, list[str]] = {}) -> None:
+    def __init__(self, states: dict[str, list[str]] = {}, config = DEFAULT_CONFIG) -> None:
         self.stateTable: dict[str, set[str]] = {k: set(v) for k,v in states.items()}
+        self.config = config
 
     def addMessage(self, inpMsg: str) -> None:
         samples = [v.lower() for v in inpMsg.split() if v != MRK_START and v != MRK_END]
