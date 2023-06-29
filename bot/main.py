@@ -31,6 +31,8 @@ from config import *
 
 bb = Balaboba()
 
+word_dict = set()
+
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
 kgb.persistent_views_added = False
@@ -219,8 +221,15 @@ async def on_message(message):
               
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
-
     await kgb.process_commands(message)
+        
+    global word_dict
+    print(message.content)
+    if message.author == bot.user:
+        return
+    words = message.content.split()
+    word_dict = word_dict.union(set(words))
+    await bot.process_commands(message)
           
 @kgb.event
 async def on_member_remove(member):
@@ -1690,6 +1699,16 @@ async def reload(ctx):
       color = discord.Colour(0xFF0000)
     ))
 
+@kgb.command()
+async def gen(ctx):
+    if len(word_dict) < 20:
+        await ctx.send(f"Недостаточно слов в словаре. Нужно ещё {20-len(word_dict)}")
+        return
+
+    num_words = random.randint(2, 7)
+    selected_words = random.sample(list(word_dict), num_words)
+    generated_text = ' '.join(selected_words)
+    await ctx.send(generated_text)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
