@@ -1744,7 +1744,13 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
 
     def strToBool(inp: str) -> bool: return inp.lower() == 'true'
 
-    if isinstance(ctx.channel, discord.DMChannel): return
+    if isinstance(ctx.channel, discord.DMChannel): 
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=f'Невозможно использовать kgb!genconfig в ЛС!',
+            color=discord.Colour(0xFF0000)
+        ))
+        return
     
     channelId = str(ctx.channel.id)
 
@@ -1759,7 +1765,11 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
                 ))
                 return
 
-            await ctx.send(f'Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`')
+            await ctx.send(embed=discord.Embed(
+                title='Инфо',
+                description='Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`',
+                color=discord.Colour(0x000000)
+            ))
             return
 
     genAi = genAiArray[channelId]
@@ -1773,9 +1783,35 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
 
     if value:
         genAi.config[option] = strToBool(value)
-        await ctx.send(f'Значение `{option}` было установлено в `{genAi.config[option]}`')
+        await ctx.send(embed=discord.Embed(
+            title='Инфо',
+            description='Значение `{option}` было установлено в `{genAi.config[option]}`',
+            color=discord.Colour(0x000000)
+        ))
     else: 
-        await ctx.send(f'Значение `{option}` равно `{genAi.config[option]}`')
+        await ctx.send(embed=discord.Embed(
+            title='Инфо',
+            description='Значение `{option}` равно `{genAi.config[option]}`',
+            color=discord.Colour(0x000000)
+        ))
+
+async def genclear(ctx):
+    if isinstance(ctx.channel, discord.DMChannel): 
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=f'Невозможно использовать kgb!genclear в ЛС!',
+            color=discord.Colour(0xFF0000)
+        ))
+        return
+
+    if str(ctx.channel.id) in genAiArray:
+        del genAiArray[str(ctx.channel.id)]
+
+    await ctx.send(embed=discord.Embed(
+        title='Успешно!',
+        description='Все данные команды kgb!gen очищены в этом канале!',
+        color=discord.Colour(0x000000)
+    ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
