@@ -200,8 +200,6 @@ async def on_member_join(member):
 
 @kgb.event
 async def on_message(message):
-    if message.author == bot.user:
-        return
     if message.channel.id == 1067091686725001306:
         with open('data/retr.txt', 'r') as file:
             channel_ids = file.readlines()
