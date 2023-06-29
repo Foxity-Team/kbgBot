@@ -1717,9 +1717,16 @@ async def reload(ctx):
       color = discord.Colour(0xFF0000)
     ))
 
-@kgb.command()
+@kgb.command(description="Генерирует текст как гена.\nЧто бы начать генерацию и сохранение сообщение,\nПропишите: kgb!genconfig")
+@helpCategory('neuro')
 async def gen(ctx):
-    await ctx.send(genAi.generate())
+    #тут проверка нужно что если канал не содержиться в файле генконфига то бот напоминает чтоб они прописали эту команду чтоб бот занёс канал в список тех каналов где он может читать сообщения
+    await ctx.send(f"```{genAi.generate()}```")
+
+@kgb.command(description="Добавляет канал в список каналов где разрешено сохранять сообщения и их генерировать")
+@helpCategory('config')
+async def genconfig(ctx):
+    await ctx.send("Заглушка типа")
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
