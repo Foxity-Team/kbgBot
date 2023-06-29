@@ -1,3 +1,4 @@
+from os.path import isfile
 import discord
 from discord.ext import commands
 import discord.utils
@@ -24,18 +25,27 @@ import typing
 import logging
 import transliterate
 import markov
+import json
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
 from config import *
 
+genaiDataPath = 'data/genai_info.json'
 
 bb = Balaboba()
 
 word_dict = []
 
-genAi = markov.MarkovGen()
+if isfile(genaiDataPath):
+    with open(genaiDataPath) as f:
+        genData = json.load(f)
+else:
+    genData = {}
+
+genAi = markov.MarkovGen(genData)
+msgCounter = 0
 
 print("AdventurerUp Corporation")
 kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
@@ -227,6 +237,13 @@ async def on_message(message):
         return await message.channel.send("Мой префикс - `kgb!`")
 
     genAi.addMessage(message.content)
+    
+    global msgCounter
+    msgCounter = msgCounter + 1
+
+    if msgCounter % 10 == 0:
+        with open(genaiDataPath, 'w') as f:
+            json.dump(genAi.stateTable, f)
 
     await kgb.process_commands(message)
 

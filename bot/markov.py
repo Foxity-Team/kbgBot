@@ -4,8 +4,8 @@ MRK_START = '__start'
 MRK_END = '__end'
 
 class MarkovGen:
-    def __init__(self) -> None:
-        self.stateTable: dict[str, set[str]] = {}
+    def __init__(self, states: dict[str, set[str]] = {}) -> None:
+        self.stateTable: dict[str, set[str]] = states
 
     def addMessage(self, inpMsg: str) -> None:
         samples = [v.lower() for v in inpMsg.split() if v != MRK_START and v != MRK_END]
