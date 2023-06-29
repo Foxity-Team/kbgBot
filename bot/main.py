@@ -240,6 +240,11 @@ async def on_message(message):
         channelId = str(message.channel.id)
         if channelId in genAiArray and genAiArray[channelId].config['read']:
             genAiArray[channelId].addMessage(message.content)
+            if genAiArray[channelId].config['reply_on_mention']:
+                for user in message.mentions:
+                    if user.id == kgb.user.id:
+                        await message.reply(genAiArray[channelId].generate())
+                        break
         
         global msgCounter
         msgCounter = msgCounter + 1
