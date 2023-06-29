@@ -236,19 +236,20 @@ async def on_message(message):
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
 
-    channelId = str(message.channel.id)
-    if channelId in genAiArray and genAiArray[channelId].config['read']:
-        genAiArray[channelId].addMessage(message.content)
-    
-    global msgCounter
-    msgCounter = msgCounter + 1
+    if not message.author == kgb.user:
+        channelId = str(message.channel.id)
+        if channelId in genAiArray and genAiArray[channelId].config['read']:
+            genAiArray[channelId].addMessage(message.content)
+        
+        global msgCounter
+        msgCounter = msgCounter + 1
 
-    if msgCounter % 10 == 0:
-        with open(genaiDataPath, 'w') as f:
-            json.dump({k: {
-                'state': v.dumpState(),
-                'config': v.config,
-            } for k,v in genAiArray.items()}, f)
+        if msgCounter % 10 == 0:
+            with open(genaiDataPath, 'w') as f:
+                json.dump({k: {
+                    'state': v.dumpState(),
+                    'config': v.config,
+                } for k,v in genAiArray.items()}, f)
 
     await kgb.process_commands(message)
 
@@ -1734,7 +1735,7 @@ async def gen(ctx):
         ))
         return
 
-    await ctx.send(f'```genAiArray[channelId].generate()```')
+    await ctx.send(genAiArray[channelId].generate())
 
 @kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение")
 @helpCategory('config')
