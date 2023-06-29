@@ -1767,7 +1767,7 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
 
             await ctx.send(embed=discord.Embed(
                 title='Инфо',
-                description='Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`',
+                description=f'Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`',
                 color=discord.Colour(0x000000)
             ))
             return
@@ -1784,22 +1784,23 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
     if value:
         genAi.config[option] = strToBool(value)
         await ctx.send(embed=discord.Embed(
-            title='Инфо',
-            description='Значение `{option}` было установлено в `{genAi.config[option]}`',
+            title='Успешно',
+            description=f'Значение `{option}` было установлено в `{genAi.config[option]}`',
             color=discord.Colour(0x000000)
         ))
     else: 
         await ctx.send(embed=discord.Embed(
             title='Инфо',
-            description='Значение `{option}` равно `{genAi.config[option]}`',
+            description=f'Значение `{option}` равно `{genAi.config[option]}`',
             color=discord.Colour(0x000000)
         ))
 
+@kgb.command()
 async def genclear(ctx):
     if isinstance(ctx.channel, discord.DMChannel): 
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=f'Невозможно использовать kgb!genclear в ЛС!',
+            description='Невозможно использовать kgb!genclear в ЛС!',
             color=discord.Colour(0xFF0000)
         ))
         return
