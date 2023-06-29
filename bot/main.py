@@ -200,6 +200,8 @@ async def on_member_join(member):
 
 @kgb.event
 async def on_message(message):
+    if message.author == bot.user:
+        return
     if message.channel.id == 1067091686725001306:
         with open('data/retr.txt', 'r') as file:
             channel_ids = file.readlines()
@@ -221,15 +223,13 @@ async def on_message(message):
               
     if message.content == "<@1061907927880974406>":
         return await message.channel.send("Мой префикс - `kgb!`")
-    await kgb.process_commands(message)
-        
+
     global word_dict
     print(message.content)
-    if message.author == bot.user:
-        return
     words = message.content.split()
     word_dict = word_dict.union(set(words))
-    await bot.process_commands(message)
+
+    await kgb.process_commands(message)
           
 @kgb.event
 async def on_member_remove(member):
