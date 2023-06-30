@@ -1825,13 +1825,22 @@ async def genclear(ctx):
         color=discord.Colour(0x000000)
     ))
 
-@kgb.command()
+@kgb.command(description="Выводит факты о числах(на англиском).\nДоступные типы фактов:\n`math` `date` `year` `trivia`")
 @helpCategory('fun')
 async def factnumber(ctx, number: str, fact_type: str):
     if not number.isdigit():
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
             description="Пожалуйста, введите корректное число.",
+            color=discord.Colour(0xFF0000)
+        ))
+        return
+        
+    valid_fact_types = ['trivia', 'math', 'date', 'year']
+    if fact_type not in valid_fact_types:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description="Пожалуйста, введите корректный тип факта.",
             color=discord.Colour(0xFF0000)
         ))
         return
