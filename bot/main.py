@@ -1829,7 +1829,11 @@ async def genclear(ctx):
 @helpCategory('fun')
 async def factnumber(ctx, number: str, fact_type: str):
     if not number.isdigit():
-        await ctx.send("Пожалуйста, введите корректное число.")
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description="Пожалуйста, введите корректное число.",
+            color=discord.Colour(0xFF0000)
+        ))
         return
 
     url = f"http://numbersapi.com/{number}/{fact_type}?lang=ru"
@@ -1837,9 +1841,17 @@ async def factnumber(ctx, number: str, fact_type: str):
 
     if response.status_code == 200:
         fact_text = response.text
-        await ctx.send(fact_text)
+        await ctx.send(embed=discord.Embed(
+            title='Факт о числе:',
+            description=fact_text,
+            color=discord.Colour(0x000000)
+        ))
     else:
-        await ctx.send(f"Извините, не удалось получить факт о числе {number}.")
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=f"Извините, не удалось получить факт о числе {number}.",
+            color=discord.Colour(0xFF0000)
+        ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
