@@ -1,16 +1,18 @@
 import random
+import re
 
 MRK_START = '__start'
 MRK_END = '__end'
 DEFAULT_CONFIG = {
     'read': False,
     'reply_on_mention': False,
+    'remove_mentions': True,
 }
 
 class MarkovGen:
     def __init__(self, states: dict[str, list[str]] = {}, config = DEFAULT_CONFIG) -> None:
         self.stateTable: dict[str, set[str]] = {k: set(v) for k,v in states.items()}
-        self.config = config
+        self.config = DEFAULT_CONFIG | config
 
     def addMessage(self, inpMsg: str) -> None:
         samples = [v.lower() for v in inpMsg.split() if v != MRK_START and v != MRK_END]
@@ -43,8 +45,11 @@ class MarkovGen:
         outString = ''.join([str(token) + ' ' for token in out if token != MRK_START and token != MRK_END])
         if not outString.startswith('http'):
             return outString.capitalize()
-        else:
-            return outString
+
+        if self.config['remove_mentions']:
+            return re.sub('(<@[0-9]*>)', '', outString)
+
+        return outString
 
 if __name__ == '__main__':
     generator = MarkovGen()
