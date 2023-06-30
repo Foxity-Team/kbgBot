@@ -1832,7 +1832,7 @@ async def factnumber(ctx, number: str, fact_type: str):
         await ctx.send("Пожалуйста, введите корректное число.")
         return
 
-    url = f"http://numbersapi.com/{number}/{fact_type}"
+    url = f"http://numbersapi.com/{number}/{fact_type}?lang=ru"
     response = requests.get(url)
 
     if response.status_code == 200:
