@@ -1734,6 +1734,8 @@ async def reload(ctx):
 @kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
 async def gen(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+        return
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
         await ctx.send(embed=discord.Embed(
@@ -1803,7 +1805,8 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
             color=discord.Colour(0x000000)
         ))
 
-@kgb.command()
+@kgb.command(description="Удаляет все сообщения из базы генерации")
+@helpCategory('config')
 async def genclear(ctx):
     if isinstance(ctx.channel, discord.DMChannel): 
         await ctx.send(embed=discord.Embed(
@@ -1821,6 +1824,22 @@ async def genclear(ctx):
         description='Все данные команды kgb!gen очищены в этом канале!',
         color=discord.Colour(0x000000)
     ))
+
+@kgb.command()
+@helpCategory('fun')
+async def factnumber(ctx, number: str, fact_type: str):
+    if not number.isdigit():
+        await ctx.send("Пожалуйста, введите корректное число.")
+        return
+
+    url = f"http://numbersapi.com/{number}/{fact_type}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        fact_text = response.text
+        await ctx.send(fact_text)
+    else:
+        await ctx.send(f"Извините, не удалось получить факт о числе {number}.")
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
