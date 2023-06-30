@@ -1862,6 +1862,24 @@ async def factnumber(ctx, number: str, fact_type: str):
             color=discord.Colour(0xFF0000)
         ))
 
+@kgb.command()
+async def country(ctx, query):
+    response = requests.get(f'https://api.restcountries.com/v2/name/{query}')
+    data = response.json()
+
+    if response.status_code == 200:
+        country_data = data[0]
+        country_name = country_data['name']
+        country_capital = country_data['capital']
+        country_population = country_data['population']
+
+        reply = f"Country: {country_name}\nCapital: {country_capital}\nPopulation: {country_population}"
+
+    else:
+        reply = "Country not found."
+
+    await ctx.send(reply)
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
