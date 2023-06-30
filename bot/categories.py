@@ -59,7 +59,7 @@ def buildHelpEmbed() -> Embed:
 
     for i, categ in enumerate(filter(lambda v: not v.isHidden(),HELP_CATEGORIES.values())):
         catName, _ = categ.getData()
-        emb.add_field(name=f'{i+1}. {catName}', value='', inline=False)
+        emb.add_field(name=f'{catName} - {i+1}', value='', inline=False)
 
     emb.add_field(name="Что бы узнать команды из категории, \nНапишите:", value="`kgb!help (цифра категории)`", inline=False)
     emb.set_thumbnail(url=tumbaYUMBA)
