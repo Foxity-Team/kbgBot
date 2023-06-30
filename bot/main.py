@@ -387,7 +387,7 @@ async def help(ctx, *, query=None):
 wiki = wikipediaapi.Wikipedia('ru')
   
 @kgb.command(description = "Кот")
-@helpCategory('fun')
+@helpCategory('api')
 async def cat(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -399,7 +399,7 @@ async def cat(ctx):
     await ctx.send(embed=embed)
   
 @kgb.command(description = "Собака")
-@helpCategory('fun')
+@helpCategory('api')
 async def dog(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -411,7 +411,7 @@ async def dog(ctx):
     await ctx.send(embed=embed)
   
 @kgb.command(description = "Лис")
-@helpCategory('fun')
+@helpCategory('api')
 async def fox(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -650,7 +650,7 @@ async def cipher(ctx):
     await ctx.author.send(embed=black_embed)
   
 @kgb.command(description = "Создаёт фейковый ютуб комментарий")
-@helpCategory('fun')
+@helpCategory('api')
 async def comment(ctx, *, commint):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1143,7 +1143,7 @@ async def rand(ctx, num1, num2=None):
         ))
 
 @kgb.command(description='Ищет статью на вики')
-@helpCategory('fun')
+@helpCategory('api')
 async def wiki(ctx, *, query):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1353,7 +1353,7 @@ async def null(ctx):
     await ctx.reply(embed=embed)
 
 @kgb.command(description="Хорни карта")
-@helpCategory('fun')
+@helpCategory('api')
 async def horny(ctx, member: discord.Member = None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1375,7 +1375,7 @@ async def horny(ctx, member: discord.Member = None):
                 await session.close()
 
 @kgb.command(description="hello comrade!")
-@helpCategory('fun')
+@helpCategory('api')
 async def comrade(ctx, member: discord.Member = None):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1506,7 +1506,7 @@ async def code(ctx):
     await ctx.send(file=file)
 
 @kgb.command(description='Гадает по имени')
-@helpCategory('fun')
+@helpCategory('api')
 async def info(ctx, *, name):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1622,7 +1622,7 @@ async def nasa(ctx):
     await ctx.send(embed=embed)
 
 @kgb.command(description="Генератор оскарблений")
-@helpCategory('fun')
+@helpCategory('api')
 async def insult(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
@@ -1826,7 +1826,7 @@ async def genclear(ctx):
     ))
 
 @kgb.command(description="Выводит факты о числах(на англиском).\nДоступные типы фактов:\n`math` `date` `year` `trivia`")
-@helpCategory('fun')
+@helpCategory('api')
 async def factnumber(ctx, number: str, fact_type: str):
     if not number.isdigit():
         await ctx.send(embed=discord.Embed(
