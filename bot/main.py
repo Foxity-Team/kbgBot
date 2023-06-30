@@ -1605,7 +1605,7 @@ async def person(ctx):
     await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
 @kgb.command(description="Интересное о Космосе")
-@helpCategory('fun')
+@helpCategory('api')
 async def nasa(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
       return
