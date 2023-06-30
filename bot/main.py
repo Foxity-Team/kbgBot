@@ -1734,7 +1734,7 @@ async def reload(ctx):
 
 @kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
-async def gen(ctx):
+async def gen(ctx, startMsg: str=''):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     channelId = str(ctx.channel.id)
@@ -1746,7 +1746,14 @@ async def gen(ctx):
         ))
         return
 
-    await ctx.send(genAiArray[channelId].generate())
+    try:
+        await ctx.send(genAiArray[channelId].generate(startMsg))
+    except ValueError as exc:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=exc,
+            color=discord.Colour(0xFF0000)
+        ))
 
 @kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение")
 @helpCategory('config')

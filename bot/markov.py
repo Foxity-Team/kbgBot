@@ -33,13 +33,17 @@ class MarkovGen:
     def dumpState(self) -> dict[str, list[str]]:
         return {k: list(v) for k,v in self.stateTable.items()}
 
-    def generate(self) -> str:
+    def generate(self, startMsg: str='') -> str:
         if len(self.stateTable) == 0: raise ValueError('No messages recorded!')
 
         out = [ MRK_START ]
+        out.extend(startMsg.split())
         
         while out[-1] != MRK_END:
-            nextVals = self.stateTable[out[-1]]
+            try:
+                nextVals = self.stateTable[out[-1]]
+            except KeyError as exc:
+                raise ValueError(f'Невозможно сгенерировать предложение, начинающеяся на {out[-1]}!') from exc
             out.append(random.choice(list(nextVals)))
 
         outString = ''.join([str(token) + ' ' for token in out if token != MRK_START and token != MRK_END])
