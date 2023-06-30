@@ -1863,22 +1863,30 @@ async def factnumber(ctx, number: str, fact_type: str):
         ))
 
 @kgb.command()
-async def country(ctx, query):
-    response = requests.get(f'https://api.restcountries.com/v2/name/{query}')
-    data = response.json()
+async def seekmusic(ctx, *, query):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'outtmpl': '%(title)s.%(ext)s',
+    }
 
-    if response.status_code == 200:
-        country_data = data[0]
-        country_name = country_data['name']
-        country_capital = country_data['capital']
-        country_population = country_data['population']
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(f"ytsearch:{query}", download=False)
+        url = info['entries'][0]['webpage_url']
+        title = info['entries'][0]['title']
 
-        reply = f"Country: {country_name}\nCapital: {country_capital}\nPopulation: {country_population}"
+        filename = f"{title}.mp3"
+        ydl.download([url])
 
-    else:
-        reply = "Country not found."
-
-    await ctx.send(reply)
+    try:
+        await ctx.send(file=discord.File(filename))
+        os.remove(filename) 
+    except Exception as e:
+        await ctx.send(e)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
