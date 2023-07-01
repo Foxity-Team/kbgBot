@@ -1898,14 +1898,20 @@ async def seekmusic(ctx, *, query):
         os.remove(filename) 
     except Exception as e:
         await ctx.send(e)
-
+        
 @kgb.command()
-async def generate(ctx, *, message):
-    response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', messages=[
-        {"role": "user", "content": message}
-    ])
-    generated_text = response.get('choices')[0].get('message').get('content')
-    await ctx.send(generated_text)
+async def chat(ctx, *, message):
+
+    response = g4f.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {"role": "user", "content": message}
+        ]
+    )
+
+    completion = response['choices'][0]['message']['content']
+
+    await ctx.send(completion)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
