@@ -1909,7 +1909,7 @@ async def chat(ctx, *, message):
         ]
     )
 
-    completion = response['choices'][0]['message']['content']
+    completion = response.choices[0].message.content
 
     await ctx.send(completion)
 
