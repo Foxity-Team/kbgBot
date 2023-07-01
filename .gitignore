@@ -1,5 +1,6 @@
 env/
 bot/__pycache__/
+bot/g4f/__pycache__/
 __pycache__/
 data/
 .env
