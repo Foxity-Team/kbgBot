@@ -62,7 +62,7 @@ def buildHelpEmbed() -> Embed:
         emb.add_field(name=f'{i+1} - {catName}', value='', inline=False)
 
     emb.add_field(name="Что бы узнать команды из категории, \nНапишите:", value="`kgb!help (цифра категории)`", inline=False)
-    emb.add_field(name=f"Поддержать бота на бусти можно [тут]({boostyURL})", value="Ваша поддержка очень важна для нас!", inline=False)
+    emb.add_field(name="Поддержать бота на бусти можно тут:", value=f"[Ваша поддержка очень важна для нас!]({boostyURL})", inline=False)
     emb.set_thumbnail(url=tumbaYUMBA)
     emb.set_footer(text="communist_fox", icon_url=avaURL)
     
@@ -73,7 +73,7 @@ def buildCategoryEmbeds() -> tuple[list[Embed], dict[str, Embed]]:
         emb = Embed(title=f"Категория: {categ.getName()}", color=Colour(0x000000))
         emb.add_field(name="Команды:", value=categ.getData()[1], inline=False)
         emb.add_field(name="Что бы узнать, что делает команда, \nНапишите:", value="`kgb!help (команда)`", inline=False)
-        emb.add_field(name=f"Поддержать бота на бусти можно [тут]({boostyURL})", value="Ваша поддержка очень важна для нас!", inline=False)
+        emb.add_field(name="Поддержать бота на бусти можно тут:", value=f"[Ваша поддержка очень важна для нас!]({boostyURL})", inline=False)
         emb.set_thumbnail(url=tumbaYUMBA)
         emb.set_footer(text="communist_fox", icon_url=avaURL)
         return emb
