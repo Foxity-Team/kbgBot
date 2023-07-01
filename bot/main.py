@@ -1901,17 +1901,11 @@ async def seekmusic(ctx, *, query):
         
 @kgb.command()
 async def chat(ctx, *, message):
-
-    response = g4f.ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        messages=[
-            {"role": "user", "content": message}
-        ]
-    )
-
-    completion = response.choices[0].message.content
-
-    await ctx.send(completion)
+    print(g4f.Provider.Ails.params)
+    response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', messages=[
+        {"role": "user", "content": f"{message}"}], stream=True)
+    for message in response:
+        ctx.send(message)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
