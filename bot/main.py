@@ -26,12 +26,15 @@ import logging
 import transliterate
 import markov
 import json
+import g4f
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
 from config import *
 import youtube_dl
+
+print(g4f.Provider.Ails.params)
 
 genaiDataPath = 'data/genai_info.json'
 
