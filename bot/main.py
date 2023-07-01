@@ -243,7 +243,7 @@ async def on_message(message):
             if genAiArray[channelId].config['reply_on_mention']:
                 for user in message.mentions:
                     if user.id == kgb.user.id:
-                        await message.reply(genAiArray[channelId].generate())
+                        await message.reply(genAiArray[channelId].generate()[:2000])
                         replied = True
                         break
         
@@ -1747,7 +1747,7 @@ async def gen(ctx, *args: str):
         return
     
     try:
-        await ctx.send(genAiArray[channelId].generate(''.join([v + ' ' for v in args])))
+        await ctx.send(genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]))
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
