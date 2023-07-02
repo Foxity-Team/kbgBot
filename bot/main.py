@@ -1844,7 +1844,8 @@ async def chat(ctx, *, message: str):
 
 @kgb.command()
 async def name(ctx, *names):
-    g = AsyncNameAPI(names, mode="*")
+    name_list = list(names)
+    g = AsyncNameAPI(name_list, mode="*")
     result = await g.get_names_info()
 
     embed = discord.Embed(title="Информация о именах", color=discord.Color.blue())
