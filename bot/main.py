@@ -1841,7 +1841,7 @@ async def name(ctx, *names):
     await ctx.send(embed=embed)
 
 @kgb.command()
-async def dem(ctx):
+async def dem(ctx, *args: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     channelId = str(ctx.channel.id)
