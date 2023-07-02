@@ -1840,6 +1840,8 @@ async def name(ctx, *names):
 
     await ctx.send(embed=embed)
 
+image_list = []
+
 @kgb.command()
 async def dem(ctx, *args: str):
     if isinstance(ctx.channel, discord.DMChannel):
@@ -1853,25 +1855,21 @@ async def dem(ctx, *args: str):
         ))
         return
     
-    if not ctx.message.attachments:
-        await ctx.send(embed=discord.Embed(
-            title="Ошибка:",
-            description="Вы забыли прикрепить изображение!",
-            color=discord.Colour(0xFF0000)
-        ))
-        return
-    
     try:
-        attachment = ctx.message.attachments[0]
-        image = await attachment.read()
+        attachment = ctx.message.attachments[0] if ctx.message.attachments else None
+        if attachment and attachment.filename.endswith(('.png', '.jpg', '.jpeg')):
+            attachment = ctx.message.attachments[0]
+            random_image = await attachment.read()
+        else:
+            random_image = random.choice(image_list)
         
         conf = demapi.Configure(
-            base_photo=image,
+            base_photo=random_image,
             title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
-        demotivator = await conf.coroutine_download()
-        demotivator.save("demotivator.png")
+        image = await conf.coroutine_download()
+        image.save("demotivator.png")
         
         await ctx.send(file=discord.File("demotivator.png"))
         os.remove("demotivator.png")
@@ -1879,7 +1877,7 @@ async def dem(ctx, *args: str):
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=str(exc),
+            description=exc,
             color=discord.Colour(0xFF0000)
         ))
 
