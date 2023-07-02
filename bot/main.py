@@ -33,6 +33,7 @@ from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
 from config import *
 from agify import AsyncNameAPI
+import httpx
 
 print(g4f.Provider.Ails.params)
 
