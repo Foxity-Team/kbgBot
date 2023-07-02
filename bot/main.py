@@ -220,14 +220,14 @@ async def on_message(message):
         channelId = str(message.channel.id)
         if channelId in genAiArray and genAiArray[channelId].config['read']:
             genAiArray[channelId].addMessage(message.content)
-             if message.attachments:
-                 for attachment in message.attachments:
-                     if attachment.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-                         response = requests.get(attachment.url)
-                         if response.status_code == 200:
-                             with open(f"png/{attachment.filename}", 'wb') as file:
-                                 file.write(response.content)
-                                 print(f"Image '{attachment.filename}' saved.")
+            if message.attachments:
+                for attachment in message.attachments:
+                    if attachment.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+                        response = requests.get(attachment.url)
+                        if response.status_code == 200:
+                            with open(f"png/{attachment.filename}", 'wb') as file:
+                                file.write(response.content)
+                                print(f"Image '{attachment.filename}' saved.")
             if genAiArray[channelId].config['reply_on_mention']:
                 for user in message.mentions:
                     if user.id == kgb.user.id:
