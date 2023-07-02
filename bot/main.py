@@ -1855,24 +1855,34 @@ async def dem(ctx, *args: str):
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
         await ctx.send(embed=discord.Embed(
-                title="Ошибка:",
-                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
-                color=discord.Colour(0xFF0000)
+            title="Ошибка:",
+            description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+            color=discord.Colour(0xFF0000)
         ))
         return
-    
+
     try:
+        png_files = [file for file in os.listdir("png") if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+        if not png_files:
+            await ctx.send(embed=discord.Embed(
+                title='Ошибка:',
+                description="Нет доступных изображений.",
+                color=discord.Colour(0xFF0000)
+            ))
+            return
+        random_png = random.choice(png_files)
+
         conf = demapi.Configure(
-            base_photo="example.png",
+            base_photo=f"png/{random_png}",
             title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
         image = await conf.coroutine_download()
-        image.save("example.png")
-        
-        await ctx.send(file=discord.File("example.png"))
-        os.remove("example.png")
-    
+        image.save("demotivator.png")
+
+        await ctx.send(file=discord.File("demotivator.png"))
+        os.remove("demotivator.png")
+
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
