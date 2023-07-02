@@ -1400,18 +1400,6 @@ async def comrade(ctx, member: discord.Member = None):
                     await ctx.send('No horny :(')
                 await session.close()
 
-@kgb.command(description='Чатбот')
-async def chatbot(ctx, *, message):
-    if isinstance(ctx.channel, discord.DMChannel):
-      return
-    response = requests.get('https://some-random-api.com/chatbot', params={
-        'message': message,
-        'key': chatbotKEY
-    })
-    data = response.json()
-    response_message = data
-    await ctx.send(response_message)
-
 @kgb.command(description="Взлом пентагона")
 @helpCategory('fun')
 async def hackp(ctx):
@@ -1511,7 +1499,7 @@ async def code(ctx):
 
 @kgb.command(description='Гадает по имени')
 @helpCategory('api')
-async def info(ctx, *, name):
+async def name(ctx, *, name):
     if isinstance(ctx.channel, discord.DMChannel):
       return
     try:
@@ -1872,32 +1860,6 @@ async def factnumber(ctx, number: str, fact_type: str):
             description=f"Извините, не удалось получить факт о числе {number}.",
             color=discord.Colour(0xFF0000)
         ))
-
-@kgb.command()
-async def seekmusic(ctx, *, query):
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'outtmpl': '%(title)s.%(ext)s',
-    }
-
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(f"ytsearch:{query}", download=False)
-        url = info['entries'][0]['webpage_url']
-        title = info['entries'][0]['title']
-
-        filename = f"{title}.mp3"
-        ydl.download([url])
-
-    try:
-        await ctx.send(file=discord.File(filename))
-        os.remove(filename) 
-    except Exception as e:
-        await ctx.send(e)
         
 @kgb.command()
 async def chat(ctx, *, message: str):
