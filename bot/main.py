@@ -34,6 +34,7 @@ from balaboba import Balaboba
 from config import *
 from agify import AsyncNameAPI
 import httpx
+import demapi
 
 print(g4f.Provider.Ails.params)
 
@@ -1838,6 +1839,20 @@ async def name(ctx, *names):
         embed.add_field(name=name, value=f"Возраст: {age}\nПол: {gender}\nВероятность: {probability}\nСтраны:\n{country}", inline=False)
 
     await ctx.send(embed=embed)
+
+@kgb.command()
+async def dem(ctx):
+    conf = demapi.Configure(
+        base_photo="example.png",
+        title="The first line",
+        explanation="The second line"
+    )
+    image = await conf.coroutine_download()
+    image.save("example.png")
+
+    await ctx.send(file=discord.File("example.png"))
+
+    os.remove("example.png")
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
