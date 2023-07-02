@@ -1864,7 +1864,7 @@ async def dem(ctx, *args: str):
     try:
         attachment = ctx.message.attachments[0]
         image = await attachment.to_file()
-        image.save("example.png")
+        await image.save("example.png")
         
         conf = demapi.Configure(
             base_photo="example.png",
@@ -1872,7 +1872,7 @@ async def dem(ctx, *args: str):
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
         demotivator_image = await conf.coroutine_download()
-        demotivator_image.save("demotivator.png")
+        await demotivator_image.save("demotivator.png")
         
         await ctx.send(file=discord.File("example.png"))
         os.remove("demotivator.png")
