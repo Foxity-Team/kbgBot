@@ -1873,6 +1873,8 @@ async def dem(ctx, *args: str):
                 image_content = response.content
                 with open("downloaded_image.png", "wb") as file:
                     file.write(random_image)
+             else:
+                 ctx.send(response.status_code)
         
         conf = demapi.Configure(
             base_photo=random_image,
