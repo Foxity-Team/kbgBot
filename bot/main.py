@@ -1497,34 +1497,6 @@ async def code(ctx):
     file = discord.File(file_path)
     await ctx.send(file=file)
 
-@kgb.command(description='Гадает по имени')
-@helpCategory('api')
-async def name(ctx, *, name):
-    if isinstance(ctx.channel, discord.DMChannel):
-      return
-    try:
-        age = get_age(name)
-        nationality, nationality_probability = get_nationality(name)
-        gender, gender_probability = get_gender(name)
-
-        response = f'Имя: {name}\n'
-        if age:
-            response += f'Возраст: {age}\n'
-        if gender:
-            response += f'Гендер: {gender} (Вероятность: {gender_probability})\n'
-        if nationality:
-            response += f'Национальность: {nationality} (Вероятность: {nationality_probability})'
-
-        await ctx.send(embed = discord.Embed(
-          title = "Информация об имени:",
-          description = response,
-          color = discord.Color(0x000000)
-        ))
-    
-    except Exception as e:
-        print(f'An error occurred: {e}')
-        await ctx.send(f'Ошибка.\n {e}')
-
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
 @helpCategory('config')
 async def sub(ctx, arg=None):
@@ -1868,6 +1840,12 @@ async def chat(ctx, *, message: str):
         {"role": "user", "content": message}])
     
     await ctx.send(response)
+
+@kgb.command()
+async def names(ctx, name):
+    g = AsyncNameAPI(name, mode="*")
+    result = await g.get_names_info()
+    await ctx.send(result)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
