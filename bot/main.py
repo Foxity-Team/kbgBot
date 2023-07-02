@@ -1047,7 +1047,7 @@ async def invite(ctx):
       return
     embed=discord.Embed(
       title=f"Пригласить {kgb.user.name}", 
-      description=f"[Добавить {kgb.user.name}]({botURL}) на свой сервер\n[Присоединится]({serverURL}) к серверу бота", 
+      description=f"[Добавить {kgb.user.name}]({botURL}) на свой сервер\n[Присоединится]({serverURL}) к серверу бота\n[Поддержать]({BoostyURL}) бота на бусти", 
       color=discord.Color(0x000000))
     embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах")
     await ctx.send(embed=embed)
