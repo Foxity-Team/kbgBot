@@ -1605,6 +1605,7 @@ async def porfir(ctx, *, prompt):
             data = response.json()
             generated_text = data['replies'][0]
             await ctx.send(f'```\n{prompt}{generated_text}\n```')
+            return
         if response.status_code == 500:
            await ctx.send(f"Нейросеть отключена, невозможно предположить время её включения.")
         else:
