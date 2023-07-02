@@ -1843,10 +1843,22 @@ async def chat(ctx, *, message: str):
     await ctx.send(response)
 
 @kgb.command()
-async def names(ctx, name):
-    g = AsyncNameAPI(name, mode="*")
+async def name(ctx, *names):
+    g = AsyncNameAPI(names, mode="*")
     result = await g.get_names_info()
-    await ctx.send(result)
+
+    embed = discord.Embed(title="Информация о именах", color=discord.Color.blue())
+
+    for name, info in result.items():
+        age = info['age'] if info['age'] is not None else "Неизвестно"
+        gender = info['gender'] if info['gender'] is not None else "Неизвестно"
+        probability = info['probability']
+        country_list = [f"{country['country_id']} ({country['probability']})" for country in info['country']]
+        country = "\n".join(country_list)
+
+        embed.add_field(name=name, value=f"Возраст: {age}\nПол: {gender}\nВероятность: {probability}\nСтраны:\n{country}", inline=False)
+
+    await ctx.send(embed=embed)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
