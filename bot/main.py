@@ -1852,31 +1852,29 @@ async def dem(ctx, *args: str):
                 color=discord.Colour(0xFF0000)
         ))
         return
-
+    
     if not ctx.message.attachments:
         await ctx.send(embed=discord.Embed(
-            title='Ошибка:',
-            description='Вы забыли прикрепить картинку!',
+            title="Ошибка:",
+            description="Вы забыли прикрепить изображение!",
             color=discord.Colour(0xFF0000)
         ))
         return
-
+    
     try:
         attachment = ctx.message.attachments[0]
-        image = await attachment.to_file()
-        await image.save("example.png")
+        image = await attachment.read()
         
         conf = demapi.Configure(
-            base_photo="example.png",
+            base_photo=image,
             title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
-        demotivator_image = await conf.coroutine_download()
-        await demotivator_image.save("demotivator.png")
+        demotivator = await conf.coroutine_download()
+        demotivator.save("demotivator.png")
         
-        await ctx.send(file=discord.File("example.png"))
+        await ctx.send(file=discord.File("demotivator.png"))
         os.remove("demotivator.png")
-        os.remove("example.png")
     
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
