@@ -105,31 +105,6 @@ def format_overwrites(overwrites):
         formatted.append(f"{item[0].name}: {perms_str}")
     return "\n".join(formatted)
 
-def get_age(name):
-    url = f"https://api.agify.io?name={name}"
-    response = requests.get(url)
-    data = response.json()
-    age = data.get('age')
-    return age
-
-def get_nationality(name):
-    url = f"https://api.nationalize.io?name={name}"
-    headers = {'Authorization': f'Bearer {NATIONALIZE_API_KEY}'}
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    nationality = data.get('country')[0].get('country_id')
-    probability = data.get('country')[0].get('probability')
-    return nationality, probability
-
-def get_gender(name):
-    url = f"https://api.genderize.io?name={name}"
-    headers = {'Authorization': f'Bearer {GENDERIZE_API_KEY}'}
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    gender = data.get('gender')
-    probability = data.get('probability')
-    return gender, probability
-
 def get_guild_names():
     return [guild.name for guild in kgb.guilds]
 
@@ -1834,7 +1809,8 @@ async def factnumber(ctx, number: str, fact_type: str):
             color=discord.Colour(0xFF0000)
         ))
         
-@kgb.command()
+@kgb.command(description="Нейросеть ChatGPT")
+@helpCategory('neuro')
 async def chat(ctx, *, message: str):
     print(g4f.Provider.Ails.params)
     response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.DeepAi, messages=[
@@ -1842,13 +1818,14 @@ async def chat(ctx, *, message: str):
     
     await ctx.send(response)
 
-@kgb.command()
+@kgb.command(description="Гадает по имени")
+@helpCategory('api')
 async def name(ctx, *names):
     name_list = list(names)
     g = AsyncNameAPI(name_list, mode="*")
     result = await g.get_names_info()
 
-    embed = discord.Embed(title="Информация о именах", color=discord.Color.blue())
+    embed = discord.Embed(title="Информация о именах", color=discord.Color(0x000000))
 
     for name, info in result.items():
         age = info['age'] if info['age'] is not None else "Неизвестно"
