@@ -32,7 +32,7 @@ from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 from balaboba import Balaboba
 from config import *
-import agify
+from agify import AsyncNameAPI
 
 print(g4f.Provider.Ails.params)
 
