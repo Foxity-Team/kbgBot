@@ -1840,7 +1840,13 @@ async def name(ctx, *names):
 
     await ctx.send(embed=embed)
 
-image_list = []
+image_list = [
+    "https://media.discordapp.net/attachments/1067069690066767924/1125120757891084338/upscale_3.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125113929048268872/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125016158341447800/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125015841923153951/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125016211516825600/i.png"
+]
 
 @kgb.command()
 async def dem(ctx, *args: str):
@@ -1861,7 +1867,12 @@ async def dem(ctx, *args: str):
             attachment = ctx.message.attachments[0]
             random_image = await attachment.read()
         else:
-            random_image = random.choice(image_list)
+            random_image_url = random.choice(image_list)
+            response = requests.get(random_image_url)
+            if response.status_code == 200:
+                image_content = response.content
+                with open("downloaded_image.png", "wb") as file:
+                    file.write(random_image)
         
         conf = demapi.Configure(
             base_photo=random_image,
@@ -1869,7 +1880,7 @@ async def dem(ctx, *args: str):
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
         image = await conf.coroutine_download()
-        image.save("demotivator.png")
+        image.save("demotivator.png", "downloaded_image.png")
         
         await ctx.send(file=discord.File("demotivator.png"))
         os.remove("demotivator.png")
