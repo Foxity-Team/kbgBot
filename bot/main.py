@@ -1842,17 +1842,35 @@ async def name(ctx, *names):
 
 @kgb.command()
 async def dem(ctx):
-    conf = demapi.Configure(
-        base_photo="example.png",
-        title="The first line",
-        explanation="The second line"
-    )
-    image = await conf.coroutine_download()
-    image.save("example.png")
-
-    await ctx.send(file=discord.File("example.png"))
-
-    os.remove("example.png")
+    if isinstance(ctx.channel, discord.DMChannel):
+        return
+    channelId = str(ctx.channel.id)
+    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
+        await ctx.send(embed=discord.Embed(
+                title="Ошибка:",
+                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                color=discord.Colour(0xFF0000)
+        ))
+        return
+    
+    try:
+        conf = demapi.Configure(
+            base_photo="example.png",
+            title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
+            explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
+        )
+        image = await conf.coroutine_download()
+        image.save("example.png")
+        
+        await ctx.send(file=discord.File("example.png"))
+        os.remove("example.png")
+    
+    except ValueError as exc:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description=exc,
+            color=discord.Colour(0xFF0000)
+        ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
