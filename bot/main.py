@@ -220,14 +220,6 @@ async def on_message(message):
         channelId = str(message.channel.id)
         if channelId in genAiArray and genAiArray[channelId].config['read']:
             genAiArray[channelId].addMessage(message.content)
-            if message.attachments:
-                for attachment in message.attachments:
-                    if attachment.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-                        response = requests.get(attachment.url)
-                        if response.status_code == 200:
-                            with open(f"png/{attachment.filename}", 'wb') as file:
-                                file.write(response.content)
-                                print(f"Image '{attachment.filename}' saved.")
             if genAiArray[channelId].config['reply_on_mention']:
                 for user in message.mentions:
                     if user.id == kgb.user.id:
@@ -1855,38 +1847,41 @@ async def dem(ctx, *args: str):
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
         await ctx.send(embed=discord.Embed(
-            title="Ошибка:",
-            description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                title="Ошибка:",
+                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                color=discord.Colour(0xFF0000)
+        ))
+        return
+
+    if not ctx.message.attachments:
+        await ctx.send(embed=discord.Embed(
+            title='Ошибка:',
+            description='Вы забыли прикрепить картинку!',
             color=discord.Colour(0xFF0000)
         ))
         return
 
     try:
-        png_files = [file for file in os.listdir("png") if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-        if not png_files:
-            await ctx.send(embed=discord.Embed(
-                title='Ошибка:',
-                description="Нет доступных изображений.",
-                color=discord.Colour(0xFF0000)
-            ))
-            return
-        random_png = random.choice(png_files)
-
+        attachment = ctx.message.attachments[0]
+        image = await attachment.to_file()
+        image.save("example.png")
+        
         conf = demapi.Configure(
-            base_photo=f"png/{random_png}",
+            base_photo="example.png",
             title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
-        image = await conf.coroutine_download()
-        image.save("demotivator.png")
-
-        await ctx.send(file=discord.File("demotivator.png"))
+        demotivator_image = await conf.coroutine_download()
+        demotivator_image.save("demotivator.png")
+        
+        await ctx.send(file=discord.File("example.png"))
         os.remove("demotivator.png")
-
+        os.remove("example.png")
+    
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=exc,
+            description=str(exc),
             color=discord.Colour(0xFF0000)
         ))
 
