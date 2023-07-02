@@ -1523,7 +1523,7 @@ async def name(ctx, *, name):
     
     except Exception as e:
         print(f'An error occurred: {e}')
-        await ctx.send('Ошибка.')
+        await ctx.send(f'Ошибка.\n {e}')
 
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
 @helpCategory('config')
