@@ -39,7 +39,6 @@ import demapi
 print(g4f.Provider.Ails.params)
 
 genaiDataPath = 'data/genai_info.json'
-imagesDataPath = 'data/image_urls.json'
 
 bb = Balaboba()
 
@@ -51,14 +50,7 @@ if isfile(genaiDataPath):
 else:
     genData = {}
 
-if isfile(imagesDataPath):
-    with open(imagesDataPath) as f:
-        imgData = json.load(f)
-else:
-    imgData = {}
-
-genAiArray: dict[str, markov.MarkovGen] = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData.items()}
-image_list: dict[str, list[str]] = imgData
+genAiArray = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in genData.items()}
 msgCounter = 0
 
 print("AdventurerUp Corporation")
@@ -224,23 +216,17 @@ async def on_message(message):
 
     replied = False
 
-    if message.author != kgb.user:
+    if not message.author == kgb.user:
         channelId = str(message.channel.id)
-        genAi = genAiArray[channelId]
-        if channelId in genAiArray and genAi.config['read']:
-            genAi.addMessage(message.content)
-            if genAi.config['reply_on_mention']:
+        if channelId in genAiArray and genAiArray[channelId].config['read']:
+            genAiArray[channelId].addMessage(message.content)
+            if genAiArray[channelId].config['reply_on_mention']:
                 for user in message.mentions:
                     if user.id == kgb.user.id:
-                        await message.reply(genAi.generate()[:2000])
+                        await message.reply(genAiArray[channelId].generate()[:2000])
                         replied = True
                         break
-            
-            if channelId not in image_list: image_list[channelId] = []
-
-            global image_list
-            if message.attachments: image_list[channelId].extend([str(v) for v in message.attachments])
-
+        
         global msgCounter
         msgCounter = msgCounter + 1
 
@@ -250,9 +236,6 @@ async def on_message(message):
                     'state': v.dumpState(),
                     'config': v.config,
                 } for k,v in genAiArray.items()}, f)
-
-            with open(imagesDataPath, 'w') as f:
-                json.dump(image_list, f)
 
     if message.content == "<@1061907927880974406>" and not replied:
         return await message.channel.send("Мой префикс - `kgb!`")
@@ -1705,7 +1688,7 @@ async def gen(ctx, *args: str):
         return
     
     try:
-        await ctx.send(genAiArray[channelId].generate(' '.join(args)[:2000]))
+        await ctx.send(genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]))
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
@@ -1857,11 +1840,20 @@ async def name(ctx, *names):
 
     await ctx.send(embed=embed)
 
+image_list = [
+    "https://media.discordapp.net/attachments/1067069690066767924/1125120757891084338/upscale_3.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125113929048268872/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125016158341447800/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125015841923153951/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1125016211516825600/i.png",
+    "https://media.discordapp.net/attachments/1067069690066767924/1095385824247423120/SPOILER_image.png"
+]
 
 @kgb.command()
 async def dem(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
+    args = ""
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
         await ctx.send(embed=discord.Embed(
@@ -1874,17 +1866,10 @@ async def dem(ctx):
     try:
         attachment = ctx.message.attachments[0] if ctx.message.attachments else None
         if attachment and attachment.filename.endswith(('.png', '.jpg', '.jpeg')):
+            attachment = ctx.message.attachments[0]
             random_image = await attachment.read()
         else:
-            if channelId not in image_list:
-                await ctx.send(embed=discord.Embed(
-                        title="Ошибка:",
-                        description="Пожалуйста укажите картинку!",
-                        color=discord.Colour(0xFF0000)
-                ))
-                return
-
-            random_image_url = random.choice(image_list[channelId])
+            random_image_url = random.choice(image_list)
             response = requests.get(random_image_url)
             if response.status_code == 200:
                 random_image = response.content
@@ -1893,11 +1878,10 @@ async def dem(ctx):
                 return
         with open("downloaded_image.jpg", "wb") as file:
             file.write(random_image)
-
         conf = demapi.Configure(
             base_photo="downloaded_image.jpg",
-            title=genAiArray[channelId].generate(),
-            explanation=genAiArray[channelId].generate()
+            title=genAiArray[channelId].generate(args[:2000]),
+            explanation=genAiArray[channelId].generate(args[:2000])
         )
         image = await conf.coroutine_download()
         image.save("demotivator.png")
