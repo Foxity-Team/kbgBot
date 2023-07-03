@@ -498,7 +498,7 @@ async def ban(ctx, member: discord.Member = None, time=None, *, reason: str = No
     elif member.top_role >= ctx.author.top_role:
         await ctx.send(embed=discord.Embed(
           title="Ошибка:",
-          description="Ты не можешь забанить пользователя т.к. он выше тебя по роли",
+          description="Вы не можете забанить пользователя т.к. он выше вас по роли",
           color=discord.Color(0xFF0000)
         ))
     else:
@@ -597,7 +597,7 @@ async def kick(ctx, member: discord.Member = None, *, reason:str =None):
   elif member == kgb.user.id:
     await ctx.send(embed = discord.Embed(
       title = "Ошибка:",
-      description = "Нет. сэр",
+      description = "Нет, сэр",
       color = discord.Color(0xFF0000)
     ))
   else:
@@ -673,7 +673,7 @@ async def thank(ctx):
     return
   await ctx.send(embed = discord.Embed(
     title = "Я благодарен:",
-    description = "SvZ_Bonnie#5779, за предоставленный обучающий материал!\nGrisshink#6476, за помощь в создании системы предупреждений!\nSanechka#1384 за рисование аватара для бота и постоянную поддержку меня:3",
+    description = "SvZ_Bonnie#5779, за предоставленный обучающий материал!\nGrisshink#6476, за помощь в разработке бота!\nSanechka#1384 за рисование аватара для бота и постоянную поддержку меня:3",
     color = discord.Color(0xffff00)
   ))
   
@@ -842,7 +842,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
             await member.kick()
             await ctx.send(embed = discord.Embed(
           title = "Кик:",
-          description = f'{member.name} былъ кикнут. \nДостигнутъ лимит предупреждений: {total_warns}/{warn_limit}',
+          description = f'{member.name} был кикнут. \nДостигнут лимит предупреждений: {total_warns}/{warn_limit}',
           color = discord.Color(0x000000)
         ))
             return
@@ -851,7 +851,7 @@ async def warn(ctx, member: discord.Member, count: int=1):
             await member.ban(reason=f'Достигнут лимит предупреждений: {total_warns}/{warn_limit}')
             await ctx.send(embed = discord.Embed(
               title = "Бан:",
-              description = f'{member.name} былъ забанен. \nДостигнут лимит предупреждений: {total_warns}/{warn_limit}',
+              description = f'{member.name} был забанен. \nДостигнут лимит предупреждений: {total_warns}/{warn_limit}',
               color = discord.Color(0x000000)
             ))
 
