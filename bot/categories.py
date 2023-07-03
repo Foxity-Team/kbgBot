@@ -64,7 +64,7 @@ def buildHelpEmbed() -> Embed:
     emb.add_field(name="Что бы узнать команды из категории, \nНапишите:", value="`kgb!help (цифра категории)`", inline=False)
     emb.add_field(name="Поддержать бота на бусти можно тут:", value=f"[Ваша поддержка очень важна для нас!]({boostyURL})", inline=False)
     emb.set_thumbnail(url=tumbaYUMBA)
-    emb.set_footer(text="communist_fox", icon_url=avaURL)
+    emb.set_footer(text="Soviet WorkShop © 2023", icon_url=avaURL)
     
     return emb
 
@@ -74,7 +74,7 @@ def buildCategoryEmbeds() -> tuple[list[Embed], dict[str, Embed]]:
         emb.add_field(name="Команды:", value=categ.getData()[1], inline=False)
         emb.add_field(name="Что бы узнать, что делает команда, \nНапишите:", value="`kgb!help (команда)`", inline=False)
         emb.set_thumbnail(url=tumbaYUMBA)
-        emb.set_footer(text="communist_fox", icon_url=avaURL)
+        emb.set_footer(text="Soviet WorkShop © 2023", icon_url=avaURL)
         return emb
 
     embs = [addEmbed(categ) for categ in filter(lambda v: not v.isHidden(), HELP_CATEGORIES.values())]
