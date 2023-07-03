@@ -1849,7 +1849,7 @@ image_list = [
 ]
 
 @kgb.command()
-async def dem(ctx, args1*: str, args2*: str):
+async def dem(ctx, args1: str, args2: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     channelId = str(ctx.channel.id)
