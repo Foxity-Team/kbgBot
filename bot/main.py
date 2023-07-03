@@ -1871,7 +1871,7 @@ async def dem(ctx, *args: str):
             response = requests.get(random_image_url)
             if response.status_code == 200:
                 image_content = response.content
-                with open("downloaded_image.jpg", "wb") as file:
+                with open("downloaded_image.png", "wb") as file:
                     file.write(image_content)
             else:
                 ctx.send(response.status_code)
@@ -1882,10 +1882,11 @@ async def dem(ctx, *args: str):
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
         image = await conf.coroutine_download()
-        image.save("demotivator.png", "downloaded_image.png")
+        image.save("demotivator.png")
         
         await ctx.send(file=discord.File("demotivator.png"))
         os.remove("demotivator.png")
+        os.remove("downloaded_image.png")
     
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
