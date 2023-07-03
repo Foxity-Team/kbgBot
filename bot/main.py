@@ -1872,7 +1872,7 @@ async def dem(ctx, *args: str):
             if response.status_code == 200:
                 image_content = response.content
                 with open("downloaded_image.jpg", "wb") as file:
-                    file.write(random_image)
+                    file.write(image_content)
             else:
                 ctx.send(response.status_code)
         
