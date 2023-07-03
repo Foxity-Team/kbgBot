@@ -1849,7 +1849,7 @@ image_list = [
 ]
 
 @kgb.command()
-async def dem(ctx, *args: str):
+async def dem(ctx, args1: str, args2: str):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     channelId = str(ctx.channel.id)
@@ -1878,8 +1878,8 @@ async def dem(ctx, *args: str):
             file.write(random_image)
         conf = demapi.Configure(
             base_photo="downloaded_image.jpg",
-            title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
-            explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
+            title=genAiArray[channelId].generate(''.join([v + ' ' for v in args1])[:2000]),
+            explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args2])[:2000])
         )
         image = await conf.coroutine_download()
         image.save("demotivator.png")
