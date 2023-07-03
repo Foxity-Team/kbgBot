@@ -238,7 +238,6 @@ async def on_message(message):
             
             if channelId not in image_list: image_list[channelId] = []
 
-            global image_list
             if message.attachments: image_list[channelId].extend([str(v) for v in message.attachments])
 
         global msgCounter
@@ -1876,7 +1875,7 @@ async def dem(ctx):
         if attachment and attachment.filename.endswith(('.png', '.jpg', '.jpeg')):
             random_image = await attachment.read()
         else:
-            if channelId not in image_list:
+            if channelId not in image_list or len(image_list[channelId]) == 0:
                 await ctx.send(embed=discord.Embed(
                         title="Ошибка:",
                         description="Пожалуйста укажите картинку!",
