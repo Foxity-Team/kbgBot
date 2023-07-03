@@ -1870,14 +1870,14 @@ async def dem(ctx, *args: str):
             random_image_url = random.choice(image_list)
             response = requests.get(random_image_url)
             if response.status_code == 200:
-                image_content = response.content
-                with open("downloaded_image.png", "wb") as file:
-                    file.write(image_content)
+                random_image = response.content
             else:
-                ctx.send(response.status_code)
-        
+                await ctx.send(response.status_code)
+                return
+        with open("downloaded_image.jpg", "wb") as file:
+            file.write(random_image)
         conf = demapi.Configure(
-            base_photo=random_image,
+            base_photo="downloaded_image.jpg",
             title=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000]),
             explanation=genAiArray[channelId].generate(''.join([v + ' ' for v in args])[:2000])
         )
