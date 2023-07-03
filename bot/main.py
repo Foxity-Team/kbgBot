@@ -1751,7 +1751,7 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
     if option not in genAi.config:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+            description=f'Неизвестное значение `{option}`! \nДоступные значения: {optionKeys}',
             color=discord.Colour(0xFF0000)
         ))
         return
