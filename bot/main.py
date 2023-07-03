@@ -1735,7 +1735,7 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
             if option not in markov.DEFAULT_CONFIG:
                 await ctx.send(embed=discord.Embed(
                     title='Ошибка:',
-                    description=f'Неизвестное значение `{option}`! \nДоступные значения: {optionKeys}',
+                    description=f'Неизвестное значение `{option}`! \nПожалуйста, пропишите команду:\n`kgb!help genconfig`',
                     color=discord.Colour(0xFF0000)
                 ))
                 return
@@ -1751,7 +1751,7 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
     if option not in genAi.config:
         await ctx.send(embed=discord.Embed(
             title='Ошибка:',
-            description=f'Неизвестное значение `{option}`! \nДоступные значения: {optionKeys}',
+            description=f'Неизвестное значение `{option}`! \nПожалуйста, пропишите команду:\n`kgb!help genconfig`',
             color=discord.Colour(0xFF0000)
         ))
         return
@@ -1857,7 +1857,7 @@ async def name(ctx, *names):
     await ctx.send(embed=embed)
 
 
-@kgb.command(description="Создаёт демотиватор\nОн использует сохран'ніе картинки из чата,\nНо вы можете прикрепить изображение к сообщению что использовать его")
+@kgb.command(description="Создаёт демотиватор\nОн использует сохранёные картинки из чата,\nНо вы можете прикрепить изображение к сообщению что использовать его")
 @helpCategory('neuro')
 async def demotivator(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
