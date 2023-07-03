@@ -1886,7 +1886,6 @@ async def dem(ctx, *args: str):
         
         await ctx.send(file=discord.File("demotivator.png"))
         os.remove("demotivator.png")
-        os.remove("downloaded_image.png")
     
     except ValueError as exc:
         await ctx.send(embed=discord.Embed(
