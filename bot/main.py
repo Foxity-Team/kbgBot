@@ -1712,7 +1712,7 @@ async def gen(ctx, *args: str):
             color=discord.Colour(0xFF0000)
         ))
 
-@kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение")
+@kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение.\nДоступные опции:\n`read true/false` - Позволяет боту сохранять сообщения и картинки для генерации\n`reply_on_mention true/false` - Позволяет боту генерировать текст если ответить на его сообщение\n`remove_mentions true/false` - Не позволяет упоминать участников в сгенерированном тексте")
 @helpCategory('config')
 async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
     optionKeys = ''.join([f'`{key}` ' for key in markov.DEFAULT_CONFIG])
@@ -1735,7 +1735,7 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
             if option not in markov.DEFAULT_CONFIG:
                 await ctx.send(embed=discord.Embed(
                     title='Ошибка:',
-                    description=f'Неизвестное значение `{option}`! Доступные значения: {optionKeys}',
+                    description=f'Неизвестное значение `{option}`! \nДоступные значения: {optionKeys}',
                     color=discord.Colour(0xFF0000)
                 ))
                 return
@@ -1857,8 +1857,9 @@ async def name(ctx, *names):
     await ctx.send(embed=embed)
 
 
-@kgb.command()
-async def dem(ctx):
+@kgb.command(description="Создаёт демотиватор\nОн использует сохран'ніе картинки из чата,\nНо вы можете прикрепить изображение к сообщению что использовать его")
+@helpCategory('neuro')
+async def demotivator(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
     channelId = str(ctx.channel.id)
