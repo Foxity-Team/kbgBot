@@ -23,10 +23,9 @@ class KgbCategory:
     def getData(self) -> tuple[str, str]:
         outCommands = ''
         for i, val in enumerate(sorted(self._commands)):
-            if (i+1) % 5 == 0:
-                outCommands = f'{outCommands} `{val}`\n'
-            else:
-                outCommands = f'{outCommands} `{val}`'
+            outCommands = f'{outCommands} `{val}`\n' \
+                          if (i+1) % 5 == 0 \
+                          else f'{outCommands} `{val}`\n'
 
         return self._name, outCommands
 
