@@ -226,8 +226,8 @@ async def on_message(message):
 
     if message.author != kgb.user:
         channelId = str(message.channel.id)
-        genAi = genAiArray[channelId]
-        if channelId in genAiArray and genAi.config['read']:
+        if channelId in genAiArray and genAiArray[channelId].config['read']:
+            genAi = genAiArray[channelId]
             genAi.addMessage(message.content)
             if genAi.config['reply_on_mention']:
                 for user in message.mentions:
