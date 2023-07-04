@@ -94,7 +94,7 @@ class DiscordHandler(logging.Handler):
         asyncio.ensure_future(self.send_log_message(log_entry))
 
 async def change_status():
-    statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
+    statuses = "kgb!help", "версия 3.0", "на {} серверах!"
     index = 0
     while not kgb.is_closed():
         servers_count = len(kgb.guilds)
@@ -332,7 +332,7 @@ async def on_guild_join(guild: discord.Guild):
             await channel.send(embed=embed)
             break
   
-@kgb.command(description="Выведет список команд или информацию о команде")
+@kgb.command(description="Выведет список категорий или информацию о команде")
 async def help(ctx, *, query=None):
     if isinstance(ctx.channel, discord.DMChannel):
         return
@@ -1905,7 +1905,7 @@ async def demotivator(ctx):
 async def bot_info(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
-    embed = discord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности.\nБот очень активно разрабатывается, поэтому может падать несколько раз в день", color=discord.Color(0x000000))
+    embed = discord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности\nНапишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \nПоэтому может падать несколько раз в день", color=discord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
     embed.add_field(name="Полезные ссылки:", value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n[Присоединится к серверу бота]({serverURL})\n[Поддержать бота на бусти]({boostyURL})", inline=False)
     embed.set_thumbnail(url=tumbaYUMBA)
