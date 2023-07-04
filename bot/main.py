@@ -1905,9 +1905,8 @@ async def demotivator(ctx):
 async def bot_info(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
-    embed = discord.Embed(title="Информация о боте:", color=discord.Color.blue())
+    embed = discord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности.\nБот очень активно разрабатывается, поэтому может падать несколько раз в день", color=discord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
-    embed.set_author(name="Занимается разработкой бота:", icon_url=avaURL, value="Soviet WorkShop", inline=True)
     embed.add_field(name="Полезные ссылки:", value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n[Присоединится к серверу бота]({serverURL})\n[Поддержать бота на бусти]({boostyURL})", inline=False)
     embed.set_thumbnail(url=tumbaYUMBA)
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
