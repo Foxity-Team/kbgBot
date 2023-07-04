@@ -1033,18 +1033,6 @@ async def configwarn(ctx, limit: int, warn_type: str):
               color = discord.Color(0x000000)
             ))
 
-@kgb.command(description="Пригласить бота и другие полезные ссылки")
-@helpCategory('misc')
-async def invite(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
-      return
-    embed=discord.Embed(
-      title=f"Пригласить {kgb.user.name}", 
-      description=f"[Добавить {kgb.user.name}]({botURL}) на свой сервер\n[Присоединится]({serverURL}) к серверу бота\n[Поддержать]({boostyURL}) бота на бусти", 
-      color=discord.Color(0x000000))
-    embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах")
-    await ctx.send(embed=embed)
-
 @kgb.command(description="Ищет пользователей по их примерному нику на всех серверах, где присутствует бот")
 @helpCategory('info')
 async def seek_user(ctx, *, query):
@@ -1911,6 +1899,19 @@ async def demotivator(ctx):
             description=exc,
             color=discord.Colour(0xFF0000)
         ))
+
+@kgb.command(description="Покажет всю информацию о боте")
+@helpCategory('info')
+async def bot_info(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+        return
+    embed = discord.Embed(title="Информация о боте:", color=discord.Color.blue())
+    embed.add_field(name="Версия:", value="3.0", inline=False)
+    embed.add_field(name="Занимается разработкой бота:", icon_url=avaURL, value="Soviet WorkShop", inline=True)
+    embed.add_field(name="Полезные ссылки:", value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n[Присоединится к серверу бота]({serverURL})\n[Поддержать бота на бусти]({boostyURL})", inline=False)
+    embed.set_thumbnail(url=tumbaYUMBA)
+    embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
+    await ctx.send(embed=embed)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
