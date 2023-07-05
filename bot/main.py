@@ -1730,6 +1730,28 @@ async def reload(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
 
+@kgb.slash_command(name="gen", description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
+async def genslash(interaction: Interaction, *args: str):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+        return
+    channelId = str(ctx.channel.id)
+    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
+        await interaction.send(embed=nextcord.Embed(
+                title="Ошибка:",
+                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
+                color=nextcord.Colour(0xFF0000)
+        ))
+        return
+    
+    try:
+        await interaction.send(genAiArray[channelId].generate(' '.join(args)[:2000]))
+    except ValueError as exc:
+        await interaction.send(embed=nextcord.Embed(
+            title='Ошибка:',
+            description=exc,
+            color=nextcord.Colour(0xFF0000)
+        ))
+
 @kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
 async def gen(ctx, *args: str):
@@ -1954,7 +1976,7 @@ async def demotivator(ctx):
         ))
 
 @kgb.slash_command(name="bot_info", description = "Покажет всю информацию о боте")
-async def botinfo(interaction: Interaction):
+async def bot_infoslash(interaction: Interaction):
     if isinstance(interaction.channel, nextcord.DMChannel):
         return
     embed = nextcord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности\nНапишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \nПоэтому может падать несколько раз в день", color=nextcord.Color(0x000000))
