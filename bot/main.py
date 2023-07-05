@@ -1953,6 +1953,17 @@ async def demotivator(ctx):
             color=nextcord.Colour(0xFF0000)
         ))
 
+@kgb.slash_command(name="bot_info", description = "Покажет всю информацию о боте")
+async def botinfo(interaction: Interaction):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+        return
+    embed = nextcord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности\nНапишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \nПоэтому может падать несколько раз в день", color=nextcord.Color(0x000000))
+    embed.add_field(name="Версия:", value="3.0", inline=False)
+    embed.add_field(name="Полезные ссылки:", value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n[Присоединится к серверу бота]({serverURL})\n[Поддержать бота на бусти]({boostyURL})", inline=False)
+    embed.set_thumbnail(url=tumbaYUMBA)
+    embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
+    await interaction.send(embed=embed)
+
 @kgb.command(description="Покажет всю информацию о боте")
 @helpCategory('info')
 async def bot_info(ctx):
