@@ -459,14 +459,7 @@ async def hack(ctx, *, member):
           color = nextcord.Color(0x000000)
         ))
 
-@kgb.slash_command(name = "heck", description="Взламывает пользователя (не по-настоящему)")
-async def heck(interaction: Interaction, *, member):
-     await interaction.send(embed = nextcord.Embed(
-    description=f"{member} был успешно взломан!",
-		color = 0x2F3136
-	))
-
-@kgb.slash_command(name="hack")
+@kgb.slash_command(name="hack", description = "Выводит шуточное сообщение о: \nУспешном/неуспешном взломе пользователя")
 async def hackslash(interaction: Interaction,  *, member):
     if isinstance(interaction.channel, nextcord.DMChannel):
         return
