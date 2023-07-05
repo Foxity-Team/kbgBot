@@ -458,6 +458,25 @@ async def hack(ctx, *, member):
           description = f"{member} не был взломан!",
           color = nextcord.Color(0x000000)
         ))
+
+@kgb.slash_command(name="hack")
+async def hackslash(ctx: nextcord.Interaction, member: str):
+    if isinstance(ctx.channel, nextcord.DMChannel):
+        return
+    rand = random.randint(1, 2)
+    if rand == 1:
+        embed = nextcord.Embed(
+            title="Результат взлома:",
+            description=f"{member} был успешно взломан!",
+            color=nextcord.Color(0x000000)
+        )
+    else:
+        embed = nextcord.Embed(
+            title="Результат взлома:",
+            description=f"{member} не был взломан!",
+            color=nextcord.Color(0x000000)
+        )
+    await ctx.send(embed=embed)
       
 @kgb.command(description = "Гадальный шар")
 @helpCategory('fun')
