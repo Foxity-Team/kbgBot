@@ -1923,4 +1923,4 @@ async def heck(interaction: Interaction, *, member):
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
-kgb.run(getenv('discord_TOKEN', ''))
+kgb.run(getenv('DISCORD_TOKEN', ''))
