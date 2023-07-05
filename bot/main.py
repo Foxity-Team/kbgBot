@@ -460,7 +460,7 @@ async def hack(ctx, *, member):
         ))
 
 @kgb.slash_command(name="hack")
-async def hackslash(ctx: nextcord.Interaction, member: str):
+async def hackslash(interaction: Interaction,  *, member):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
     rand = random.randint(1, 2)
@@ -476,7 +476,7 @@ async def hackslash(ctx: nextcord.Interaction, member: str):
             description=f"{member} не был взломан!",
             color=nextcord.Color(0x000000)
         )
-    await ctx.send(embed=embed)
+    await interaction.send(embed=embed)
       
 @kgb.command(description = "Гадальный шар")
 @helpCategory('fun')
