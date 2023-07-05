@@ -52,7 +52,7 @@ class MarkovGen:
                 print(outString.capitalize())
                 sub = re.sub('(<@&*[0-9]*>)', '', outString.capitalize())
                 print(sub)
-                if sub == '':
+                if sub.strip() == '':
                     return '*(Пустое сообщение)*'
                 return sub 
             return outString.capitalize()
