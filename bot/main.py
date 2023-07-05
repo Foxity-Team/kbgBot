@@ -62,7 +62,7 @@ image_list: dict[str, list[str]] = imgData
 msgCounter = 0
 
 print("AdventurerUp Corporation")
-kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = nextcord.Intents.all())
+kgb = commands.Bot(command_prefix=prefix, strip_after_prefix=True, intents=nextcord.Intents.all())
 kgb.persistent_views_added = False
 kgb.remove_command("help")
 load_dotenv()
@@ -176,6 +176,7 @@ if not os.path.exists('data/stanwarns.json'):
 
 @kgb.event
 async def on_ready():
+    await kgb.sync_all_commands()
     handler = nextcordHandler(channel_id=1123467774098935828)
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
