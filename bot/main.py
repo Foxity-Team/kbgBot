@@ -421,7 +421,7 @@ async def fox(ctx):
     await ctx.send(embed=embed)
 
 @kgb.slash_command(name="cat", description = "Кот")
-async def catslash(interaction: Interaction,  *, member):
+async def catslash(interaction: Interaction):
     if isinstance(interaction.channel, nextcord.DMChannel):
       return
     response = requests.get("https://some-random-api.com/animal/cat")
@@ -432,7 +432,7 @@ async def catslash(interaction: Interaction,  *, member):
     await interaction.send(embed=embed)
   
 @kgb.slash_command(name="dog", description = "Собака")
-async def dogslash(interaction: Interaction,  *, member):
+async def dogslash(interaction: Interaction):
     if isinstance(interaction.channel, nextcord.DMChannel):
       return
     response = requests.get('https://some-random-api.com/animal/dog')
@@ -443,7 +443,7 @@ async def dogslash(interaction: Interaction,  *, member):
     await interaction.send(embed=embed)
   
 @kgb.slash_command(name="fox", description = "Лис")
-async def foxslash(interaction: Interaction,  *, member):
+async def foxslash(interaction: Interaction):
     if isinstance(interaction.channel, nextcord.DMChannel):
       return
     response = requests.get("https://some-random-api.com/animal/fox")
