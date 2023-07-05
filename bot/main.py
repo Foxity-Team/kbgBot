@@ -35,6 +35,7 @@ from config import *
 from agify import AsyncNameAPI
 import httpx
 import demapi
+from nextcord import Interaction
 
 print(g4f.Provider.Ails.params)
 
