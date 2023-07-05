@@ -383,7 +383,7 @@ async def help(ctx, *, query=None):
     await ctx.send(embed=embed)
 
 wiki = wikipediaapi.Wikipedia('ru')
-  
+
 @kgb.command(description = "Кот")
 @helpCategory('api')
 async def cat(ctx):
@@ -419,6 +419,39 @@ async def fox(ctx):
     embed.set_image(url=data["image"])
     embed.set_footer(text=data['fact'])
     await ctx.send(embed=embed)
+
+@kgb.slash_command(name="cat", description = "Кот")
+async def catslash(interaction: Interaction,  *, member):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+      return
+    response = requests.get("https://some-random-api.com/animal/cat")
+    data = response.json()
+    embed = nextcord.Embed(color=0x000000)
+    embed.set_image(url=data['image'])
+    embed.set_footer(text=data['fact'])
+    await interaction.send(embed=embed)
+  
+@kgb.slash_command(name="dog", description = "Собака")
+async def dogslash(interaction: Interaction,  *, member):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+      return
+    response = requests.get('https://some-random-api.com/animal/dog')
+    data = response.json()
+    embed = nextcord.Embed(color=0x000000)
+    embed.set_footer(text=data['fact'])
+    embed.set_image(url=data["image"])
+    await interaction.send(embed=embed)
+  
+@kgb.slash_command(name="fox", description = "Лис")
+async def foxslash(interaction: Interaction,  *, member):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+      return
+    response = requests.get("https://some-random-api.com/animal/fox")
+    data = response.json()
+    embed = nextcord.Embed(color=0x000000)
+    embed.set_image(url=data["image"])
+    embed.set_footer(text=data['fact'])
+    await interaction.send(embed=embed)
   
 @kgb.command(description = "Выключает бота(только для разработчика)")
 @helpCategory('secret')
