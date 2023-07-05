@@ -1730,28 +1730,6 @@ async def reload(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
 
-@kgb.slash_command(name="gen", description="Генерирует текст как гена.")
-async def genslash(interaction: Interaction, *args: str):
-    if isinstance(interaction.channel, nextcord.DMChannel):
-        return
-    channelId = str(interaction.channel.id)
-    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
-        await interaction.send(embed=nextcord.Embed(
-                title="Ошибка:",
-                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
-                color=nextcord.Colour(0xFF0000)
-        ))
-        return
-    
-    try:
-        await interaction.send(genAiArray[channelId].generate(' '.join(args)[:2000]))
-    except ValueError as exc:
-        await interaction.send(embed=nextcord.Embed(
-            title='Ошибка:',
-            description=exc,
-            color=nextcord.Colour(0xFF0000)
-        ))
-
 @kgb.command(description="Генерирует текст как гена.")
 @helpCategory('neuro')
 async def gen(ctx, *args: str):
