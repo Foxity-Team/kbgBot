@@ -440,7 +440,7 @@ async def killbot(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
     
-@kgb.command(description = "Выводит шуточное сообщение о: \nУспешном/неуспешном взломе пользователя")
+@kgb.command(description = "Выводит шуточное сообщение об: \nУспешном/неуспешном взломе пользователя")
 @helpCategory('fun')
 async def hack(ctx, *, member):
     if isinstance(ctx.channel, nextcord.DMChannel):
@@ -459,7 +459,7 @@ async def hack(ctx, *, member):
           color = nextcord.Color(0x000000)
         ))
 
-@kgb.slash_command(name="hack", description = "Выводит шуточное сообщение о: \nУспешном/неуспешном взломе пользователя")
+@kgb.slash_command(name="hack", description = "Выводит шуточное сообщение об: \nУспешном/неуспешном взломе пользователя")
 async def hackslash(interaction: Interaction,  *, member):
     if isinstance(interaction.channel, nextcord.DMChannel):
         return
@@ -639,16 +639,16 @@ async def verlist(ctx):
     color = nextcord.Color(0x000000)
   ))
   
-@kgb.command(description = ")")
-@helpCategory('secret')
-async def love(ctx):
-  if isinstance(ctx.channel, nextcord.DMChannel):
-    return
-  await ctx.send(embed = nextcord.Embed(
-    title = "Да)",
-    description = "Несо и Саня пара навеки:3",
-    color = nextcord.Color(0xff7089)
-  ))
+#@kgb.command(description = ")")
+#@helpCategory('secret')
+#async def love(ctx):
+#  if isinstance(ctx.channel, nextcord.DMChannel):
+#    return
+#  await ctx.send(embed = nextcord.Embed(
+#    title = "Да)",
+#    description = "Несо и Саня пара навеки:3", похоже, больше уже нет.....
+#    color = nextcord.Color(0xff7089)
+#  ))
   
 @kgb.command(description = "шифр")
 @helpCategory('misc')
