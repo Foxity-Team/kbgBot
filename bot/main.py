@@ -1734,7 +1734,7 @@ async def reload(ctx):
 async def genslash(interaction: Interaction, *args: str):
     if isinstance(interaction.channel, nextcord.DMChannel):
         return
-    channelId = str(ctx.channel.id)
+    channelId = str(interaction.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
         await interaction.send(embed=nextcord.Embed(
                 title="Ошибка:",
