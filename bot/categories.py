@@ -1,5 +1,5 @@
 from typing import Callable
-from discord import Embed, Colour
+from nextcord import Embed, Colour
 from functools import reduce
 from config import *
 
