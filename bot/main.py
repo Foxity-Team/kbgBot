@@ -177,7 +177,6 @@ if not os.path.exists('data/stanwarns.json'):
 
 @kgb.event
 async def on_ready():
-    await kgb.sync_commands()
     handler = nextcordHandler(channel_id=1123467774098935828)
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
