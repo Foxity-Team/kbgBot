@@ -468,6 +468,8 @@ async def heck(interaction: Interaction, *, member):
 
 @kgb.slash_command(name="hack")
 async def hackslash(interaction: Interaction,  *, member):
+    if isinstance(interaction.channel, nextcord.DMChannel):
+        return
     rand = random.randint(1, 2)
     if rand == 1:
         embed = nextcord.Embed(
