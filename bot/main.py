@@ -1752,7 +1752,7 @@ async def genslash(interaction: Interaction, *args: str):
             color=nextcord.Colour(0xFF0000)
         ))
 
-@kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
+@kgb.command(description="Генерирует текст как гена.")
 @helpCategory('neuro')
 async def gen(ctx, *args: str):
     if isinstance(ctx.channel, nextcord.DMChannel):
