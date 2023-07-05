@@ -1730,7 +1730,7 @@ async def reload(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
 
-@kgb.slash_command(name="gen", description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
+@kgb.slash_command(name="gen", description="Генерирует текст как гена.")
 async def genslash(interaction: Interaction, *args: str):
     if isinstance(interaction.channel, nextcord.DMChannel):
         return
