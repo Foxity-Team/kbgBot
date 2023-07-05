@@ -1678,9 +1678,9 @@ async def reload(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
 
-@kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
+@kgb.slash_command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
-async def gen(ctx, *args: str):
+async def gen(ctx: nextcord.Interaction, *args: str):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
     channelId = str(ctx.channel.id)
@@ -1912,13 +1912,6 @@ async def bot_info(ctx):
     embed.set_thumbnail(url=tumbaYUMBA)
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
     await ctx.send(embed=embed)
-
-@kgb.slash_command(name = "hack", description="Взламывает пользователя (не по-настоящему)")
-async def heck(interaction: Interaction, *, member):
-     await interaction.send(embed = nextcord.Embed(
-    description=f"{member} был успешно взломан!",
-		color = 0x2F3136
-	))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
