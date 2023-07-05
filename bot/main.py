@@ -3,6 +3,7 @@ import nextcord
 from nextcord.ext import commands
 import nextcord.utils
 from nextcord.ext.commands import BadArgument
+from nextcord import Interaction
 import asyncio
 import random
 import traceback
@@ -35,7 +36,6 @@ from config import *
 from agify import AsyncNameAPI
 import httpx
 import demapi
-from nextcord import Interaction
 
 print(g4f.Provider.Ails.params)
 
