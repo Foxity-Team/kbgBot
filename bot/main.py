@@ -1912,6 +1912,13 @@ async def bot_info(ctx):
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
     await ctx.send(embed=embed)
 
+@kgb.slash_command(name = "hack", description="Взламывает пользователя (не по-настоящему)")
+async def heck(interaction: Interaction, *, member):
+     await interaction.send(embed = nextcord.Embed(
+    description=f"{member} был успешно взломан!",
+		color = 0x2F3136
+	))
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('nextcord_TOKEN', ''))
