@@ -460,7 +460,7 @@ async def hack(ctx, *, member):
         ))
 
 @kgb.slash_command(name="hack")
-async def hackslash(ctx: nextcord.Interaction, member: str):
+async def hackslash(ctx: nextcord.SlashContext, member: str):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
     rand = random.randint(1, 2)
