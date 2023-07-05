@@ -1,8 +1,8 @@
 from os.path import isfile
-import discord
-from discord.ext import commands
-import discord.utils
-from discord.ext.commands import BadArgument
+import nextcord
+from nextcord.ext import commands
+import nextcord.utils
+from nextcord.ext.commands import BadArgument
 import asyncio
 import random
 import traceback
@@ -62,25 +62,25 @@ image_list: dict[str, list[str]] = imgData
 msgCounter = 0
 
 print("AdventurerUp Corporation")
-kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = discord.Intents.all())
+kgb = commands.Bot(command_prefix = prefix, strip_after_prefix = True, sync_commands=True, intents = nextcord.Intents.all())
 kgb.persistent_views_added = False
 kgb.remove_command("help")
 load_dotenv()
 
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
 
-HELP_EMB: typing.Union[discord.Embed, None] = None
-HELP_CAT_EMB: typing.Union[list[discord.Embed], None] = None
-HELP_CAT_HIDDEN: typing.Union[dict[str, discord.Embed], None] = None
+HELP_EMB: typing.Union[nextcord.Embed, None] = None
+HELP_CAT_EMB: typing.Union[list[nextcord.Embed], None] = None
+HELP_CAT_HIDDEN: typing.Union[dict[str, nextcord.Embed], None] = None
 
 if not os.path.isfile('data/guild_seek.json'):
     with open('data/guild_seek.json', 'w', encoding='utf-8') as f:
         f.write('{}')
 
-logger = logging.getLogger('discord')
+logger = logging.getLogger('nextcord')
 logger.setLevel(logging.ERROR)
 
-class DiscordHandler(logging.Handler):
+class nextcordHandler(logging.Handler):
     def __init__(self, channel_id):
         self.channel_id = channel_id
         super().__init__()
@@ -99,7 +99,7 @@ async def change_status():
     while not kgb.is_closed():
         servers_count = len(kgb.guilds)
         status = statuses[index].format(servers_count)
-        await kgb.change_presence(activity=discord.Game(name=status))
+        await kgb.change_presence(activity=nextcord.Game(name=status))
         index = (index+1) % len(statuses)
         await asyncio.sleep(10)
 
@@ -157,7 +157,7 @@ async def update_guild_names():
         json.dump(guild_names, f, ensure_ascii=False, indent=4)
       
 def no_format(user):
-    if isinstance(user, discord.Member):
+    if isinstance(user, nextcord.Member):
         return f"{user.name}#{user.discriminator}"
     return user.name
 try:
@@ -176,7 +176,7 @@ if not os.path.exists('data/stanwarns.json'):
 
 @kgb.event
 async def on_ready():
-    handler = DiscordHandler(channel_id=1123467774098935828)
+    handler = nextcordHandler(channel_id=1123467774098935828)
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
 
@@ -212,10 +212,10 @@ async def on_message(message):
             channel = kgb.get_channel(int(channel_id))
             if channel:
                 embed_color = random.choice(['FF0000', 'FFFF00'])
-                embed = discord.Embed(
+                embed = nextcord.Embed(
                     title=f'Сообщение из канала #{message.channel.name}:',
                     description=message.content,
-                    color=discord.Color(int(embed_color, 16))
+                    color=nextcord.Color(int(embed_color, 16))
                 )
                 if len(message.attachments) > 0:
                     for attachment in message.attachments:
@@ -270,63 +270,63 @@ async def on_member_remove(member):
 @kgb.event
 async def on_command_error(ctx, exc):
   if isinstance(exc, BadArgument):
-    await ctx.reply(embed = discord.Embed(
+    await ctx.reply(embed = nextcord.Embed(
       title = "Ошибка:",
       description = "Найдены некорректные аргументы",
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
   elif isinstance(exc, commands.CommandNotFound):
     cmd = ctx.invoked_with
     cmds = [cmd.name for cmd in kgb.commands]
     matches = get_close_matches(cmd, cmds)
     if len(matches) > 0:
-      await ctx.reply(embed = discord.Embed(
+      await ctx.reply(embed = nextcord.Embed(
         title = "Ошибка:",
         description = f"Команда `kgb!{cmd}` не найдена, может вы имели ввиду `kgb!{matches[0]}`?",
-        color = discord.Colour(0xFF0000)
+        color = nextcord.Colour(0xFF0000)
       ))
     else:
-      return await ctx.reply(embed = discord.Embed(
+      return await ctx.reply(embed = nextcord.Embed(
         title = "Ошибка:",
         description = "Команда не найдена. \nПожалуйста, напишите `kgb!help` чтобы посмотреть полный список команд!", 
-        color = discord.Colour(0xFF0000)
+        color = nextcord.Colour(0xFF0000)
       ))
   elif isinstance(exc, commands.CommandOnCooldown):
-    await ctx.reply(embed = discord.Embed(
+    await ctx.reply(embed = nextcord.Embed(
       title = "Эта команда перезагружаеться!",
       description = f"Повторите попытку через {round(exc.retry_after, 2)} секунд.",
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
   elif isinstance(exc, commands.MissingPermissions):
-    await ctx.reply(embed = discord.Embed(
+    await ctx.reply(embed = nextcord.Embed(
       title = "Ошибка:", 
       description = "Вы не имеете прав администратора!", 
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
   elif isinstance(exc, commands.MissingRequiredArgument):
-    await ctx.reply(embed = discord.Embed(
+    await ctx.reply(embed = nextcord.Embed(
       title = "Ошибка:",
       description = f"Пропущен аргумент: `{exc.param.name}`!",
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
   else:
     traceback.print_exception(type(exc), exc, exc.__traceback__)
-    await ctx.reply(embed = discord.Embed(
+    await ctx.reply(embed = nextcord.Embed(
         title = "Ошибка:",
         description = exc,
-        color = discord.Colour(0xFF0000)
+        color = nextcord.Colour(0xFF0000)
     ))
     
 @kgb.event
-async def on_guild_join(guild: discord.Guild):
+async def on_guild_join(guild: nextcord.Guild):
     url = on_guild_join_pic
-    embed = discord.Embed(title = "Hello, comrades!", color = 0xff0000)
+    embed = nextcord.Embed(title = "Hello, comrades!", color = 0xff0000)
     embed.set_image(url = url)
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             await channel.send(embed = embed)
             break
-    embed = discord.Embed(title = "Я KGB Modern", description = "КГБ - Комитет Государственной Безопасности.\nЯ имею команды для модерации и развлечения.\nНапишите kgb!help чтобы увидеть полный список команд", color = 0x000000)
+    embed = nextcord.Embed(title = "Я KGB Modern", description = "КГБ - Комитет Государственной Безопасности.\nЯ имею команды для модерации и развлечения.\nНапишите kgb!help чтобы увидеть полный список команд", color = 0x000000)
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             await channel.send(embed=embed)
@@ -334,12 +334,12 @@ async def on_guild_join(guild: discord.Guild):
   
 @kgb.command(description="Выведет список категорий или информацию о команде")
 async def help(ctx, *, query=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
 
     if query is None:
         if HELP_EMB is None:
-            embed = discord.Embed(title='Системная ошибка:', description='Эмбед помощи не собран!', color=discord.Colour(0xFF0000))
+            embed = nextcord.Embed(title='Системная ошибка:', description='Эмбед помощи не собран!', color=nextcord.Colour(0xFF0000))
             await ctx.send(embed=embed)
             return
         
@@ -348,7 +348,7 @@ async def help(ctx, *, query=None):
 
     if query.isdigit():
         if HELP_CAT_EMB is None:
-            embed = discord.Embed(title="Системная ошибка:", description="Эмбед помощи категорий не собран!", color=discord.Colour(0xFF0000))
+            embed = nextcord.Embed(title="Системная ошибка:", description="Эмбед помощи категорий не собран!", color=nextcord.Colour(0xFF0000))
             await ctx.send(embed=embed)
             return
 
@@ -358,7 +358,7 @@ async def help(ctx, *, query=None):
             await ctx.send(embed=HELP_CAT_EMB[int(query) - 1])
             return
         except IndexError:
-            embed = discord.Embed(title="Ошибка:", description="Неверный номер категории.", color=discord.Colour(0xFF0000))
+            embed = nextcord.Embed(title="Ошибка:", description="Неверный номер категории.", color=nextcord.Colour(0xFF0000))
             await ctx.send(embed=embed)
             return
 
@@ -371,9 +371,9 @@ async def help(ctx, *, query=None):
 
     command = kgb.get_command(query)
     if command is None:
-        embed = discord.Embed(title="Ошибка:", description=f"Команда `{query}` не найдена.", color=discord.Colour(0xFF0000))
+        embed = nextcord.Embed(title="Ошибка:", description=f"Команда `{query}` не найдена.", color=nextcord.Colour(0xFF0000))
     else:
-        embed = discord.Embed(title="Описание команды:", description=command.description, color=discord.Colour(0x000000))
+        embed = nextcord.Embed(title="Описание команды:", description=command.description, color=nextcord.Colour(0x000000))
         if command.aliases:
             aliases = ', '.join(command.aliases)
             embed.add_field(name="Альтернативные названия:", value=aliases, inline=False)
@@ -386,11 +386,11 @@ wiki = wikipediaapi.Wikipedia('ru')
 @kgb.command(description = "Кот")
 @helpCategory('api')
 async def cat(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     response = requests.get("https://some-random-api.com/animal/cat")
     data = response.json()
-    embed = discord.Embed(color=0x000000)
+    embed = nextcord.Embed(color=0x000000)
     embed.set_image(url=data['image'])
     embed.set_footer(text=data['fact'])
     await ctx.send(embed=embed)
@@ -398,11 +398,11 @@ async def cat(ctx):
 @kgb.command(description = "Собака")
 @helpCategory('api')
 async def dog(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     response = requests.get('https://some-random-api.com/animal/dog')
     data = response.json()
-    embed = discord.Embed(color=0x000000)
+    embed = nextcord.Embed(color=0x000000)
     embed.set_footer(text=data['fact'])
     embed.set_image(url=data["image"])
     await ctx.send(embed=embed)
@@ -410,11 +410,11 @@ async def dog(ctx):
 @kgb.command(description = "Лис")
 @helpCategory('api')
 async def fox(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     response = requests.get("https://some-random-api.com/animal/fox")
     data = response.json()
-    embed = discord.Embed(color=0x000000)
+    embed = nextcord.Embed(color=0x000000)
     embed.set_image(url=data["image"])
     embed.set_footer(text=data['fact'])
     await ctx.send(embed=embed)
@@ -422,122 +422,122 @@ async def fox(ctx):
 @kgb.command(description = "Выключает бота(только для разработчика)")
 @helpCategory('secret')
 async def killbot(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
      return
   if ctx.author.id == 745674921774153799:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = 'Пожалуйста подождите:',
       description = "Бот выключиться через 3 секунды!",
-      color = discord.Colour(0x000000)
+      color = nextcord.Colour(0x000000)
     ))
     await asyncio.sleep(3)
     await kgb.close()
   else:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = 'Ошибка:',
       description = "Эта команда только для разработчиков!",
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
     
 @kgb.command(description = "Выводит шуточное сообщение о: \nУспешном/неуспешном взломе пользователя")
 @helpCategory('fun')
 async def hack(ctx, *, member):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     rand = random.randint(1,2)
     if rand == 1:
-        await ctx.send(embed = discord.Embed(
+        await ctx.send(embed = nextcord.Embed(
           title = "Результат взлома:",
           description = f"{member} был успешно взломан!",
-          color = discord.Color(0x000000)
+          color = nextcord.Color(0x000000)
         ))
     else:
-        await ctx.send(embed = discord.Embed(
+        await ctx.send(embed = nextcord.Embed(
           title = "Результат взлома:",
           description = f"{member} не был взломан!",
-          color = discord.Color(0x000000)
+          color = nextcord.Color(0x000000)
         ))
       
 @kgb.command(description = "Гадальный шар")
 @helpCategory('fun')
 async def ball(ctx, *, question):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
   answers = ["Да", "Может быть", "Конечно", "Я не знаю", "Определённо **Нет**", "Нет", "Невозможно"] 
-  await ctx.send(embed = discord.Embed(
+  await ctx.send(embed = nextcord.Embed(
     title = f"Вопрос: {question}",
     description = f"Ответ: {random.choice(answers)}",
-    color = discord.Color(0x000000)
+    color = nextcord.Color(0x000000)
   ))
   
 @kgb.command(description = "Бан пользователя")
 @commands.has_permissions(ban_members=True)
 @helpCategory('moderation')
-async def ban(ctx, member: discord.Member = None, time=None, *, reason: str = None):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def ban(ctx, member: nextcord.Member = None, time=None, *, reason: str = None):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if member == '1061907927880974406':
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Нет, сэр",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
       
     if member is None:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Вы не указали кого нужно забанить!",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
     elif member.id == kgb.user.id:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="No, sir",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
     elif member.top_role >= ctx.author.top_role:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Вы не можете забанить пользователя т.к. он выше вас по роли",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
     else:
         await member.ban(reason=reason)
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Успешно:",
           description=f"Пользователь {member.name} был забанен",
-          color=discord.Color(0x000000)
+          color=nextcord.Color(0x000000)
         ))
       
 @kgb.command(description = "Покажет всех забаненных пользователей этого сервера")
 @commands.has_permissions(ban_members = True)
 @helpCategory('moderation')
 async def banlist(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
      return
   banned_users = ctx.guild.bans()
   banlist = []
   async for ban_entry in banned_users:
     banlist.append(f"{ban_entry.user.name}#{ban_entry.user.discriminator}\n")
   if banlist == []:
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
       title="Банлист:",
       description = "На этом сервере нет забаненных пользователей.",
-      color = discord.Color(0x000000)
+      color = nextcord.Color(0x000000)
     ))
   else:
     s = ''.join(banlist)
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
       title = "Банлист:", 
       description = s, 
-      color = discord.Color(0x000000)
+      color = nextcord.Color(0x000000)
     ))
     
 @kgb.command(description = "Разбан пользователя")
 @commands.has_permissions(ban_members = True)
 @helpCategory('moderation')
 async def unban(ctx, *, member):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
   banned_users = ctx.guild.bans()
   member_name, member_discriminator = member.split("#")
@@ -545,111 +545,111 @@ async def unban(ctx, *, member):
     user = ban_entry.user
     if (user.name, user.discriminator) == (member_name, member_discriminator):
       await ctx.guild.unban(user)
-      await ctx.send(embed = discord.Embed(
+      await ctx.send(embed = nextcord.Embed(
         title = "Успешно:",
         escription=  f'Пользователь {user.name}#{user.discriminator} был разбанен',
-        color = discord.Color(0x000000)
+        color = nextcord.Color(0x000000)
       ))
       
 @kgb.command(description = "Удаляет сообщения")
 @helpCategory('moderation')
 async def clear(ctx, amount: int):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
   if ctx.author.guild_permissions.administrator:
     await ctx.channel.purge(limit = amount)
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = "Успешно",
       description = f'Успешно удалено {amount} сообщений',
-      color = discord.Color(0x000000)
+      color = nextcord.Color(0x000000)
     ))
   else:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
         title = "Ошибка:",
         description = "Вы не имеете прав администратора!",
-        color = discord.Color(0xFF0000)
+        color = nextcord.Color(0xFF0000)
     ))
     
 @kgb.command(description = "Кик пользователя")
 @commands.has_permissions(kick_members=True)
 @helpCategory('moderation')
-async def kick(ctx, member: discord.Member = None, *, reason:str =None):
-  if isinstance(ctx.channel, discord.DMChannel):
+async def kick(ctx, member: nextcord.Member = None, *, reason:str =None):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
   if member.id == '1061907927880974406':
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Нет, сэр.",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
   if member is None:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
     title = "Ошибка:",
     description = "Вы должны указать кого кинуть!",
-    color = discord.Color(0xFF0000)
+    color = nextcord.Color(0xFF0000)
     ))
   if member.top_role >= ctx.author.top_role:
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
       title="Ошибка:",
       description="Вы не можете кикнуть пользователя т.к. он выше вас по ролям.",
-      color=discord.Color(0xFF0000)
+      color=nextcord.Color(0xFF0000)
     ))
   elif member == kgb.user.id:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = "Ошибка:",
       description = "Нет, сэр",
-      color = discord.Color(0xFF0000)
+      color = nextcord.Color(0xFF0000)
     ))
   else:
     await member.kick(reason=reason)
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = "Успешно",
       description = f"Пользователь {member.name} был кикнут.",
-      color = discord.Color(0x000000)
+      color = nextcord.Color(0x000000)
     ))
     
 @kgb.command(description = "Покажет список версий бота" )
 @helpCategory('secret')
 async def verlist(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
-  await ctx.send(embed = discord.Embed(
+  await ctx.send(embed = nextcord.Embed(
     title = "Список версий:",
     description = ver,
-    color = discord.Color(0x000000)
+    color = nextcord.Color(0x000000)
   ))
   
 @kgb.command(description = ")")
 @helpCategory('secret')
 async def love(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
-  await ctx.send(embed = discord.Embed(
+  await ctx.send(embed = nextcord.Embed(
     title = "Да)",
     description = "Несо и Саня пара навеки:3",
-    color = discord.Color(0xff7089)
+    color = nextcord.Color(0xff7089)
   ))
   
 @kgb.command(description = "шифр")
 @helpCategory('misc')
 async def cipher(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     url1 = cipherURL
     response1 = requests.get(url1)
     if response1.status_code != 200:
         await ctx.send('Ошибка загрузки изображения')
         return
-    embed = discord.Embed(color=0x000000)
+    embed = nextcord.Embed(color=0x000000)
     embed.set_image(url=url1)
     await ctx.author.send(embed=embed)
-    black_embed = discord.Embed(color=0x000000, description="20-9-23-5")
+    black_embed = nextcord.Embed(color=0x000000, description="20-9-23-5")
     await ctx.author.send(embed=black_embed)
   
 @kgb.command(description = "Создаёт фейковый ютуб комментарий")
 @helpCategory('api')
 async def comment(ctx, *, commint):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     try:
         comm = commint.replace("\n", " ").replace("+", "%2B").replace(" ", "+")
@@ -660,27 +660,27 @@ async def comment(ctx, *, commint):
             async with trigSession.get(f'https://some-random-api.com/canvas/youtube-comment?avatar={ctx.author.avatar.url}&comment={(comm)}&username={ctx.author.name}') as trigImg:
                 imageData = io.BytesIO(await trigImg.read())
                 await trigSession.close()
-                await ctx.send(embed=discord.Embed(
+                await ctx.send(embed=nextcord.Embed(
                   title="Ваш коммент:",
                   description="",
-                  color=discord.Color(0x000000)
-                ).set_image(url="attachment://youtube_comment.gif"), file=discord.File(imageData, 'youtube_comment.gif'))
+                  color=nextcord.Color(0x000000)
+                ).set_image(url="attachment://youtube_comment.gif"), file=nextcord.File(imageData, 'youtube_comment.gif'))
               
 @kgb.command(description = "Список благодарностей")
 @helpCategory('misc')
 async def thank(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
-  await ctx.send(embed = discord.Embed(
+  await ctx.send(embed = nextcord.Embed(
     title = "Я благодарен:",
     description = "SvZ_Bonnie#5779, за предоставленный обучающий материал!\nGrisshink#6476, за помощь в разработке бота!\nSanechka#1384 за рисование аватара для бота и постоянную поддержку меня:3",
-    color = discord.Color(0xffff00)
+    color = nextcord.Color(0xffff00)
   ))
   
 @kgb.command(description = "Даёт информацию о сервере")
 @helpCategory('info')
 async def server(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild = ctx.guild
     member_count = guild.member_count
@@ -691,7 +691,7 @@ async def server(ctx):
     voice_channels = len(guild.voice_channels)
     created_at = guild.created_at.strftime("%d.%m.%Y %H:%M:%S")
     region = guild.preferred_locale
-    embed = discord.Embed(title=f"Информация о сервере {guild.name}", color=0x000000)
+    embed = nextcord.Embed(title=f"Информация о сервере {guild.name}", color=0x000000)
     embed.set_thumbnail(url=guild.icon.url)
     embed.add_field(name="Участников:", value=member_count, inline=True)
     embed.add_field(name="Людей:", value=human_count, inline=True)
@@ -707,33 +707,33 @@ async def server(ctx):
 @commands.has_permissions(administrator=True)
 @helpCategory('config')
 async def welcome(ctx, *, arg=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     guild_id = str(ctx.guild.id)
     if arg == "off":
         channels.pop(guild_id, None)
         with open("data/channels.json", "w") as f:
             json.dump(channels, f)
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Приветствия выключены:",
             description="Теперь они больше не буду присылаться в этот канал.",
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
     else:
         channel_id = str(ctx.channel.id)
         channels[guild_id] = channel_id
         with open("data/channels.json", "w") as f:
             json.dump(channels, f)
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Приветствия включены:",
             description=f"Приветственные сообщения теперь буду присылаться в этот канал: \n{ctx.channel.mention}",
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
   
 @kgb.command(description = "Покажет аватар пользователя")
 @helpCategory('info')
-async def avatar(ctx, user: discord.User=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def avatar(ctx, user: nextcord.User=None):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     server = ctx.author.guild
     if not user:
@@ -743,14 +743,14 @@ async def avatar(ctx, user: discord.User=None):
         userColor = user.colour
     else:
         userColor = 0x0000000
-    embed=discord.Embed(title=f"Аватар {no_format(user)}", color=userColor)
+    embed=nextcord.Embed(title=f"Аватар {no_format(user)}", color=userColor)
     embed.set_image(url=user.avatar.url)
     await ctx.send(embed=embed)
   
 @kgb.command(description = "Даёт информацию о пользователе")
 @helpCategory('info')
-async def user(ctx, member: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def user(ctx, member: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     status = str(member.status)
     tag = member.name + "#" + member.discriminator
@@ -760,7 +760,7 @@ async def user(ctx, member: discord.Member):
     is_admin = "Администратор сервера" if member.guild_permissions.administrator else "Это не администратор сервера"
     member_id = member.id
     avatar_url = member.avatar.url
-    embed = discord.Embed(title="Информация о пользователе:", color=0x000000)
+    embed = nextcord.Embed(title="Информация о пользователе:", color=0x000000)
     embed.set_thumbnail(url=avatar_url)
     embed.add_field(name="статус:", value=status, inline=True)
     embed.add_field(name="Тэг:", value=tag, inline=True)
@@ -774,36 +774,36 @@ async def user(ctx, member: discord.Member):
 @kgb.command(description = "Подбросит монетку")
 @helpCategory('fun')
 async def coin(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     result = random.choice(["орёл", "решка"])
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
           title = "Результат:",
           description = f"Монетка показывает: **{result}**!",
-          color = discord.Color(0x000000)
+          color = nextcord.Color(0x000000)
         ))
   
 @kgb.command(description = "Выдаст предупреждение пользователю")
 @commands.has_permissions(administrator=True)
 @helpCategory('moderation')
-async def warn(ctx, member: discord.Member, count: int=1):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def warn(ctx, member: nextcord.Member, count: int=1):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild_id = str(ctx.guild.id)
     user_id = str(member.id)
   
     if member.top_role >= ctx.author.top_role:
-      await ctx.send(embed=discord.Embed(
+      await ctx.send(embed=nextcord.Embed(
         title="Ошибка:",
         description="Вы не можете выдать пользователю предупредение с большей или равной ролью, чем у вас.",
-        color=discord.Color(0xFF0000)
+        color=nextcord.Color(0xFF0000)
      ))
 
     if user_id == '1061907927880974406':
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Нет, сэр",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
@@ -825,10 +825,10 @@ async def warn(ctx, member: discord.Member, count: int=1):
         stanwarns = json.load(f)
 
     if guild_id not in stanwarns:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description='Условия кика и/или бана не настроены.\nУстановите их с помощью команды:\n`kgb!configwarn`',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
@@ -840,19 +840,19 @@ async def warn(ctx, member: discord.Member, count: int=1):
     if total_warns >= warn_limit:
         if warn_type == 'kick':
             await member.kick()
-            await ctx.send(embed = discord.Embed(
+            await ctx.send(embed = nextcord.Embed(
           title = "Кик:",
           description = f'{member.name} был кикнут. \nДостигнут лимит предупреждений: {total_warns}/{warn_limit}',
-          color = discord.Color(0x000000)
+          color = nextcord.Color(0x000000)
         ))
             return
 
         if warn_type == 'ban':
             await member.ban(reason=f'Достигнут лимит предупреждений: {total_warns}/{warn_limit}')
-            await ctx.send(embed = discord.Embed(
+            await ctx.send(embed = nextcord.Embed(
               title = "Бан:",
               description = f'{member.name} был забанен. \nДостигнут лимит предупреждений: {total_warns}/{warn_limit}',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
 
             del warns[guild_id][user_id]
@@ -860,35 +860,35 @@ async def warn(ctx, member: discord.Member, count: int=1):
                 json.dump(warns, f)
             return
 
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Конуз:",
           description=f'Невозможно произвести кик или бан {member.name}, т.к. указан неверный тип в configwarn',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
 
     with open('data/warn.json', 'w') as f: 
         json.dump(warns, f)
 
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
               title = "Выдано предупреждение:",
               description = f'{member.mention} получил {count} предупреждение,\nТеперь он имеет {total_warns} предупреждений на этом сервере.',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
 
 @kgb.command(description = "Снимет предупреждение пользователя")
 @commands.has_permissions(administrator=True)
 @helpCategory('moderation')
-async def unwarn(ctx, member: discord.Member, count: int = 1):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def unwarn(ctx, member: nextcord.Member, count: int = 1):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild = str(ctx.guild.id)
     user = str(member.id)
   
     if user == '1061907927880974406':
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Нет, сэр",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
       
@@ -896,10 +896,10 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
         stanwarns = json.load(f)
 
     if guild not in stanwarns:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description='Не установлены условия для предупреждений\nУстановите с помощью команды:\n`kgb!configwarn`',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
@@ -907,26 +907,26 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
         warns = json.load(f)
 
     if guild not in warns:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Нет предупреждений:",
           description=f'У {member.mention} нет предупреждений на этом сервере.',
-          color=discord.Color(0x000000)
+          color=nextcord.Color(0x000000)
         ))
         return
 
     if user not in warns[guild]:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Нет предупреждений:",
           description=f'У {member.mention} нет предупреждений на этом сервер.',
-          color=discord.Color(0x000000)
+          color=nextcord.Color(0x000000)
         ))
         return
 
     if count > warns[guild][user]:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description=f'У {member.mention} всего {warns[user][str(guild)]} предупреждений на этом сервере, вы не можете снять больше чем у него есть.',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
@@ -936,26 +936,26 @@ async def unwarn(ctx, member: discord.Member, count: int = 1):
     with open('data/warn.json', 'w') as f:
         json.dump(warns, f)
 
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
               title = "Снято предупреждени(е/и):",
               description = f'{count} предупреждений успешно снято у {member.mention}. \nОсталось {total_warns} предупреждени(й/я/е) на этом сервере.',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
 
 @kgb.command(description = "Покажет сколько предупреждений у пользователя")
 @commands.has_permissions(administrator=True)
 @helpCategory('moderation')
-async def warnings(ctx, member: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def warnings(ctx, member: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild = str(ctx.guild.id)
     user = str(member.id)
     
     if user == '1061907927880974406':
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description="Нет, сэр",
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
@@ -966,41 +966,41 @@ async def warnings(ctx, member: discord.Member):
         stanwarns = json.load(f)
 
     if guild not in stanwarns:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description='Не установлены условия для предупреждений\nУстановите с помощью команды:\n`kgb!configwarn`',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
     if guild not in warns:
-        await ctx.send(embed = discord.Embed(
+        await ctx.send(embed = nextcord.Embed(
               title = "Ошибка:",
               description = 'На этом сервере не выдавалось никаких предупреждений',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
         return
 
     if user not in warns[guild]:
-        await ctx.send(embed = discord.Embed(
+        await ctx.send(embed = nextcord.Embed(
               title = "Ошибка:",
               description = f'{member.display_name} не имеет предупреждений на этом сервере.',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
         return
 
     total_warns = warns[guild][user]
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
               title = "Всего предупреждений:",
               description = f'{member.display_name} имеет {total_warns} предупреждений на этом сервере.',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
 
 @kgb.command(description = "Установит лимит предупреждений и действия после него")
 @commands.has_permissions(administrator=True)
 @helpCategory('config')
 async def configwarn(ctx, limit: int, warn_type: str):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild_id = str(ctx.guild.id)
 
@@ -1017,26 +1017,26 @@ async def configwarn(ctx, limit: int, warn_type: str):
         stanwarns[guild_id]['warn_type'] = 'ban'
         stanwarns[guild_id]['warn_limit'] = limit
     else:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
           title="Ошибка:",
           description='Неверный тип предупреждения. Доступны "kick" и "ban".',
-          color=discord.Color(0xFF0000)
+          color=nextcord.Color(0xFF0000)
         ))
         return
 
     with open('data/stanwarns.json', 'w') as f:
         json.dump(stanwarns, f)
 
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
               title = "Действие и лимит установлен:",
               description = f'Для сервера {ctx.guild.name} установлено {warn_type} при {limit} предупреждениях.',
-              color = discord.Color(0x000000)
+              color = nextcord.Color(0x000000)
             ))
 
 @kgb.command(description="Ищет пользователей по их примерному нику на всех серверах, где присутствует бот")
 @helpCategory('info')
 async def seek_user(ctx, *, query):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     users_found = set()
     for guild in kgb.guilds:
@@ -1045,24 +1045,24 @@ async def seek_user(ctx, *, query):
                 users_found.add(f"{member.name}")
 
     if not users_found:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Ошибка:",
             description=f"Не могу найти пользователя по запросу '{query}'",
-            color=discord.Color(0xFF0000)
+            color=nextcord.Color(0xFF0000)
         ))
     else:
         message = "\n".join(users_found)
         users_count = f"Найдено пользователей: {len(users_found)}"
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Найденные пользователи:",
             description=f"{message}\n\n{users_count}",
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
 
 @kgb.command(description="Ищет сервер, на котором находится пользователь по его точному нику, на всех серверах где присутствует бот ")
 @helpCategory('info')
 async def seek_server(ctx, *, user_name):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     guild_seek = None
     with open(GUILD_SEEK_FILENAME, "r", encoding="utf-8") as f:
@@ -1078,36 +1078,36 @@ async def seek_server(ctx, *, user_name):
                 count += 1
 
     if not found_servers:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Ошибка:",
             description=f"Не могу найти сервер, на котором находится пользователь {user_name}",
-            color=discord.Color(0xFF0000)
+            color=nextcord.Color(0xFF0000)
         ))
     else:
         message = "\n".join(found_servers)
         message_count = f"Всего найдено серверов: {count}"
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Вот сервера на которых есть пользователь:",
             description=f"{message}\n\n{message_count}",
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
       
 @kgb.command(description = "Покажет пинг бота")
 @helpCategory('misc')
 async def ping(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     latency = kgb.latency
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
             title="Понг!",
             description=f'Скорость: {latency*1000:.2f} мс',
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
 
 @kgb.command(description="Выведет рандомное число")
 @helpCategory('fun')
 async def rand(ctx, num1, num2=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if num2 is None:
         num2 = num1
@@ -1121,67 +1121,67 @@ async def rand(ctx, num1, num2=None):
             await ctx.send("Первое число должно быть меньше второго")
         else:
             result = random.randint(num1, num2)
-            await ctx.send(embed=discord.Embed(
+            await ctx.send(embed=nextcord.Embed(
             title="Результат:",
             description=result,
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
 
 @kgb.command(description='Ищет статью на вики')
 @helpCategory('api')
 async def wiki(ctx, *, query):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     wikipedia.set_lang('ru')
     try:
         page = wikipedia.page(query)
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Найдена страница",
             description=page.url,
-            color=discord.Color(0x000000)
+            color=nextcord.Color(0x000000)
         ))
     except wikipedia.exceptions.PageError:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Ошибка:",
             description=f'Страница на Википедии не найдена для "{query}"',
-            color=discord.Color(0xFF0000)
+            color=nextcord.Color(0xFF0000)
         ))
     except wikipedia.exceptions.DisambiguationError as e:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title="Ошибка:",
             description=f'Слишком много результатов для "{query}". Пожалуйста, уточните свой запрос.',
-            color=discord.Color(0xFF0000)
+            color=nextcord.Color(0xFF0000)
         ))
 
 @kgb.command(description = ")")
 @helpCategory('secret')
 async def hentai(ctx):
-  if isinstance(ctx.channel, discord.DMChannel):
+  if isinstance(ctx.channel, nextcord.DMChannel):
     return
-  await ctx.send(embed = discord.Embed(
+  await ctx.send(embed = nextcord.Embed(
     title = "Не-а)",
     description = "Эй школьник, домашку сделай а потом дрочи)",
-    color = discord.Color(0xff0000)
+    color = nextcord.Color(0xff0000)
   ))
 
 @kgb.command(description="Поцеловать участника")
 @helpCategory('rp')
-async def kiss(ctx, member: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def kiss(ctx, member: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} поцеловал(а) {member.mention}")
 
 @kgb.command(description="Обнять участника")
 @helpCategory('rp')
-async def hug(ctx, user: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def hug(ctx, user: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
 
     response = requests.get("https://some-random-api.com/animu/hug")
     data = response.json()
     image_url = data["link"]
 
-    embed = discord.Embed()
+    embed = nextcord.Embed()
     embed.set_image(url=image_url)
     embed.description = f"{ctx.author.mention} обнял(a) {user.mention}"
     embed.color=0x000000 
@@ -1189,29 +1189,29 @@ async def hug(ctx, user: discord.Member):
 
 @kgb.command(description="Ударить участника")
 @helpCategory('rp')
-async def hit(ctx, user: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def hit(ctx, user: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} ударил(а) {user.mention}")
 
 @kgb.command(description="Лизнуть участника")
 @helpCategory('rp')
-async def lick(ctx, user: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def lick(ctx, user: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     await ctx.send(f"{ctx.author.mention} лизнул(а) {user.mention}")
 
 @kgb.command(description="Погладить участника")
 @helpCategory('rp')
-async def pet(ctx, member: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def pet(ctx, member: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
 
     response = requests.get("https://some-random-api.com/animu/pat")
     data = response.json()
     image_url = data["link"]
 
-    embed = discord.Embed()
+    embed = nextcord.Embed()
     embed.set_image(url=image_url)
     embed.description = f"{ctx.author.mention} погладил(а) {member.mention}"
     embed.color=0x000000
@@ -1219,18 +1219,18 @@ async def pet(ctx, member: discord.Member):
 
 @kgb.command(description="Поприветствовать участника")
 @helpCategory('rp')
-async def hi(ctx, member: discord.Member):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def hi(ctx, member: nextcord.Member):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     await ctx.send(f'{ctx.author.mention} поприветствовал(а) {member.mention}')
 
 @kgb.command(description='Вызывает голосование в канале\n(принимает длительность голосования только в часах)' )
 @helpCategory('moderation')
 async def poll(ctx, hours: int, *, text=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if text is None:
-        embedVar = discord.Embed(
+        embedVar = nextcord.Embed(
           title='Ошибка:', 
           description='Пожалуйста, укажите текст!', 
           color=0xff0000
@@ -1241,7 +1241,7 @@ async def poll(ctx, hours: int, *, text=None):
     end_time_msk = end_time + timedelta(hours=3)
     end_time_str = end_time_msk.strftime('%H:%M:%S')
     
-    embedVar = discord.Embed(
+    embedVar = nextcord.Embed(
       title=f'Голосование от {ctx.author.name}', 
       description=f'{text}\n\n🔼 - Да\n🔽 - Нет\n\nГолосование закончится в {end_time_str} по МСК', 
       color=0x000000)
@@ -1258,7 +1258,7 @@ async def poll(ctx, hours: int, *, text=None):
     results = msgp.reactions
     yes_votes = results[0].count - 1
     no_votes = results[1].count - 1
-    embedVar = discord.Embed(
+    embedVar = nextcord.Embed(
       title='Голосование завершено!', 
       description=f'{text}\n\n🔼 - Да ({yes_votes})\n🔽 - Нет ({no_votes})', 
       color=0x000000
@@ -1267,10 +1267,10 @@ async def poll(ctx, hours: int, *, text=None):
 
 @kgb.command(description="Пишет информацию о категории\n(указывайте айди категории или её пинг")
 @helpCategory('info')
-async def category(ctx, category: discord.CategoryChannel):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def category(ctx, category: nextcord.CategoryChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
-    em = discord.Embed(title="Информация о категории:", color=0x000000)
+    em = nextcord.Embed(title="Информация о категории:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
     em.add_field(name="Имя:", value=category.name, inline=False)
     em.add_field(name="Создана:", value=category.created_at.strftime("%d.%m.%Y %H:%M:%S"), inline=False)
@@ -1281,11 +1281,11 @@ async def category(ctx, category: discord.CategoryChannel):
   
 @kgb.command(description="Пишет информацию о канале\n(указывайте айди канала или его пинг)")
 @helpCategory('info')
-async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def channel(ctx, channel: typing.Optional[nextcord.TextChannel]):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     channel = channel or ctx.channel
-    em = discord.Embed(title="Информация о канале:", color=0x000000)
+    em = nextcord.Embed(title="Информация о канале:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
     em.add_field(name="Имя:", value=channel.name, inline=False)
     em.add_field(name="Топик:", value=channel.topic or "Нет топика.", inline=False)
@@ -1299,10 +1299,10 @@ async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
   
 @kgb.command(description="Пишет информацию о роли\n(указывайте айди роли или её пинг" )
 @helpCategory('info')
-async def role(ctx, *, role: discord.Role):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def role(ctx, *, role: nextcord.Role):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
-    em = discord.Embed(title="Информация о роли:", color=0x000000)
+    em = nextcord.Embed(title="Информация о роли:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
     em.add_field(name="Имя:", value=role.name, inline=False)
     em.add_field(name="ID:", value=role.id, inline=False)
@@ -1315,7 +1315,7 @@ async def role(ctx, *, role: discord.Role):
 @kgb.command(description="Выдаст рандомную цитату")
 @helpCategory('fun')
 async def quote(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     fortun = fortune.get_random_fortune('static_data/fortune')
     await ctx.send(f"```{fortun}```")
@@ -1323,7 +1323,7 @@ async def quote(ctx):
 @kgb.command(description="Выдаст рандомную шутку про Штирлица")
 @helpCategory('fun')
 async def shtr(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     shtr = fortune.get_random_fortune('static_data/shtirlitz')
     await ctx.send(f"```{shtr}```")
@@ -1331,16 +1331,16 @@ async def shtr(ctx):
 @kgb.command(description="0x00000000")
 @helpCategory('secret')
 async def null(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
-    embed = discord.Embed(title="NULL OF PROJECT", color=0x00000000)
+    embed = nextcord.Embed(title="NULL OF PROJECT", color=0x00000000)
     embed.set_image(url=secretURL)
     await ctx.reply(embed=embed)
 
 @kgb.command(description="Хорни карта")
 @helpCategory('api')
-async def horny(ctx, member: discord.Member = None):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def horny(ctx, member: nextcord.Member = None):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     member = member or ctx.author
     async with ctx.typing():
@@ -1349,8 +1349,8 @@ async def horny(ctx, member: discord.Member = None):
             f'https://some-random-api.com/canvas/horny?avatar={member.avatar.url}') as af:
                 if 300 > af.status >= 200:
                     fp = io.BytesIO(await af.read())
-                    file = discord.File(fp, "horny.png")
-                    em = discord.Embed(
+                    file = nextcord.File(fp, "horny.png")
+                    em = nextcord.Embed(
                         color=0xFFC0CB,
                     )
                     em.set_image(url="attachment://horny.png")
@@ -1361,8 +1361,8 @@ async def horny(ctx, member: discord.Member = None):
 
 @kgb.command(description="hello comrade!")
 @helpCategory('api')
-async def comrade(ctx, member: discord.Member = None):
-    if isinstance(ctx.channel, discord.DMChannel):
+async def comrade(ctx, member: nextcord.Member = None):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     member = member or ctx.author
     async with ctx.typing():
@@ -1371,8 +1371,8 @@ async def comrade(ctx, member: discord.Member = None):
             f'https://some-random-api.com/canvas/overlay/comrade?avatar={member.avatar.url}') as af:
                 if 300 > af.status >= 200:
                     fp = io.BytesIO(await af.read())
-                    file = discord.File(fp, "comrade.png")
-                    em = discord.Embed(
+                    file = nextcord.File(fp, "comrade.png")
+                    em = nextcord.Embed(
                       color=0xff0000,
                     )
                     em.set_image(url="attachment://comrade.png")
@@ -1384,7 +1384,7 @@ async def comrade(ctx, member: discord.Member = None):
 @kgb.command(description="Взлом пентагона")
 @helpCategory('fun')
 async def hackp(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     progress = 0
     while progress < 100:
@@ -1404,7 +1404,7 @@ async def hackp(ctx):
 @kgb.command(description="Не может проигрывать музыку с ютуба\nМожет проигрывать только прямые ссылки на аудиофайлы")
 @helpCategory('music')
 async def playaudio(ctx, url):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if not ctx.author.voice:
         await ctx.send("Вы должны быть подключены к голосовому каналу, чтобы воспроизвести музыку.")
@@ -1418,7 +1418,7 @@ async def playaudio(ctx, url):
             'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         }
 
-        voice_client.play(discord.FFmpegPCMAudio(url, **ffmpeg_options))
+        voice_client.play(nextcord.FFmpegPCMAudio(url, **ffmpeg_options))
     except:
         pass
 
@@ -1430,7 +1430,7 @@ async def playaudio(ctx, url):
 @kgb.command(description="Может проигрывать музыку только с ютуба")
 @helpCategory('music')
 async def play(ctx, url):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if not ctx.author.voice:
         await ctx.send("Вы должны быть подключены к голосовому каналу, чтобы воспроизвести музыку.")
@@ -1451,7 +1451,7 @@ async def play(ctx, url):
             info = ydl.extract_info(url, download=False)
             url2 = info['formats'][3]['url']
 
-        voice_client.play(discord.FFmpegPCMAudio(url2))
+        voice_client.play(nextcord.FFmpegPCMAudio(url2))
     except:
         pass
 
@@ -1464,7 +1464,7 @@ async def play(ctx, url):
 @kgb.command(description="Выгоняет бота из войс канала")
 @helpCategory('music')
 async def leave(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     if ctx.voice_client:
         await ctx.voice_client.disconnect()
@@ -1472,16 +1472,16 @@ async def leave(ctx):
 @kgb.command(description='Вышлет вам код дискорд бота "SudoBot"')
 @helpCategory('misc')
 async def code(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     file_path = 'static_data/sudocode.py'
-    file = discord.File(file_path)
+    file = nextcord.File(file_path)
     await ctx.send(file=file)
 
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
 @helpCategory('config')
 async def sub(ctx, arg=None):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     channel_id = str(ctx.channel.id)
 
@@ -1508,7 +1508,7 @@ def remove_channel(channel_id):
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
 async def scratch_user(ctx, username):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     base_url = "https://api.scratch.mit.edu/users/"
     url = base_url + username
@@ -1525,7 +1525,7 @@ async def scratch_user(ctx, username):
                 "Дата создания аккаунта:": data['history']['joined'],
             }
 
-            embed = discord.Embed(title=f"Информация о пользователе {username}", color=discord.Color.orange())
+            embed = nextcord.Embed(title=f"Информация о пользователе {username}", color=nextcord.Color.orange())
             for key, value in user_info.items():
                 embed.add_field(name=key, value=value, inline=False)
 
@@ -1542,17 +1542,17 @@ async def scratch_user(ctx, username):
 @kgb.command(description="Нейросеть которая рисует несуществующих людей")
 @helpCategory('neuro')
 async def person(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     image_url = 'https://thispersondoesnotexist.com'
     response = requests.get(image_url)
 
-    await ctx.send(file=discord.File(io.BytesIO(response.content), 'generated_image.jpg'))
+    await ctx.send(file=nextcord.File(io.BytesIO(response.content), 'generated_image.jpg'))
 
 @kgb.command(description="Интересное о Космосе")
 @helpCategory('api')
 async def nasa(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     url = "https://api.nasa.gov/planetary/apod"
     params = {
@@ -1561,7 +1561,7 @@ async def nasa(ctx):
     response = requests.get(url, params=params)
     data = response.json()
 
-    embed = discord.Embed(title=data['title'], description=data['explanation'], color=discord.Color.dark_blue())
+    embed = nextcord.Embed(title=data['title'], description=data['explanation'], color=nextcord.Color.dark_blue())
     embed.set_image(url=data['url'])
 
     await ctx.send(embed=embed)
@@ -1569,7 +1569,7 @@ async def nasa(ctx):
 @kgb.command(description="Генератор оскарблений")
 @helpCategory('api')
 async def insult(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     url = "https://evilinsult.com/generate_insult.php?lang=ru&type=json"
     response = requests.get(url)
@@ -1577,16 +1577,16 @@ async def insult(ctx):
 
     insult = data['insult']
 
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
           title = insult,
           description = "",
-          color = discord.Color(0x000000)
+          color = nextcord.Color(0x000000)
         ))
 
 @kgb.command(description="Генератор бреда Порфирьевич")
 @helpCategory('neuro')
 async def porfir(ctx, *, prompt):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     
     async def get():
@@ -1598,10 +1598,10 @@ async def porfir(ctx, *, prompt):
         try:
             response = requests.post(api_url, json=data, timeout=30)
         except requests.ConnectTimeout:
-            await ctx.reply(embed = discord.Embed(
+            await ctx.reply(embed = nextcord.Embed(
                   title = 'Ошибка:',
                   description = 'Превышено время ожидания',
-                  color = discord.Color(0xFF0000)
+                  color = nextcord.Color(0xFF0000)
                 ))
             return
 
@@ -1622,7 +1622,7 @@ async def porfir(ctx, *, prompt):
 @kgb.command(description="Генератор бреда Балабоба")
 @helpCategory('neuro')
 async def balabola(ctx, *, prompt):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
       return
     
     text_types = bb.get_text_types(language="ru")
@@ -1637,7 +1637,7 @@ async def balabola(ctx, *, prompt):
 @kgb.command(description='Переведёт кириллицу в транслит или транслит в кириллицу')
 @helpCategory('fun')
 async def translit(ctx, option: str, lang_code: str, *, text: str):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
 
     if option.lower() == 't':
@@ -1650,54 +1650,54 @@ async def translit(ctx, option: str, lang_code: str, *, text: str):
         await ctx.send('Неправильно указана опция. Используйте "t" или "c".')
         return
 
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
         title=title,
         description=translit_text,
-        color=discord.Color(0x000000)
+        color=nextcord.Color(0x000000)
     ))
 
 @kgb.command(description = "Перезапускает бота(только для разработчика)")
 @helpCategory('secret')
 async def reload(ctx):
-  if isinstance(ctx.channel, discord.DMChannel): return
+  if isinstance(ctx.channel, nextcord.DMChannel): return
 
   if ctx.author.id == 745674921774153799 or ctx.author.id == 999606704541020200:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = 'Пожалуйста подождите:',
       description = "Бот перезагрузится через 3 секунды!",
-      color = discord.Colour(0x000000)
+      color = nextcord.Colour(0x000000)
     ))
     await asyncio.sleep(3)
     exit(1)
     await kgb.close()
   else:
-    await ctx.send(embed = discord.Embed(
+    await ctx.send(embed = nextcord.Embed(
       title = 'Ошибка:',
       description = "Эта команда только для разработчиков!",
-      color = discord.Colour(0xFF0000)
+      color = nextcord.Colour(0xFF0000)
     ))
 
 @kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
 async def gen(ctx, *args: str):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
                 title="Ошибка:",
                 description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
-                color=discord.Colour(0xFF0000)
+                color=nextcord.Colour(0xFF0000)
         ))
         return
     
     try:
         await ctx.send(genAiArray[channelId].generate(' '.join(args)[:2000]))
     except ValueError as exc:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=exc,
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
 
 @kgb.command(description="Настраивает поведение команды kgb!gen в данном канале.\n Введите имя опции без значения, чтобы посмотреть её текущее значение.\nДоступные опции:\n`read true/false` - Позволяет боту сохранять сообщения и картинки для генерации\n`reply_on_mention true/false` - Позволяет боту генерировать текст если ответить на его сообщение\n`remove_mentions true/false` - Не позволяет упоминать участников в сгенерированном тексте")
@@ -1707,11 +1707,11 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
 
     def strToBool(inp: str) -> bool: return inp.lower() == 'true'
 
-    if isinstance(ctx.channel, discord.DMChannel): 
-        await ctx.send(embed=discord.Embed(
+    if isinstance(ctx.channel, nextcord.DMChannel): 
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=f'Невозможно использовать kgb!genconfig в ЛС!',
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         return
     
@@ -1721,80 +1721,80 @@ async def genconfig(ctx, option: str, *, value: typing.Union[str, None] = None):
         if value: genAiArray[channelId] = markov.MarkovGen()
         else:
             if option not in markov.DEFAULT_CONFIG:
-                await ctx.send(embed=discord.Embed(
+                await ctx.send(embed=nextcord.Embed(
                     title='Ошибка:',
                     description=f'Неизвестное значение `{option}`! \nПожалуйста, пропишите команду:\n`kgb!help genconfig`',
-                    color=discord.Colour(0xFF0000)
+                    color=nextcord.Colour(0xFF0000)
                 ))
                 return
 
-            await ctx.send(embed=discord.Embed(
+            await ctx.send(embed=nextcord.Embed(
                 title='Инфо',
                 description=f'Значение `{option}` равно `{markov.DEFAULT_CONFIG[option]}`',
-                color=discord.Colour(0x000000)
+                color=nextcord.Colour(0x000000)
             ))
             return
 
     genAi = genAiArray[channelId]
     if option not in genAi.config:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=f'Неизвестное значение `{option}`! \nПожалуйста, пропишите команду:\n`kgb!help genconfig`',
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         return
 
     if value:
         genAi.config[option] = strToBool(value)
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Успешно',
             description=f'Значение `{option}` было установлено в `{genAi.config[option]}`',
-            color=discord.Colour(0x000000)
+            color=nextcord.Colour(0x000000)
         ))
     else: 
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Инфо',
             description=f'Значение `{option}` равно `{genAi.config[option]}`',
-            color=discord.Colour(0x000000)
+            color=nextcord.Colour(0x000000)
         ))
 
 @kgb.command(description="Удаляет все сообщения из базы генерации")
 @helpCategory('config')
 async def genclear(ctx):
-    if isinstance(ctx.channel, discord.DMChannel): 
-        await ctx.send(embed=discord.Embed(
+    if isinstance(ctx.channel, nextcord.DMChannel): 
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description='Невозможно использовать kgb!genclear в ЛС!',
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         return
 
     if str(ctx.channel.id) in genAiArray:
         del genAiArray[str(ctx.channel.id)]
 
-    await ctx.send(embed=discord.Embed(
+    await ctx.send(embed=nextcord.Embed(
         title='Успешно!',
         description='Все данные команды kgb!gen очищены в этом канале!',
-        color=discord.Colour(0x000000)
+        color=nextcord.Colour(0x000000)
     ))
 
 @kgb.command(description="Выводит факты о числах(на англиском).\nДоступные типы фактов:\n`math` `date` `year` `trivia`")
 @helpCategory('api')
 async def factnumber(ctx, number: str, fact_type: str):
     if not number.isdigit():
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description="Пожалуйста, введите корректное число.",
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         return
         
     valid_fact_types = ['trivia', 'math', 'date', 'year']
     if fact_type not in valid_fact_types:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description="Пожалуйста, введите корректный тип факта.",
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         return
 
@@ -1803,16 +1803,16 @@ async def factnumber(ctx, number: str, fact_type: str):
 
     if response.status_code == 200:
         fact_text = response.text
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Факт о числе:',
             description=fact_text,
-            color=discord.Colour(0x000000)
+            color=nextcord.Colour(0x000000)
         ))
     else:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=f"Извините, не удалось получить факт о числе {number}.",
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
         
 @kgb.command(description="Нейросеть ChatGPT")
@@ -1831,7 +1831,7 @@ async def name(ctx, *names):
     g = AsyncNameAPI(name_list, mode="*")
     result = await g.get_names_info()
 
-    embed = discord.Embed(title="Информация о именах", color=discord.Color(0x000000))
+    embed = nextcord.Embed(title="Информация о именах", color=nextcord.Color(0x000000))
 
     for name, info in result.items():
         age = info['age'] if info['age'] is not None else "Неизвестно"
@@ -1848,14 +1848,14 @@ async def name(ctx, *names):
 @kgb.command(description="Создаёт демотиватор\nОн использует сохранёные картинки из чата,\nНо вы можете прикрепить изображение к сообщению что использовать его")
 @helpCategory('neuro')
 async def demotivator(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
     channelId = str(ctx.channel.id)
     if channelId not in genAiArray or not genAiArray[channelId].config['read']:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
                 title="Ошибка:",
                 description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
-                color=discord.Colour(0xFF0000)
+                color=nextcord.Colour(0xFF0000)
         ))
         return
     
@@ -1865,10 +1865,10 @@ async def demotivator(ctx):
             random_image = await attachment.read()
         else:
             if channelId not in image_list or len(image_list[channelId]) == 0:
-                await ctx.send(embed=discord.Embed(
+                await ctx.send(embed=nextcord.Embed(
                         title="Ошибка:",
                         description="Пожалуйста укажите картинку!",
-                        color=discord.Colour(0xFF0000)
+                        color=nextcord.Colour(0xFF0000)
                 ))
                 return
 
@@ -1890,22 +1890,22 @@ async def demotivator(ctx):
         image = await conf.coroutine_download()
         image.save("demotivator.png")
         
-        await ctx.send(file=discord.File("demotivator.png"))
+        await ctx.send(file=nextcord.File("demotivator.png"))
         os.remove("demotivator.png")
     
     except ValueError as exc:
-        await ctx.send(embed=discord.Embed(
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=exc,
-            color=discord.Colour(0xFF0000)
+            color=nextcord.Colour(0xFF0000)
         ))
 
 @kgb.command(description="Покажет всю информацию о боте")
 @helpCategory('info')
 async def bot_info(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
+    if isinstance(ctx.channel, nextcord.DMChannel):
         return
-    embed = discord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности\nНапишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \nПоэтому может падать несколько раз в день", color=discord.Color(0x000000))
+    embed = nextcord.Embed(title="Информация о боте:", description="КГБ - Комитет Государственной Безопасности\nНапишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \nПоэтому может падать несколько раз в день", color=nextcord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
     embed.add_field(name="Полезные ссылки:", value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n[Присоединится к серверу бота]({serverURL})\n[Поддержать бота на бусти]({boostyURL})", inline=False)
     embed.set_thumbnail(url=tumbaYUMBA)
@@ -1914,4 +1914,4 @@ async def bot_info(ctx):
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
-kgb.run(getenv('DISCORD_TOKEN', ''))
+kgb.run(getenv('nextcord_TOKEN', ''))
