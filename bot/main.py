@@ -1678,9 +1678,9 @@ async def reload(ctx):
       color = nextcord.Colour(0xFF0000)
     ))
 
-@kgb.slash_command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
+@kgb.command(description="Генерирует текст как гена.\nДля того, чтобы бот работал в данном канале,\nПропишите: kgb!genconfig read true")
 @helpCategory('neuro')
-async def gen(ctx: nextcord.Interaction, *args: str):
+async def gen(ctx, *args: str):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
     channelId = str(ctx.channel.id)
