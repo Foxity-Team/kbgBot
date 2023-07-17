@@ -672,16 +672,16 @@ async def verlist(ctx):
     color = nextcord.Color(0x000000)
   ))
   
-#@kgb.command(description = ")")
-#@helpCategory('secret')
-#async def love(ctx):
-#  if isinstance(ctx.channel, nextcord.DMChannel):
-#    return
-#  await ctx.send(embed = nextcord.Embed(
-#    title = "Да)",
-#    description = "Несо и Саня пара навеки:3", похоже, больше уже нет.....
-#    color = nextcord.Color(0xff7089)
-#  ))
+@kgb.command(description = ")")
+@helpCategory('secret')
+async def love(ctx):
+  if isinstance(ctx.channel, nextcord.DMChannel):
+    return
+  await ctx.send(embed = nextcord.Embed(
+    title = "Нет...",
+    description = "Несо и Саня больше не пара...",
+    color = nextcord.Color(0xff7089)
+  ))
   
 @kgb.command(description = "шифр")
 @helpCategory('misc')
@@ -726,7 +726,7 @@ async def thank(ctx):
     return
   await ctx.send(embed = nextcord.Embed(
     title = "Я благодарен:",
-    description = "SvZ_Bonnie#5779, за предоставленный обучающий материал!\nGrisshink#6476, за помощь в разработке бота!\nSanechka#1384 за рисование аватара для бота и постоянную поддержку меня:3",
+    description = "SvZ_Bonnie#5779, за предоставленный обучающий материал!\nGrisshink#6476, за помощь в разработке бота!\nSanechka#1384 за рисование аватара для бота",
     color = nextcord.Color(0xffff00)
   ))
   
