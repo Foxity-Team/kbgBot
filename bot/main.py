@@ -680,7 +680,7 @@ async def love(ctx):
   await ctx.send(embed = nextcord.Embed(
     title = "Нет...",
     description = "Несо и Саня больше не пара...",
-    color = nextcord.Color(0xff7089)
+    color = nextcord.Color(0x000000)
   ))
   
 @kgb.command(description = "шифр")
