@@ -672,7 +672,7 @@ async def verlist(ctx):
     color = nextcord.Color(0x000000)
   ))
   
-@kgb.command(description = ")")
+@kgb.command(description = "(....")
 @helpCategory('secret')
 async def love(ctx):
   if isinstance(ctx.channel, nextcord.DMChannel):
@@ -680,7 +680,7 @@ async def love(ctx):
   await ctx.send(embed = nextcord.Embed(
     title = "Нет...",
     description = "Несо и Саня больше не пара...",
-    color = nextcord.Color(0x000000)
+    color = nextcord.Color(0xFF0000)
   ))
   
 @kgb.command(description = "шифр")
