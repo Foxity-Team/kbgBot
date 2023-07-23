@@ -49,9 +49,7 @@ class MarkovGen:
         outString = ''.join([str(token) + ' ' for token in out if token != MRK_START and token != MRK_END])
         if not outString.startswith('http'):
             if self.config['remove_mentions']:
-                print(outString.capitalize())
                 sub = re.sub('(<@&*[0-9]*>)', '', outString.capitalize())
-                print(sub)
                 if sub.strip() == '':
                     return '*(Пустое сообщение)*'
                 return sub 
