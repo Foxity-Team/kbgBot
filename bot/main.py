@@ -1565,6 +1565,7 @@ async def sub(ctx, arg):
         with open('data/retrgris.txt', 'a') as file:
             file.write(channel_id + '\n')
 
+
     def remove_channel_gris(channel_id):
         with open('data/retrgris.txt', 'r') as file:
             channel_ids = file.readlines()
