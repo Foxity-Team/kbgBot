@@ -1552,26 +1552,10 @@ async def code(ctx):
 
 @kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от всех новостей.')
 @helpCategory('config')
-async def sub(ctx, arg=None):
+async def sub(ctx, arg):
     if isinstance(ctx.channel, nextcord.DMChannel):
       return
     channel_id = str(ctx.channel.id)
-
-    if arg == 'grisshing_off':
-        remove_channel_gris(channel_id)
-        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
-
-    if arg == 'soviet_off':
-        remove_channel_soviet(channel_id)
-        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
-        
-    if arg == 'grisshing':
-        add_channel_gris(channel_id)
-        await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
-        
-    if arg == 'soviet':
-        add_channel_soviet(channel_id)
-        await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
 
 def add_channel_soviet(channel_id):
     with open('data/retr.txt', 'a') as file:
@@ -1598,6 +1582,22 @@ def remove_channel_soviet(channel_id):
         for id in channel_ids:
             if id.strip() != channel_id:
                 file.write(id)
+
+    if arg == 'grisshing_off':
+        remove_channel_gris(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+
+    if arg == 'soviet_off':
+        remove_channel_soviet(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+        
+    if arg == 'grisshing':
+        add_channel_gris(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
+        
+    if arg == 'soviet':
+        add_channel_soviet(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
 
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
