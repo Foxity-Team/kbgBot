@@ -223,6 +223,25 @@ async def on_message(message):
                         embed.set_image(url=attachment.url)
                 await channel.send(embed=embed)
 
+    if message.channel.id == 1131911759968612434:
+        with open('data/retrgris.txt', 'r') as file:
+            channel_ids = file.readlines()
+            channel_ids = [id.strip() for id in channel_ids]
+
+        for channel_id in channel_ids:
+            channel = kgb.get_channel(int(channel_id))
+            if channel:
+                embed_color = random.choice(['0000FF', '8B00FF'])
+                embed = nextcord.Embed(
+                    title=f'Сообщение из канала #{message.channel.name}:',
+                    description=message.content,
+                    color=nextcord.Color(int(embed_color, 16))
+                )
+                if len(message.attachments) > 0:
+                    for attachment in message.attachments:
+                        embed.set_image(url=attachment.url)
+                await channel.send(embed=embed)
+
     replied = False
 
     if message.author != kgb.user:
@@ -1531,7 +1550,7 @@ async def code(ctx):
     file = nextcord.File(file_path)
     await ctx.send(file=file)
 
-@kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от новостей.')
+@kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от всех новостей.')
 @helpCategory('config')
 async def sub(ctx, arg=None):
     if isinstance(ctx.channel, nextcord.DMChannel):
@@ -1540,7 +1559,11 @@ async def sub(ctx, arg=None):
 
     if arg == 'off':
         remove_channel(channel_id)
+        remove_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+    if arg == 'grisshing':
+        add_channel_gris(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
     else:
         add_channel(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
@@ -1548,12 +1571,16 @@ async def sub(ctx, arg=None):
 def add_channel(channel_id):
     with open('data/retr.txt', 'a') as file:
         file.write(channel_id + '\n')
+        
+def add_channel_gris(channel_id):
+    with open('data/retr.txt', 'a') as file:
+        file.write(channel_id + '\n')
 
-def remove_channel(channel_id):
-    with open('data/retr.txt', 'r') as file:
+def remove_channel_gris(channel_id):
+    with open('data/retrgris.txt', 'r') as file:
         channel_ids = file.readlines()
 
-    with open('data/retr.txt', 'w') as file:
+    with open('data/retrgris.txt', 'w') as file:
         for id in channel_ids:
             if id.strip() != channel_id:
                 file.write(id)
