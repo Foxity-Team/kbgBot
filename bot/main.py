@@ -1573,7 +1573,7 @@ def add_channel(channel_id):
         file.write(channel_id + '\n')
         
 def add_channel_gris(channel_id):
-    with open('data/retr.txt', 'a') as file:
+    with open('data/retrgris.txt', 'a') as file:
         file.write(channel_id + '\n')
 
 def remove_channel_gris(channel_id):
