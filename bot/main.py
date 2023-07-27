@@ -1587,18 +1587,22 @@ async def sub(ctx, arg):
     if arg == 'grisshink_off':
         remove_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+        return
     if arg == 'soviet_off':
         remove_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+        return
     if arg == 'grisshink':
         add_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
+        return
     if arg == 'soviet':
         add_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
+        return
     else:
         await ctx.send(f'Неверное значение!')
-        
+        return
 
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
