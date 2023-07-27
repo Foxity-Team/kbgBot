@@ -1557,18 +1557,23 @@ async def sub(ctx, arg=None):
       return
     channel_id = str(ctx.channel.id)
 
-    if arg == 'off':
-        remove_channel(channel_id)
+    if arg == 'grisshing_off':
         remove_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+
+    if arg == 'soviet_off':
+        remove_channel_soviet(channel_id)
+        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+        
     if arg == 'grisshing':
         add_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
-    else:
-        add_channel(channel_id)
+        
+    if arg == 'soviet':
+        add_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
 
-def add_channel(channel_id):
+def add_channel_soviet(channel_id):
     with open('data/retr.txt', 'a') as file:
         file.write(channel_id + '\n')
         
@@ -1585,8 +1590,8 @@ def remove_channel_gris(channel_id):
             if id.strip() != channel_id:
                 file.write(id)
 
-def remove_channel(channel_id):
-    with open('data/retrgris.txt', 'r') as file:
+def remove_channel_soviet(channel_id):
+    with open('data/retr.txt', 'r') as file:
         channel_ids = file.readlines()
 
     with open('data/retrgris.txt', 'w') as file:
