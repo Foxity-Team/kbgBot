@@ -1554,34 +1554,34 @@ async def code(ctx):
 @helpCategory('config')
 async def sub(ctx, arg):
     if isinstance(ctx.channel, nextcord.DMChannel):
-      return
+        return
     channel_id = str(ctx.channel.id)
 
-def add_channel_soviet(channel_id):
-    with open('data/retr.txt', 'a') as file:
-        file.write(channel_id + '\n')
-        
-def add_channel_gris(channel_id):
-    with open('data/retrgris.txt', 'a') as file:
-        file.write(channel_id + '\n')
+    def add_channel_soviet(channel_id):
+        with open('data/retr.txt', 'a') as file:
+            file.write(channel_id + '\n')
 
-def remove_channel_gris(channel_id):
-    with open('data/retrgris.txt', 'r') as file:
-        channel_ids = file.readlines()
+    def add_channel_gris(channel_id):
+        with open('data/retrgris.txt', 'a') as file:
+            file.write(channel_id + '\n')
 
-    with open('data/retrgris.txt', 'w') as file:
-        for id in channel_ids:
-            if id.strip() != channel_id:
-                file.write(id)
+    def remove_channel_gris(channel_id):
+        with open('data/retrgris.txt', 'r') as file:
+            channel_ids = file.readlines()
 
-def remove_channel_soviet(channel_id):
-    with open('data/retr.txt', 'r') as file:
-        channel_ids = file.readlines()
+        with open('data/retrgris.txt', 'w') as file:
+            for id in channel_ids:
+                if id.strip() != channel_id:
+                    file.write(id)
 
-    with open('data/retrgris.txt', 'w') as file:
-        for id in channel_ids:
-            if id.strip() != channel_id:
-                file.write(id)
+    def remove_channel_soviet(channel_id):
+        with open('data/retr.txt', 'r') as file:
+            channel_ids = file.readlines()
+
+        with open('data/retrgris.txt', 'w') as file:
+            for id in channel_ids:
+                if id.strip() != channel_id:
+                    file.write(id)
 
     if arg == 'grisshing_off':
         remove_channel_gris(channel_id)
@@ -1590,11 +1590,11 @@ def remove_channel_soviet(channel_id):
     if arg == 'soviet_off':
         remove_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
-        
+
     if arg == 'grisshing':
         add_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
-        
+
     if arg == 'soviet':
         add_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
