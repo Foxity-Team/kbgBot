@@ -1550,7 +1550,7 @@ async def code(ctx):
     file = nextcord.File(file_path)
     await ctx.send(file=file)
 
-@kgb.command(description='Что бы подписаться на Soviet WorkShop, в качестве аргумента напишите: soviet\nЧто бы подписаться на Grisshink Laboratory, в качестве аргумента напишите: grisshink \nВведите эту команду в тот канал куда вы хотите получать новости \nЕсли хотите отписаться от Soviet WorkShop напишите в качестве аргумента soviet_off \nЕсли хотите отписаться от Grisshink Laboratory напишите в качестве аргумента grisshink_off')
+@kgb.command(description='Что бы подписаться на Soviet WorkShop, \nВ качестве аргумента напишите: soviet\nЧто бы подписаться на Grisshink Laboratory, \nВ качестве аргумента напишите: grisshink \nВведите эту команду в тот канал куда вы хотите получать новости \nЕсли хотите отписаться от Soviet WorkShop, \nНапишите в качестве аргумента: soviet_off \nЕсли хотите отписаться от Grisshink Laboratory, \nНапишите в качестве аргумента: grisshink_off')
 @helpCategory('config')
 async def sub(ctx, arg):
     if isinstance(ctx.channel, nextcord.DMChannel):
