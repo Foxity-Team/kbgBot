@@ -1585,6 +1585,15 @@ def remove_channel_gris(channel_id):
             if id.strip() != channel_id:
                 file.write(id)
 
+def remove_channel(channel_id):
+    with open('data/retrgris.txt', 'r') as file:
+        channel_ids = file.readlines()
+
+    with open('data/retrgris.txt', 'w') as file:
+        for id in channel_ids:
+            if id.strip() != channel_id:
+                file.write(id)
+
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
 async def scratch_user(ctx, username):
