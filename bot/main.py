@@ -214,7 +214,7 @@ async def on_message(message):
             if channel:
                 embed_color = random.choice(['FF0000', 'FFFF00'])
                 embed = nextcord.Embed(
-                    title=f'Сообщение из канала #{message.channel.name}:',
+                    title='⟨☭⟩Soviet WorkShop⟨☭⟩',
                     description=message.content,
                     color=nextcord.Color(int(embed_color, 16))
                 )
@@ -233,7 +233,7 @@ async def on_message(message):
             if channel:
                 embed_color = random.choice(['0000FF', '8B00FF'])
                 embed = nextcord.Embed(
-                    title=f'Сообщение из канала #{message.channel.name}:',
+                    title='⛛ Grisshink Laboratory',
                     description=message.content,
                     color=nextcord.Color(int(embed_color, 16))
                 )
@@ -1550,7 +1550,7 @@ async def code(ctx):
     file = nextcord.File(file_path)
     await ctx.send(file=file)
 
-@kgb.command(description='Введите эту команду в тот канал куда вы хотите получать новости.\nНапишите в качестве агрумента "Off" если хотите отписаться от всех новостей.')
+@kgb.command(description='Что бы подписаться на Soviet WorkShop, в качестве аргумента напишите: soviet\nЧто бы подписаться на Grisshink Laboratory, в качестве аргумента напишите: grisshink \nВведите эту команду в тот канал куда вы хотите получать новости \nЕсли хотите отписаться от Soviet WorkShop напишите в качестве аргумента soviet_off \nЕсли хотите отписаться от Grisshink Laboratory напишите в качестве аргумента grisshink_off')
 @helpCategory('config')
 async def sub(ctx, arg):
     if isinstance(ctx.channel, nextcord.DMChannel):
@@ -1587,18 +1587,18 @@ async def sub(ctx, arg):
     if arg == 'grisshink_off':
         remove_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
-
     if arg == 'soviet_off':
         remove_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
-
     if arg == 'grisshink':
         add_channel_gris(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
-
     if arg == 'soviet':
         add_channel_soviet(channel_id)
         await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
+    else:
+        await ctx.send(f'Неверное значение!')
+        
 
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
