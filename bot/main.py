@@ -36,7 +36,7 @@ from config import *
 from agify import AsyncNameAPI
 import httpx
 import demapi
-import subprocces
+import subprocess
 
 print(g4f.Provider.Ails.params)
 
