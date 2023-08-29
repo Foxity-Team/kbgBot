@@ -36,6 +36,7 @@ from config import *
 from agify import AsyncNameAPI
 import httpx
 import demapi
+import subprocces
 
 print(g4f.Provider.Ails.params)
 
@@ -2021,6 +2022,25 @@ async def bot_info(ctx):
     embed.set_thumbnail(url=tumbaYUMBA)
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
     await ctx.send(embed=embed)
+
+@kgb.command(description="Покажет всю информацию о боте")
+@helpCategory('neuro')
+async def randword(ctx):
+    if isinstance(ctx.channel, nextcord.DMChannel):
+        return
+
+command = "python nn/main.py -i nn/russian.txt -o nn/words --sample-only"
+process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = process.communicate()
+
+if process.returncode == 0:
+    output = stdout.decode('utf-8')
+    print("Вывод команды:")
+    print(output)
+else:
+    error_message = stderr.decode('utf-8')
+    print("Ошибка выполнения команды:")
+    print(error_message)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
