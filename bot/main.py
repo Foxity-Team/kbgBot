@@ -2035,12 +2035,18 @@ stdout, stderr = process.communicate()
 
 if process.returncode == 0:
     output = stdout.decode('utf-8')
-    print("Вывод команды:")
-    print(output)
+    await ctx.send(embed=nextcord.Embed(
+            title='Сгенерированные слова:',
+            description=output,
+            color=nextcord.Colour(0x000000)
+        ))
 else:
     error_message = stderr.decode('utf-8')
-    print("Ошибка выполнения команды:")
-    print(error_message)
+    await ctx.send(embed=nextcord.Embed(
+            title='Ошибка:',
+            description=error_message,
+            color=nextcord.Colour(0xFF0000)
+        ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
