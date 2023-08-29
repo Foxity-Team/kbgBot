@@ -37,6 +37,7 @@ from agify import AsyncNameAPI
 import httpx
 import demapi
 import subprocess
+import re
 
 print(g4f.Provider.Ails.params)
 
@@ -2038,7 +2039,7 @@ async def randword(ctx):
         extracted_text = '\n'.join(matches)
         await ctx.send(embed=nextcord.Embed(
             title='Сгенерированные слова:',
-            description=matches,
+            description=extracted_text,
             color=nextcord.Colour(0x000000)
         ))
         
