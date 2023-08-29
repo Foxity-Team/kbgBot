@@ -2034,9 +2034,11 @@ async def randword(ctx):
     
     if process.returncode == 0:
         output = stdout.decode('utf-8')
+        matches = re.findall(r'new:(.*?)\--', output, re.DOTALL)
+        extracted_text = '\n'.join(matches)
         await ctx.send(embed=nextcord.Embed(
             title='Сгенерированные слова:',
-            description=output,
+            description=matches,
             color=nextcord.Colour(0x000000)
         ))
         
