@@ -2024,7 +2024,7 @@ async def bot_info(ctx):
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
     await ctx.send(embed=embed)
 
-@kgb.command(description="Сгенерироет новые слова")
+@kgb.command(description="Сгенерирует новые слова")
 @helpCategory('neuro')
 async def randword(ctx):
     if isinstance(ctx.channel, nextcord.DMChannel):
@@ -2050,55 +2050,6 @@ async def randword(ctx):
             description=error_message,
             color=nextcord.Colour(0xFF0000)
         ))
-        
-process = None
-
-def is_command_running():
-    return process is not None
-
-def command_not_running():
-    return process is None
-
-def start_command():
-    global process
-    process = asyncio.create_subprocess_shell(
-        'python nn/main.py -i nn/russian.txt -o nn/words',
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-    
-    async def send_output():
-        while True:
-            line = await process.stdout.readline()
-            if not line:
-                break
-            await channel.send(line.decode('utf-8'))
-    
-    asyncio.ensure_future(send_output())
-
-def stop_command():
-    global process
-    if process:
-        process.terminate()
-        process = None
-
-@kgb.command()
-async def train(ctx):
-    if ctx.author.id == 745674921774153799 or ctx.author.id == 999606704541020200:
-        if command_not_running():
-            start_command()
-        else:
-            await ctx.send("Command is already running.")
-    else:
-        return
-
-@kgb.command()
-async def stopt(ctx):
-    if ctx.author.id == 745674921774153799 or ctx.author.id == 999606704541020200:
-        stop_command()
-        await ctx.send("Command has been stopped.")
-    else:
-        return
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
