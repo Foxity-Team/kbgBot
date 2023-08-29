@@ -2028,21 +2028,21 @@ async def bot_info(ctx):
 async def randword(ctx):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
-
-command = "python nn/main.py -i nn/russian.txt -o nn/words --sample-only"
-process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-stdout, stderr = process.communicate()
-
-if process.returncode == 0:
-    output = stdout.decode('utf-8')
-    await ctx.send(embed=nextcord.Embed(
+    command = "python nn/main.py -i nn/russian.txt -o nn/words --sample-only"
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    
+    if process.returncode == 0:
+        output = stdout.decode('utf-8')
+        await ctx.send(embed=nextcord.Embed(
             title='Сгенерированные слова:',
             description=output,
             color=nextcord.Colour(0x000000)
         ))
-else:
-    error_message = stderr.decode('utf-8')
-    await ctx.send(embed=nextcord.Embed(
+        
+    else:
+        error_message = stderr.decode('utf-8')
+        await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description=error_message,
             color=nextcord.Colour(0xFF0000)
