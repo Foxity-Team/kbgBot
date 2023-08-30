@@ -2037,15 +2037,26 @@ async def randword(ctx, seed):
             color=nextcord.Colour(0xFF0000)
         ))
         return
+    await ctx.send(embed=nextcord.Embed(
+            title='Пожалуйста, подождите:',
+            description="Слова генерируються...",
+            color=nextcord.Colour(0x000000)
+        ))
+
+    msg = await ctx.send(embed=nextcord.Embed(
+            title='Пожалуйста, подождите:',
+            description="Слова генерируються...",
+            color=nextcord.Colour(0x000000)
+        ))
     command =  f"python nn/main.py -i nn/russian.txt -o nn/words --sample-only --seed {seed}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-    
     if process.returncode == 0:
         output = stdout.decode('utf-8')
         matches = re.findall(r'new:(.*?)\--', output, re.DOTALL)
         extracted_text = '\n'.join(matches)
-        await ctx.send(embed=nextcord.Embed(
+        
+        await msg.edit(embed=nextcord.Embed(
             title='Сгенерированные слова:',
             description=extracted_text,
             color=nextcord.Colour(0x000000)
