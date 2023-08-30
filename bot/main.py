@@ -2037,12 +2037,7 @@ async def randword(ctx, seed):
             color=nextcord.Colour(0xFF0000)
         ))
         return
-    await ctx.send(embed=nextcord.Embed(
-            title='Пожалуйста, подождите:',
-            description="Слова генерируються...",
-            color=nextcord.Colour(0x000000)
-        ))
-
+        
     msg = await ctx.send(embed=nextcord.Embed(
             title='Пожалуйста, подождите:',
             description="Слова генерируються...",
