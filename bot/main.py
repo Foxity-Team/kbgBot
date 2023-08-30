@@ -2029,8 +2029,8 @@ async def bot_info(ctx):
 async def randword(ctx, seed):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
-    ? = seed.isdigit()
-    if ? == False:
+    q = seed.isdigit()
+    if q == False:
         await ctx.send(embed=nextcord.Embed(
             title='Ошибка:',
             description="Введите целое/положительное число!",
