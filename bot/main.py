@@ -2024,12 +2024,20 @@ async def bot_info(ctx):
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
     await ctx.send(embed=embed)
 
-@kgb.command(description="Сгенерирует новые слова")
+@kgb.command(description="Сгенерирует новые слова, введите случайное число в качестве аргумента")
 @helpCategory('neuro')
-async def randword(ctx, count):
+async def randword(ctx, seed):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
-    command =  f"python nn/main.py -i nn/russian.txt -o nn/words --sample-only --seed {count}"
+    ? = seed.isdigit()
+    if ? == False:
+        await ctx.send(embed=nextcord.Embed(
+            title='Ошибка:',
+            description="Введите целое/положительное число!",
+            color=nextcord.Colour(0xFF0000)
+        ))
+        return
+    command =  f"python nn/main.py -i nn/russian.txt -o nn/words --sample-only --seed {seed}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     
