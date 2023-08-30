@@ -2026,10 +2026,10 @@ async def bot_info(ctx):
 
 @kgb.command(description="Сгенерирует новые слова")
 @helpCategory('neuro')
-async def randword(ctx):
+async def randword(ctx, count):
     if isinstance(ctx.channel, nextcord.DMChannel):
         return
-    command = "python nn/main.py -i nn/russian.txt -o nn/words --sample-only"
+    command =  f"python nn/main.py -i nn/russian.txt -o nn/words --sample-only --seed {count}"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     
