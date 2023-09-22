@@ -2065,6 +2065,20 @@ async def randword(ctx, seed):
             color=nextcord.Colour(0xFF0000)
         ))
 
+@kgb.command(description="Нейросеть ChatGPT")
+@helpCategory('api')
+async def joke(ctx, *, message: str): 
+    
+    url = "http://192.168.1.5:8000/"
+    
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        joke_data = response.json()
+        await ctx.send(f"Content: {joke_data['content']}")
+    else:
+        await ctx.send(f"Failed to retrieve joke. Status code: {response.status_code}")
+
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
