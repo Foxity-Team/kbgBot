@@ -2067,15 +2067,23 @@ async def randword(ctx, seed):
 
 @kgb.command(description="")
 @helpCategory('api')
-async def apitest(ctx): 
+async def 122(ctx): 
     url = "http://192.168.1.5:8000/"
     curl_command = ["curl", url]
     result = subprocess.run(curl_command, capture_output=True, text=True)
     try:
         joke_data = json.loads(result.stdout)
-        await ctx.send(f"Content: {joke_data['content']}")
+        await ctx.send(embed=nextcord.Embed(
+            title="Шутка:",
+            description=f"Content: {joke_data['content']}",
+            color=nextcord.Colour(0xFF0000)
+        ))
     except json.JSONDecodeError as e:
-        await ctx.send(f"Error: {e}")
+        await ctx.send(embed=nextcord.Embed(
+            title='Ошибка:',
+            description=f"Error: {e}",
+            color=nextcord.Colour(0xFF0000)
+        ))
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
