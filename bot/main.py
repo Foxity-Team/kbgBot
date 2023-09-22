@@ -2067,7 +2067,7 @@ async def randword(ctx, seed):
 
 @kgb.command(description="Нейросеть ChatGPT")
 @helpCategory('api')
-async def joke(ctx, *, message: str): 
+async def joke(ctx): 
     
     url = "http://192.168.1.5:8000/"
     
