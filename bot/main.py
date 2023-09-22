@@ -2068,16 +2068,14 @@ async def randword(ctx, seed):
 @kgb.command(description="")
 @helpCategory('api')
 async def apitest(ctx): 
-    
     url = "http://192.168.1.5:8000/"
-    
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        joke_data = response.json()
+    curl_command = ["curl", url]
+    result = subprocess.run(curl_command, capture_output=True, text=True)
+    try:
+        joke_data = json.loads(result.stdout)
         await ctx.send(f"Content: {joke_data['content']}")
-    else:
-        await ctx.send(f"Failed to retrieve joke. Status code: {response.status_code}")
+    except json.JSONDecodeError as e:
+        await ctx.send(f"Error: {e}")
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
