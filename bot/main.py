@@ -2065,9 +2065,9 @@ async def randword(ctx, seed):
             color=nextcord.Colour(0xFF0000)
         ))
 
-@kgb.command(description="Нейросеть ChatGPT")
+@kgb.command(description="")
 @helpCategory('api')
-async def joke(ctx): 
+async def apitest(ctx): 
     
     url = "http://192.168.1.5:8000/"
     
