@@ -27,7 +27,7 @@ import logging
 import transliterate
 import markov
 import json
-import g4f
+#import g4f
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
@@ -38,8 +38,6 @@ import httpx
 import demapi
 import subprocess
 import re
-
-print(g4f.Provider.Ails.params)
 
 genaiDataPath = 'data/genai_info.json'
 imagesDataPath = 'data/image_urls.json'
@@ -1916,14 +1914,17 @@ async def factnumber(ctx, number: str, fact_type: str):
             color=nextcord.Colour(0xFF0000)
         ))
         
-@kgb.command(description="Нейросеть ChatGPT")
-@helpCategory('neuro')
-async def chat(ctx, *, message: str):
-    print(g4f.Provider.Ails.params)
-    response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.DeepAi, messages=[
-        {"role": "user", "content": message}])
-    
-    await ctx.send(response)
+#@kgb.command(description="Нейросеть ChatGPT")
+#@helpCategory('neuro')
+#async def chat(ctx, *, message: str):
+#    response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.ChatBase, messages=[{"role": "user", "content": message}])
+#    
+#    if response == '':
+#        print('Пустое сообщение')
+#        await ctx.send('Бот отправил пустое сообщение')
+#    else:
+#        print(response)
+#        await ctx.send(response)
 
 @kgb.command(description="Гадает по имени")
 @helpCategory('api')
