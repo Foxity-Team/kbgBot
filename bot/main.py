@@ -113,7 +113,7 @@ async def update_guild_names():
         json.dump(guild_names, f, ensure_ascii=False, indent=4)
       
 def no_format(user):
-    if isinstance(user, discord.Member):
+    if isinstance(user, discord.Member) and user.discriminator != '0':
         return f"{user.name}#{user.discriminator}"
     return user.name
 
@@ -486,7 +486,7 @@ async def banlist(ctx):
     if isinstance(ctx.channel, discord.DMChannel): return
 
     banned_users = ctx.guild.bans()
-    banlist = [f'{ban_entry.user.name}#{ban_entry.user.discriminator}' for ban_entry in banned_users]
+    banlist = [f'{ban_entry.user.name}#{ban_entry.user.discriminator}' async for ban_entry in banned_users]
 
     if banlist == []:
         await ctx.send(embed=discord.Embed(
@@ -536,7 +536,7 @@ async def clear(ctx, amount: int):
         ))
         return
 
-    await ctx.channel.purge(limit = amount)
+    await ctx.channel.purge(limit = amount + 1)
 
     await ctx.send(embed = discord.Embed(
         title = "Успешно",
@@ -627,7 +627,7 @@ async def comment(ctx, *, commint: str):
                     description="",
                     color=discord.Color(0x000000)
                 ).set_image(url="attachment://youtube_comment.gif"), file=discord.File(imageData, 'youtube_comment.gif'))
-          
+
 @kgb.command(description = "Список благодарностей")
 @helpCategory('misc')
 async def thank(ctx):
@@ -716,7 +716,7 @@ async def avatar(ctx: Context, userInp: typing.Union[discord.Member, None]=None)
 
     if not userInp: userInp = ctx.author
 
-    embed=discord.Embed(title=f"Аватар {no_format(user)}", color=userInp.color)
+    embed=discord.Embed(title=f"Аватар {no_format(userInp)}", color=userInp.color)
     if userInp.avatar:
         embed.set_image(url=userInp.avatar.url)
 
@@ -733,7 +733,7 @@ async def user(ctx, member: discord.Member):
         'Тэг:'                    : member.name + "#" + member.discriminator,
 
         'Дата создания аккаунта:' : member.created_at.strftime("%d.%m.%Y %H:%M:%S"),
-        'Дата приода на сервер:'  : member.joined_at.strftime("%d.%m.%Y %H:%M:%S"),
+        'Дата прихода на сервер:' : member.joined_at.strftime("%d.%m.%Y %H:%M:%S"),
 
         'Тип аккаунта:'           : "Это аккаунт бота" if member.bot else "Это аккаунт человека",
         'Роль на сервере:'        : "Администратор сервера" if member.guild_permissions.administrator else "Это не администратор сервера",
@@ -1184,6 +1184,7 @@ async def lick(ctx, member: discord.Member):
 @helpCategory('rp')
 async def hi(ctx, member: discord.Member):
     if isinstance(ctx.channel, discord.DMChannel): return
+
     await ctx.send(f'{ctx.author.mention} поприветствовал(а) {member.mention}')
 
 async def rpImage(ctx, user: discord.Member, url: str) -> None:
@@ -1264,7 +1265,7 @@ async def category(ctx, category: discord.CategoryChannel):
     em = discord.Embed(title="Информация о категории:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
 
-    for n,v in category_info:
+    for n,v in category_info.items():
         em.add_field(name=n, value=v, inline=False)
 
     await ctx.send(embed=em)
@@ -1281,7 +1282,7 @@ async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
         'Топик:': channel.topic or "Нет топика.",
         'Категория:': channel.category.name if channel.category else "Нет категории",
         'Позиция:': channel.position,
-        'NSFW:': channel.is_nsfw(),
+        'NSFW:': 'Да' if channel.is_nsfw() else 'Нет',
         'Слоумод:': channel.slowmode_delay,
         'Тип канала:': str(channel.type).capitalize(),
         'Создан:': channel.created_at.strftime("%d.%m.%Y %H:%M:%S"),
@@ -1290,7 +1291,7 @@ async def channel(ctx, channel: typing.Optional[discord.TextChannel]):
     em = discord.Embed(title="Информация о канале:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
 
-    for n,v in channel_info:
+    for n,v in channel_info.items():
         em.add_field(name=n, value=v, inline=False)
 
     await ctx.send(embed=em)
@@ -1312,7 +1313,7 @@ async def role(ctx, *, role: discord.Role):
     em = discord.Embed(title="Информация о роли:", color=0x000000)
     em.set_thumbnail(url=ctx.guild.icon.url)
 
-    for n,v in role_info:
+    for n,v in role_info.items():
         em.add_field(name=n, value=v, inline=False)
 
     await ctx.send(embed=em)
