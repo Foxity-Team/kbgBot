@@ -1518,18 +1518,20 @@ async def play(ctx, url):
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }],
+            'noplaylist': True,
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-            url2 = info['formats'][3]['url']
-
-        voice_client.play(nextcord.FFmpegPCMAudio(url2))
+            for format in info['formats']:
+                if format['audio_ext'] == 'none': continue
+                voice_client.play(nextcord.FFmpegPCMAudio(format['url']))
+                break
+        await ctx.send(f"Проигрывается музыка в канале {voice_channel}.")
+        while voice_client.is_playing():
+            await asyncio.sleep(1)
     except:
         pass
 
-    await ctx.send(f"Проигрывается музыка в канале {voice_channel}.")
-    while voice_client.is_playing():
-        await asyncio.sleep(1)
     await asyncio.sleep(5)
     await voice_client.disconnect()
 
