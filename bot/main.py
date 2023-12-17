@@ -93,8 +93,8 @@ async def read_stderr():
         print(val, end='')
         i = 0
         while i < len(val):
-            await channel.send(f'```{val[i:i+4000]}```')
-            i += 4000
+            await channel.send(f'```{val[i:i+3994]}```')
+            i += 3994
 
 async def update_guild_seek():
     guild_seek = {}
@@ -1455,21 +1455,25 @@ async def play(ctx, url):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
+        'noplaylist': True,
     }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-            if not info: return
-            url2 = info['formats'][3]['url']
+            if not info:
+                await ctx.send("Произошла ошибка получения данных о музыке. Проверьте правильность ввода ссылки")
+                return
+            for format in info['formats']:
+                if format['audio_ext'] == 'none': continue
+                voice_client.play(discord.FFmpegPCMAudio(format['url']))
+                break
 
-        voice_client.play(discord.FFmpegPCMAudio(url2))
+        await ctx.send(f"Проигрывается музыка в канале {voice_channel}.")
+
+        while voice_client.is_playing():
+            await asyncio.sleep(1)
     except: pass
-
-    await ctx.send(f"Проигрывается музыка в канале {voice_channel}.")
-
-    while voice_client.is_playing():
-        await asyncio.sleep(1)
 
     await asyncio.sleep(5)
     await voice_client.disconnect()
