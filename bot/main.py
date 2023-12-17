@@ -36,6 +36,7 @@ from agify import AsyncNameAPI
 genaiDataPath = 'data/genai_info.json'
 imagesDataPath = 'data/image_urls.json'
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
+ERR_CHANNEL_ID = 1123467774098935828
 
 bb = Balaboba()
 
@@ -64,23 +65,6 @@ if not os.path.isfile('data/guild_seek.json'):
     with open('data/guild_seek.json', 'w', encoding='utf-8') as f:
         f.write('{}')
 
-logger = logging.getLogger('discord')
-logger.setLevel(logging.ERROR)
-
-class DiscordHandler(logging.Handler):
-    def __init__(self, channel_id):
-        self.channel_id = channel_id
-        super().__init__()
-
-    async def send_log_message(self, message):
-        channel = kgb.get_channel(self.channel_id)
-        if not isinstance(channel, discord.TextChannel): return
-        await channel.send(message)
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        asyncio.ensure_future(self.send_log_message(log_entry))
-
 async def change_status():
     statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
     index = 0
@@ -90,6 +74,27 @@ async def change_status():
         await kgb.change_presence(activity=discord.Game(name=status))
         index = (index+1) % len(statuses)
         await asyncio.sleep(10)
+
+async def read_stderr():
+    channel = kgb.get_channel(ERR_CHANNEL_ID)
+    if not isinstance(channel, discord.TextChannel):
+        print('{ERR_CHANNEL_ID} is not a valid channel id!')
+        return
+    f = open('temp.log')
+
+    print('Logger started')
+    while not kgb.is_closed():
+        val = f.read()
+
+        if len(val) == 0:
+            await asyncio.sleep(1)
+            continue
+
+        print(val, end='')
+        i = 0
+        while i < len(val):
+            await channel.send(f'```{val[i:i+4000]}```')
+            i += 4000
 
 async def update_guild_seek():
     guild_seek = {}
@@ -119,12 +124,8 @@ def no_format(user):
 
 @kgb.event
 async def on_ready():
-    handler = DiscordHandler(channel_id=1123467774098935828)
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
-
-    logger.info('Бот в полной боевой готовности!')
     kgb.loop.create_task(change_status())
+    kgb.loop.create_task(read_stderr())
     await update_guild_names()
     while True:
         try:
