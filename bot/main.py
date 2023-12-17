@@ -18,6 +18,7 @@ import markov
 import json
 import sys
 import config as global_config
+import retr
 
 from datetime import datetime, timedelta
 from difflib import get_close_matches
@@ -31,6 +32,12 @@ from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 genaiDataPath = 'data/genai_info.json'
 imagesDataPath = 'data/image_urls.json'
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
+KGB_RETR = "data/retr.txt"
+RETR_PUBLISHERS = {
+    'soviet': retr.Publisher(1067091686725001306, 'data/retr.txt'),
+    'griss': retr.Publisher(1131911759968612434, 'data/retrgris.txt'),
+}
+
 ERR_CHANNEL_ID = 1123467774098935828
 
 def loadFile(path: str):
@@ -89,6 +96,12 @@ async def read_stderr():
             await channel.send(f'```{val[i:i+1994]}```')
             i += 1994
 
+async def sync_retr():
+    while True:
+        await asyncio.sleep(10)
+        for pub in RETR_PUBLISHERS.values():
+            pub.sync_retr()
+
 async def update_guild_seek():
     guild_seek = {}
     for guild in kgb.guilds:
@@ -119,6 +132,7 @@ def no_format(user):
 async def on_ready():
     kgb.loop.create_task(change_status())
     kgb.loop.create_task(read_stderr())
+    kgb.loop.create_task(sync_retr())
     await update_guild_names()
     while True:
         try:
@@ -137,30 +151,6 @@ async def on_member_join(member):
 
         if not isinstance(channel, discord.TextChannel): return
         await channel.send(f"Приветствую вас на этом сервере, {member.mention}!")
-
-async def retranslate_news(message) -> None:
-    if message.channel.id != 1067091686725001306: return
-
-    with open('data/retr.txt', 'r') as file:
-        channel_ids = file.readlines()
-        channel_ids = [chid.strip() for chid in channel_ids]
-
-    embed_color = random.choice([0xFF0000, 0xFFFF00])
-    embed = discord.Embed(
-        title=f'Сообщение из канала #{message.channel.name}:',
-        description=message.content,
-        color=discord.Color(embed_color)
-    )
-
-    for attachment in message.attachments:
-        embed.set_image(url=attachment.url)
-        break
-
-    for channel_id in channel_ids:
-        channel = kgb.get_channel(int(channel_id))
-        if not isinstance(channel, discord.TextChannel): continue
-
-        await channel.send(embed=embed)
 
 def saveGenAiState():
     global msgCounter
@@ -205,7 +195,7 @@ async def manageGenAiMsgs(message) -> bool:
 
 @kgb.event
 async def on_message(message):
-    await retranslate_news(message)
+    for retr in RETR_PUBLISHERS.values(): await retr.publish(kgb, message)
 
     replied = await manageGenAiMsgs(message)
     saveGenAiState()
@@ -1492,31 +1482,44 @@ async def code(ctx):
     'Напишите в качестве агрумента "Off" если хотите отписаться от новостей.'
 )
 @helpCategory('config')
-async def sub(ctx, arg=None):
+async def sub(ctx, publisher: str, off: typing.Union[str, None] = None):
     if isinstance(ctx.channel, discord.DMChannel): return
 
-    def add_channel(channel_id):
-        with open('data/retr.txt', 'a') as file:
-            file.write(channel_id + '\n')
+    def getPublishers() -> str:
+        out = ''
+        for pub in RETR_PUBLISHERS.keys(): out += f'`{pub}`, '
+        return out
 
-    def remove_channel(channel_id):
-        with open('data/retr.txt', 'r') as file:
-            channel_ids = file.readlines()
-
-        with open('data/retr.txt', 'w') as file:
-            for chid in channel_ids:
-                if chid.strip() != channel_id:
-                    file.write(chid)
-
-    channel_id = str(ctx.channel.id)
-
-    if arg == 'off':
-        remove_channel(channel_id)
-        await ctx.send(f'Канал {ctx.channel.mention} удален из списка.')
+    if publisher not in RETR_PUBLISHERS:
+        await ctx.send(embed=discord.Embed(
+            title="Ошибка:",
+            description=f"Неверное имя публикатора! Доступные имена: {getPublishers()}",
+            color=discord.Color(0xFF0000)
+        ))
         return
 
-    add_channel(channel_id)
-    await ctx.send(f'Канал {ctx.channel.mention} добавлен в список.')
+    pub = RETR_PUBLISHERS[publisher]
+
+    if off == 'off':
+        if not pub.unsubscribe(ctx.channel.id):
+            await ctx.send(embed=discord.Embed(
+                title="Ошибка:",
+                description=f"Данный канал не находится в списке подписок у публикатора `{publisher}`!",
+                color=discord.Color(0xFF0000)
+            ))
+            return
+        await ctx.send(f'Канал {ctx.channel.mention} удален из списка у публикатора `{publisher}`.')
+        return
+    
+    if not pub.subscribe(ctx.channel.id):
+        await ctx.send(embed=discord.Embed(
+            title="Ошибка:",
+            description=f"Данный канал уже есть в списке подписок у публикатора `{publisher}`!",
+            color=discord.Color(0xFF0000)
+        ))
+        return
+
+    await ctx.send(f'Канал {ctx.channel.mention} добавлен в список у публикатора `{publisher}`.')
 
 @kgb.command(description="Выводит всю информацию о скрэтч-пользователе")
 @helpCategory('scratch')
