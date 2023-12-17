@@ -14,12 +14,9 @@ import fortune
 import time
 import yt_dlp
 import typing
-import logging
-import transliterate
 import markov
 import json
-import g4f
-import demapi
+import sys
 import config as global_config
 
 from datetime import datetime, timedelta
@@ -30,15 +27,11 @@ from discord.ext.commands import BadArgument, Context
 from os import getenv
 from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
-from balaboba import Balaboba
-from agify import AsyncNameAPI
 
 genaiDataPath = 'data/genai_info.json'
 imagesDataPath = 'data/image_urls.json'
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
 ERR_CHANNEL_ID = 1123467774098935828
-
-bb = Balaboba()
 
 def loadFile(path: str):
     if not isfile(path): return {}
@@ -93,8 +86,8 @@ async def read_stderr():
         print(val, end='')
         i = 0
         while i < len(val):
-            await channel.send(f'```{val[i:i+3994]}```')
-            i += 3994
+            await channel.send(f'```{val[i:i+1994]}```')
+            i += 1994
 
 async def update_guild_seek():
     guild_seek = {}
@@ -278,7 +271,7 @@ async def on_command_error(ctx, exc):
             color = discord.Colour(0xFF0000)
         ))
     else:
-        traceback.print_exception(type(exc), exc, exc.__traceback__)
+        traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
         await ctx.reply(embed = discord.Embed(
             title = "Ошибка:",
             description = exc,
@@ -1630,39 +1623,6 @@ async def porfir(ctx, *, prompt):
         generated_text = data['replies'][0]
         await ctx.send(f'```\n{prompt}{generated_text}\n```')
 
-@kgb.command(description="Генератор бреда Балабоба")
-@helpCategory('neuro')
-async def balabola(ctx, *, prompt):
-    if isinstance(ctx.channel, discord.DMChannel): return
-    
-    text_types = bb.get_text_types(language="ru")
-
-    async with ctx.typing():
-        response = bb.balaboba(prompt, text_type=text_types[0])
-        
-        await ctx.send(f'```\n{response}\n```')
-
-@kgb.command(description='Переведёт кириллицу в транслит или транслит в кириллицу')
-@helpCategory('fun')
-async def translit(ctx, option: str, lang_code: str, *, text: str):
-    if isinstance(ctx.channel, discord.DMChannel): return
-
-    if option.lower() == 't':
-        translit_text = transliterate.translit(text, lang_code, reversed=True)
-        title = 'Перевод на транслит:'
-    elif option.lower() == 'c':
-        translit_text = transliterate.translit(text, lang_code, reversed=False)
-        title = 'Перевод на кириллицу:'
-    else:
-        await ctx.send('Неправильно указана опция. Используйте "t" или "c".')
-        return
-
-    await ctx.send(embed=discord.Embed(
-        title=title,
-        description=translit_text,
-        color=discord.Color(0x000000)
-    ))
-
 @kgb.command(description = "Перезапускает бота(только для разработчика)")
 @helpCategory('secret')
 async def reload(ctx):
@@ -1818,118 +1778,6 @@ async def factnumber(ctx, number: int, fact_type: str):
         description=fact_text,
         color=discord.Colour(0x000000)
     ))
-        
-@kgb.command(description="Нейросеть ChatGPT")
-@helpCategory('neuro')
-async def chat(ctx, *, message: str):
-    if isinstance(ctx.channel, discord.DMChannel): return
-
-    response = g4f.ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        provider=g4f.Provider.DeepAi,
-        messages=[
-            {
-                "role": "user",
-                "content": message
-            }
-        ]
-    )
-    
-    await ctx.send(response)
-
-@kgb.command(description="Гадает по имени")
-@helpCategory('api')
-async def name(ctx, *names):
-    if isinstance(ctx.channel, discord.DMChannel): return
-
-    g = AsyncNameAPI(names, mode="*")
-    result = await g.get_names_info()
-
-    embed = discord.Embed(
-        title="Информация о именах",
-        color=discord.Color(0x000000)
-    )
-
-    for name, info in result.items():
-        age = info['age'] if 'age' in info else 'Неизвестно'
-        gender = info['gender'] if 'gender' in info else 'Неизвестно'
-        probability = info['probability']
-        country_list = [f'{country["country_id"]} ({country["probability"]})' for country in info['country']]
-        country = '\n'.join(country_list)
-
-        embed.add_field(
-            name=name,
-            value=
-                f'Возраст: {age}\n'
-                f'Пол: {gender}\n'
-                f'Вероятность: {probability}\n'
-                f'Страны:\n{country}',
-            inline=False
-        )
-
-    await ctx.send(embed=embed)
-
-@kgb.command(description=
-    'Создаёт демотиватор\n'
-    'Он использует сохранёные картинки из чата,\n'
-    'Но вы можете прикрепить изображение к сообщению что использовать его'
-)
-@helpCategory('neuro')
-async def demotivator(ctx):
-    if isinstance(ctx.channel, discord.DMChannel): return
-
-    channelId = str(ctx.channel.id)
-    if channelId not in genAiArray or not genAiArray[channelId].config['read']:
-        await ctx.send(embed=discord.Embed(
-                title="Ошибка:",
-                description="Бот не может читать сообщения с этого канала! Включите это через команду `kgb!genconfig read true`!",
-                color=discord.Colour(0xFF0000)
-        ))
-        return
-    
-    attachment = ctx.message.attachments[0] if ctx.message.attachments else None
-    if attachment and attachment.filename.endswith(('.png', '.jpg', '.jpeg')):
-        random_image = await attachment.read()
-    else:
-        if channelId not in image_list or len(image_list[channelId]) == 0:
-            await ctx.send(embed=discord.Embed(
-                    title="Ошибка:",
-                    description="Пожалуйста укажите картинку!",
-                    color=discord.Colour(0xFF0000)
-            ))
-            return
-
-        random_image_url = random.choice(image_list[channelId])
-        response = requests.get(random_image_url)
-
-        if response.status_code != 200:
-            await ctx.send(response.status_code)
-            return
-
-        random_image = response.content
-
-    with open("downloaded_image.jpg", "wb") as file:
-        file.write(random_image)
-
-    try:
-        conf = demapi.Configure(
-            base_photo="downloaded_image.jpg",
-            title=genAiArray[channelId].generate(),
-            explanation=genAiArray[channelId].generate()
-        )
-    except ValueError as exc:
-        await ctx.send(embed=discord.Embed(
-            title='Ошибка:',
-            description=exc,
-            color=discord.Colour(0xFF0000)
-        ))
-        return
-
-    image = await conf.coroutine_download()
-    image.save("demotivator.png")
-    
-    await ctx.send(file=discord.File("demotivator.png"))
-    os.remove("demotivator.png")
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
