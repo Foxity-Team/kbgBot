@@ -30,7 +30,6 @@ from dotenv import load_dotenv
 from categories import buildHelpEmbed, buildCategoryEmbeds, helpCategory
 
 genaiDataPath = 'data/genai_info.json'
-imagesDataPath = 'data/image_urls.json'
 GUILD_SEEK_FILENAME = "data/guild_seek.json"
 KGB_RETR = "data/retr.txt"
 RETR_PUBLISHERS = {
@@ -48,7 +47,6 @@ def loadFile(path: str):
 
 channels = loadFile('data/channels.json')
 genAiArray: dict[str, markov.MarkovGen] = {k: markov.MarkovGen(states=v['state'], config=v['config']) for k,v in loadFile(genaiDataPath).items()}
-image_list: dict[str, list[str]] = loadFile(imagesDataPath)
 msgCounter = 0
 
 print("AdventurerUp Corporation")
@@ -164,9 +162,6 @@ def saveGenAiState():
             'config': v.config,
         } for k,v in genAiArray.items()}, f)
 
-    with open(imagesDataPath, 'w') as f:
-        json.dump(image_list, f)
-
 async def manageGenAiMsgs(message) -> bool:
     replied = False
 
@@ -177,9 +172,6 @@ async def manageGenAiMsgs(message) -> bool:
 
     genAi = genAiArray[channelId]
     genAi.addMessage(message.content)
-
-    if channelId not in image_list: image_list[channelId] = []
-    if message.attachments: image_list[channelId].extend([str(v) for v in message.attachments])
 
     if not genAi.config['reply_on_mention']: return replied
 
