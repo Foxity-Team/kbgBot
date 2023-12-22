@@ -1764,6 +1764,7 @@ async def factnumber(ctx, number: int, fact_type: str):
 async def bot_info(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
+    total_commands = len(bot.commands)
     embed = discord.Embed(title="Информация о боте:", 
                           description=
                           "КГБ - Комитет Государственной Безопасности\n"
