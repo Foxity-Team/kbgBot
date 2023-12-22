@@ -64,7 +64,7 @@ if not os.path.isfile('data/guild_seek.json'):
         f.write('{}')
 
 async def change_status():
-    statuses = "kgb!help", "версия 2.5", "на {} серверах!", "SLAVA KPSS!"
+    statuses = "kgb!help", "версия 3.0", "на {} серверах!", "SLAVA KPSS!"
     index = 0
     while not kgb.is_closed():
         servers_count = len(kgb.guilds)
