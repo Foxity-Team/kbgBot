@@ -64,7 +64,7 @@ if not os.path.isfile('data/guild_seek.json'):
         f.write('{}')
 
 async def change_status():
-    statuses = "kgb!help", "версия 3.0", "на {} серверах!", "SLAVA KPSS!"
+    statuses = "kgb!help", "версия 3.0", "на {} серверах!"
     index = 0
     while not kgb.is_closed():
         servers_count = len(kgb.guilds)
@@ -278,9 +278,12 @@ async def on_guild_join(guild: discord.Guild):
     embed = discord.Embed(
         title = 'Я KGB Modern', 
         description = 
-            'КГБ - Комитет Государственной Безопасности.\n' 
-            'Я имею команды для модерации и развлечения.\n'
-            'Напишите kgb!help чтобы увидеть полный список команд', 
+            'Modern KGB - универсальный помощник на вашем сервере!\n' 
+            'Он имеет:\n'
+            '1.Встроенный генератор маркова, создающий оригинальные сообщения на основе старых.'
+            '2.Множество прикольных апи.'
+            '3.Возможность воспроизведения музыки в голосовых каналах.'
+            '4.Большое множество команд', 
         color = 0x000000
     )
 
@@ -563,16 +566,16 @@ async def verlist(ctx):
         color = discord.Color(0x000000)
     ))
 
-@kgb.command(description = ")")
-@helpCategory('secret')
-async def love(ctx):
-    if isinstance(ctx.channel, discord.DMChannel): return
-
-    await ctx.send(embed = discord.Embed(
-        title = "Да)",
-        description = "Несо и Саня пара навеки:3",
-        color = discord.Color(0xff7089)
-    ))
+#@kgb.command(description = ")")
+#@helpCategory('secret')
+#async def love(ctx):
+#    if isinstance(ctx.channel, discord.DMChannel): return
+#
+#    await ctx.send(embed = discord.Embed(
+#        title = "Да)",
+#        description = "Несо и Саня пара навеки:3",
+#        color = discord.Color(0xff7089)
+#    ))
 
 @kgb.command(description = "шифр")
 @helpCategory('misc')
@@ -612,9 +615,9 @@ async def thank(ctx):
     await ctx.send(embed = discord.Embed(
         title = "Я благодарен:",
         description = 
-            'SvZ_Bonnie#5779, за предоставленный обучающий материал!\n'
-            'Grisshink#6476, за помощь в разработке бота!\n'
-            'Sanechka#1384 за рисование аватара для бота и постоянную поддержку меня:3',
+            'СВЗ(@svz_code_), за предоставленный обучающий материал!\n'
+            'Грише(@grisshink), за помощь в разработке бота!\n'
+            'Санечке(@demsanechka) за рисование аватара для бота и постоянную поддержку меня:3',
         color = discord.Color(0xFFFF00)
     ))
   
@@ -1368,7 +1371,7 @@ async def comrade(ctx, member: typing.Union[discord.Member, None] = None):
 
 @kgb.command(description="Взлом пентагона")
 @helpCategory('fun')
-async def hackp(ctx):
+async def hack_pentagon(ctx):
     if isinstance(ctx.channel, discord.DMChannel): return
 
     progress = 0
