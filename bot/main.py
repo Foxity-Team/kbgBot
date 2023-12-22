@@ -1787,48 +1787,6 @@ async def bot_info(ctx):
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=global_config.avaURL)
     await ctx.send(embed=embed)
 
-@kgb.command(description="Сгенерирует новые слова")
-@helpCategory('neuro')
-async def randword(ctx):
-    if isinstance(ctx.channel, discord.DMChannel):
-        return
-    seed = str(random.randint(0, 100000))
-    q = seed.isdigit()
-    if q == False:
-        await ctx.send(embed=discord.Embed(
-            title='Ошибка:',
-            description="Введите целое/положительное число!",
-            color=discord.Colour(0xFF0000)
-        ))
-        return
-        
-    msg = await ctx.send(embed=discord.Embed(
-            title='Пожалуйста, подождите:',
-            description="Слова генерируються...",
-            color=discord.Colour(0x000000)
-        ))
-    command =  f"python nn/main.py -i nn/russian.txt -o nn/words --sample-only --seed {seed}"
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    if process.returncode == 0:
-        output = stdout.decode('utf-8')
-        matches = re.findall(r'new:(.*?)\--', output, re.DOTALL)
-        extracted_text = '\n'.join(matches)
-        
-        await msg.edit(embed=discord.Embed(
-            title='Сгенерированные слова:',
-            description=extracted_text,
-            color=discord.Colour(0x000000)
-        ))
-        
-    else:
-        error_message = stderr.decode('utf-8')
-        await ctx.send(embed=discord.Embed(
-            title='Ошибка:',
-            description=error_message,
-            color=discord.Colour(0xFF0000)
-        ))
-
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
 kgb.run(getenv('DISCORD_TOKEN', ''))
