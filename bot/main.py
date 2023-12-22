@@ -1774,7 +1774,7 @@ async def bot_info(ctx):
                           color=discord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
     embed.add_field(name="Полезные ссылки:", 
-                    value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n"
+                    value=f"[Добавить {kgb.user.name} на свой сервер]({global_config.botURL})\n"
                     "[Присоединится к серверу бота]({serverURL})\n"
                     "[Поддержать бота на бусти]({boostyURL})\n"
                     "Зайти на [сайт]({global_config.siteURL}) компании", 
