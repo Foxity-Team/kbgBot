@@ -990,26 +990,6 @@ async def configwarn(ctx, limit: int, warn_type: str):
         color = discord.Color(0x000000)
     ))
 
-@kgb.command(description="Пригласить бота и другие полезные ссылки")
-@helpCategory('misc')
-async def invite(ctx):
-    total_commands = len(kgb.commands)
-    if isinstance(ctx.channel, discord.DMChannel): return
-    if not kgb.user: return
-
-    embed=discord.Embed(
-        title=f"Пригласить {kgb.user.name}", 
-        description=
-            f"[Добавить {kgb.user.name}]({global_config.botURL}) на свой сервер\n"
-            f"[Присоединиться]({global_config.serverURL}) к серверу бота\n"
-            f"[Поддержать]({global_config.boostyURL}) бота на бусти\n"
-            f"Зайти на [сайт]({global_config.siteURL}) компании", 
-        color=discord.Color(0x000000
-    ))
-    embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах и имеет {total_commands} команд")
-
-    await ctx.send(embed=embed)
-
 @kgb.command(description="Ищет пользователей по их примерному нику на всех серверах, где присутствует бот")
 @helpCategory('info')
 async def seek_user(ctx, *, query):
@@ -1778,6 +1758,30 @@ async def factnumber(ctx, number: int, fact_type: str):
         description=fact_text,
         color=discord.Colour(0x000000)
     ))
+
+@kgb.command(description="Покажет всю информацию о боте")
+@helpCategory('info')
+async def bot_info(ctx):
+    if isinstance(ctx.channel, discord.DMChannel):
+        return
+    embed = discord.Embed(title="Информация о боте:", 
+                          description=
+                          "КГБ - Комитет Государственной Безопасности\n"
+                          "Напишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \n"
+                          "Поэтому может падать несколько раз в день"
+                          f"{kgb.user.name} находится на {len(kgb.guilds)} серверах и имеет {total_commands} команд", 
+                          color=nextcord.Color(0x000000))
+    embed.add_field(name="Версия:", value="3.0", inline=False)
+    embed.add_field(name="Полезные ссылки:", 
+                    value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n"
+                    "[Присоединится к серверу бота]({serverURL})\n"
+                    "[Поддержать бота на бусти]({boostyURL})\n"
+                    "Зайти на [сайт]({global_config.siteURL}) компании", 
+                    inline=False
+                   )
+    embed.set_thumbnail(url=tumbaYUMBA)
+    embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
+    await ctx.send(embed=embed)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
