@@ -1771,7 +1771,7 @@ async def bot_info(ctx):
                           "Напишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \n"
                           "Поэтому может падать несколько раз в день"
                           f"{kgb.user.name} находится на {len(kgb.guilds)} серверах и имеет {total_commands} команд", 
-                          color=nextcord.Color(0x000000))
+                          color=discord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
     embed.add_field(name="Полезные ссылки:", 
                     value=f"[Добавить {kgb.user.name} на свой сервер]({botURL})\n"
