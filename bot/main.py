@@ -280,10 +280,10 @@ async def on_guild_join(guild: discord.Guild):
         description = 
             'Modern KGB - универсальный помощник на вашем сервере!\n' 
             'Он имеет:\n'
-            '1.Встроенный генератор маркова, создающий оригинальные сообщения на основе старых.'
-            '2.Множество прикольных апи.'
-            '3.Возможность воспроизведения музыки в голосовых каналах.'
-            '4.Большое множество команд', 
+            '1.Встроенный генератор маркова, создающий оригинальные сообщения на основе старых.\n'
+            '2.Множество прикольных апи.\n'
+            '3.Возможность воспроизведения музыки в голосовых каналах.\n'
+            '4.Большое множество команд\n', 
         color = 0x000000
     )
 
@@ -465,7 +465,7 @@ async def banlist(ctx):
     if isinstance(ctx.channel, discord.DMChannel): return
 
     banned_users = ctx.guild.bans()
-    banlist = [f'{ban_entry.user.name}#{ban_entry.user.discriminator}' async for ban_entry in banned_users]
+    banlist = [f'{ban_entry.user.name}#{ban_entry.user.discriminator}\n' async for ban_entry in banned_users]
 
     if banlist == []:
         await ctx.send(embed=discord.Embed(
