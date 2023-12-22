@@ -993,6 +993,7 @@ async def configwarn(ctx, limit: int, warn_type: str):
 @kgb.command(description="Пригласить бота и другие полезные ссылки")
 @helpCategory('misc')
 async def invite(ctx):
+    total_commands = len(bot.commands)
     if isinstance(ctx.channel, discord.DMChannel): return
     if not kgb.user: return
 
@@ -1001,10 +1002,11 @@ async def invite(ctx):
         description=
             f"[Добавить {kgb.user.name}]({global_config.botURL}) на свой сервер\n"
             f"[Присоединиться]({global_config.serverURL}) к серверу бота\n"
-            f"[Поддержать]({global_config.boostyURL}) бота на бусти", 
+            f"[Поддержать]({global_config.boostyURL}) бота на бусти\n"
+            f"Зайти на [сайт]({global_config.boostyURL}) компании", 
         color=discord.Color(0x000000
     ))
-    embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах")
+    embed.set_footer(text=f"{kgb.user.name} находится на {len(kgb.guilds)} серверах и имеет {total_commands} команд")
 
     await ctx.send(embed=embed)
 
