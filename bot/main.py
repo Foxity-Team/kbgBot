@@ -1791,7 +1791,7 @@ async def bot_info(ctx):
 async def randword(ctx):
     if isinstance(ctx.channel, discord.DMChannel):
         return
-    seed = random.randint(0, 100000)
+    seed = str(random.randint(0, 100000))
     q = seed.isdigit()
     if q == False:
         await ctx.send(embed=discord.Embed(
