@@ -1780,8 +1780,8 @@ async def bot_info(ctx):
                     "Зайти на [сайт]({global_config.siteURL}) компании", 
                     inline=False
                    )
-    embed.set_thumbnail(url=tumbaYUMBA)
-    embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=avaURL)
+    embed.set_thumbnail(url=global_config.tumbaYUMBA)
+    embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=global_config.avaURL)
     await ctx.send(embed=embed)
 
 HELP_EMB = buildHelpEmbed()
