@@ -1768,16 +1768,17 @@ async def bot_info(ctx):
     embed = discord.Embed(title="Информация о боте:", 
                           description=
                           "КГБ - Комитет Государственной Безопасности\n"
-                          "Напишите kgb!help чтобы увидеть полный список команд\nБот очень активно разрабатывается, \n"
-                          "Поэтому может падать несколько раз в день"
+                          "Напишите kgb!help чтобы увидеть полный список команд\n"
+                          "Бот очень активно разрабатывается, \n"
+                          "Поэтому может падать несколько раз в день. \n"
                           f"{kgb.user.name} находится на {len(kgb.guilds)} серверах и имеет {total_commands} команд", 
                           color=discord.Color(0x000000))
     embed.add_field(name="Версия:", value="3.0", inline=False)
     embed.add_field(name="Полезные ссылки:", 
                     value=f"[Добавить {kgb.user.name} на свой сервер]({global_config.botURL})\n"
-                    "[Присоединится к серверу бота]({serverURL})\n"
-                    "[Поддержать бота на бусти]({boostyURL})\n"
-                    "Зайти на [сайт]({global_config.siteURL}) компании", 
+                    f"[Присоединится к серверу бота]({global_config.serverURL})\n"
+                    f"[Поддержать бота на бусти]({global_config.boostyURL})\n"
+                    f"Зайти на [сайт]({global_config.siteURL}) компании", 
                     inline=False
                    )
     embed.set_thumbnail(url=global_config.tumbaYUMBA)
