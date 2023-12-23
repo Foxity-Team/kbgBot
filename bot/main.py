@@ -1826,6 +1826,7 @@ async def execute(ctx, *, code=None):
         await ctx.send(result)
 
 @kgb.command(description="Подробный хелп по команде execute")
+@helpCategory('info')
 async def help_execute(ctx):
     file = discord.File('static_data/help.txt')
     await ctx.send(file=file)
