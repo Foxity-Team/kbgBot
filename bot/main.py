@@ -127,7 +127,7 @@ def no_format(user):
     return user.name
 
 def execute_code(code):
-    forbidden_keywords = ['def', 'eval', 'while', '*']
+    forbidden_keywords = ['def', 'eval', 'while', '*', 'import']
     
     for keyword in forbidden_keywords:
         if keyword in code:
