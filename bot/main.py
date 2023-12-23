@@ -126,6 +126,19 @@ def no_format(user):
         return f"{user.name}#{user.discriminator}"
     return user.name
 
+def execute_code(code):
+    forbidden_keywords = ['def', 'eval', 'while', '*']
+    
+    for keyword in forbidden_keywords:
+        if keyword in code:
+            return "Код содержит запрещенное ключевое слово: {}".format(keyword)
+
+    try:
+        exec('from hellya import *\n' + code)
+        return "Код успешно выполнен."
+    except Exception as e:
+        return f"Ошибка при выполнении кода: {str(e)}"
+
 @kgb.event
 async def on_ready():
     kgb.loop.create_task(change_status())
@@ -1784,6 +1797,34 @@ async def bot_info(ctx):
     embed.set_thumbnail(url=global_config.tumbaYUMBA)
     embed.set_footer(text="© 2023 Soviet WorkShop", icon_url=global_config.avaURL)
     await ctx.send(embed=embed)
+
+@kgb.command(desciption="Выполняет код языка Hellya")
+@helpCategory('neuro')
+async def execute(ctx, *, code=None):
+    if not code and not ctx.message.attachments:
+        await ctx.send("Вы должны прикрепить файл с кодом или ввести код в сообщении.")
+        return
+
+    # Получение кода из вложения, если он не был введен в сообщении
+    if not code and ctx.message.attachments:
+        attachment = ctx.message.attachments[0]
+        if attachment.filename.endswith('.py'):
+            code = (await attachment.read()).decode('utf-8')
+        else:
+            await ctx.send("Пожалуйста, прикрепите текстовый файл с кодом.")
+            return
+
+    result = execute_code(code)
+    if result == "Код успешно выполнен.":
+        await ctx.send(result)
+        await asyncio.sleep(1)
+        with open('result.png', 'rb') as file:
+            result_image = discord.File(file)
+            await ctx.send(file=result_image)
+            
+        os.remove('result.png')
+    else:
+        await ctx.send(result)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
