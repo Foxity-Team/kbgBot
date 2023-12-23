@@ -1827,7 +1827,7 @@ async def execute(ctx, *, code=None):
 
 @kgb.command(description="Подробный хелп по команде execute")
 async def help_execute(ctx):
-    file = discord.File('help.txt')
+    file = discord.File('/static_data/help.txt')
     await ctx.send(file=file)
 
 HELP_EMB = buildHelpEmbed()
