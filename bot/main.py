@@ -1805,7 +1805,6 @@ async def execute(ctx, *, code=None):
         await ctx.send("Вы должны прикрепить файл с кодом или ввести код в сообщении.")
         return
 
-    # Получение кода из вложения, если он не был введен в сообщении
     if not code and ctx.message.attachments:
         attachment = ctx.message.attachments[0]
         if attachment.filename.endswith('.py'):
@@ -1825,6 +1824,11 @@ async def execute(ctx, *, code=None):
         os.remove('result.png')
     else:
         await ctx.send(result)
+
+@kgb.command(description="Подробный хелп по команде execute")
+async def help_execute(ctx):
+    file = discord.File('help.txt')
+    await ctx.send(file=file)
 
 HELP_EMB = buildHelpEmbed()
 HELP_CAT_EMB, HELP_CAT_HIDDEN = buildCategoryEmbeds()
