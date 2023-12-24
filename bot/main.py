@@ -1841,13 +1841,13 @@ async def execute(ctx, *, code=None):
     result = execute_code(code)
     if result == "Код успешно выполнен.":
         try:
-            await ctx.send(result)
             with open('result.png', 'rb') as file:
                 result_image = discord.File(file)
                 await ctx.send(file=result_image)
             os.remove('result.png')
+            await ctx.send(result)
             last_command_time[user_id] = time.time()
-        except FileNotFoundError:
+        except:
             ctx.send("Код не был выполнен успешно")
             last_command_time[user_id] = time.time()
     else:
