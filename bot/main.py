@@ -19,6 +19,7 @@ import json
 import sys
 import config as global_config
 import retr
+import time
 
 from datetime import datetime, timedelta
 from difflib import get_close_matches
@@ -36,6 +37,8 @@ RETR_PUBLISHERS = {
     'soviet': retr.Publisher(1067091686725001306, 'data/retr.txt'),
     'griss': retr.Publisher(1131911759968612434, 'data/retrgris.txt'),
 }
+
+last_command_time={}
 
 ERR_CHANNEL_ID = 1123467774098935828
 
@@ -1814,6 +1817,15 @@ async def bot_info(ctx):
 @kgb.command(desciption="Выполняет код языка Hellya")
 @helpCategory('neuro')
 async def execute(ctx, *, code=None):
+    user_id = ctx.author.id
+
+    if user_id in last_command_time:
+        current_time = time.time()
+        last_time = last_command_time[user_id]
+        if current_time - last_time < 15:
+            await ctx.send(f"Подождите еще {15 - (current_time - last_time):.1f} секунд")
+            return
+            
     if not code and not ctx.message.attachments:
         await ctx.send("Вы должны прикрепить файл с кодом или ввести код в сообщении.")
         return
