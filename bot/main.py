@@ -1848,20 +1848,20 @@ async def execute(ctx, *, code=None):
             await ctx.send(result)
             last_command_time[user_id] = time.time()
         except FileNotFoundError:
-            ctx.send(
+            await ctx.send(
                 embed=discord.Embed(
                 title='Ошибка:',
                 description="Ваш код не сохраняет картинку, либо не создаёт её",
                 color=discord.Colour(0xFF0000)
                 ))
     else:
-         await ctx.send(
+        await ctx.send(
                 embed=discord.Embed(
                 title='Ошибка:',
                 description=result,
                 color=discord.Colour(0xFF0000)
                 ))
-         last_command_time[user_id] = time.time().time()
+        last_command_time[user_id] = time.time().time()
 
 @kgb.command(description="Подробный хелп по команде execute")
 @helpCategory('info')
