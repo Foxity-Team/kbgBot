@@ -1851,7 +1851,7 @@ async def execute(ctx, *, code=None):
             await ctx.send(
                 embed=discord.Embed(
                 title='Ошибка:',
-                descriptio=result,
+                description=result,
                 color=discord.Colour(0xFF0000)
                 ))
             last_command_time[user_id] = time.time()
