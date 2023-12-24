@@ -1832,7 +1832,7 @@ async def execute(ctx, *, code=None):
 
     if not code and ctx.message.attachments:
         attachment = ctx.message.attachments[0]
-        if attachment.filename.endswith('.py'):
+        if attachment.filename.endswith('.hellya'):
             code = (await attachment.read()).decode('utf-8')
         else:
             await ctx.send("Пожалуйста, прикрепите текстовый файл с кодом.")
