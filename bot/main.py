@@ -1840,12 +1840,20 @@ async def execute(ctx, *, code=None):
 
     result = execute_code(code)
     if result == "Код успешно выполнен.":
-        with open('result.png', 'rb') as file:
-            result_image = discord.File(file)
-            await ctx.send(file=result_image)
-            os.remove('result.png')
-        await ctx.send(result)
-        last_command_time[user_id] = time.time()
+        try:
+            with open('result.png', 'rb') as file:
+                result_image = discord.File(file)
+                await ctx.send(file=result_image)
+                os.remove('result.png')
+            await ctx.send(result)
+            last_command_time[user_id] = time.time()
+        except FileNotFoundError:
+            ctx.send(
+                embed=discord.Embed(
+                title='Ошибка:',
+                description="Ваш код не сохраняет картинку, либо не создаёт её",
+                color=discord.Colour(0xFF0000)
+                ))
     else:
          await ctx.send(
                 embed=discord.Embed(
