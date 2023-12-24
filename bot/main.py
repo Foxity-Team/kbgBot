@@ -1822,8 +1822,8 @@ async def execute(ctx, *, code=None):
     if user_id in last_command_time:
         current_time = time.time()
         last_time = last_command_time[user_id]
-        if current_time - last_time < 15:
-            await ctx.send(f"Подождите еще {15 - (current_time - last_time):.1f} секунд")
+        if current_time - last_time < 10:
+            await ctx.send(f"Подождите еще {10 - (current_time - last_time):.1f} секунд")
             return
             
     if not code and not ctx.message.attachments:
@@ -1848,7 +1848,12 @@ async def execute(ctx, *, code=None):
             await ctx.send(result)
             last_command_time[user_id] = time.time()
         except:
-            await ctx.send("Код не был выполнен успешно")
+            await ctx.send(
+                embed=discord.Embed(
+                title='Ошибка:',
+                descriptio=result,
+                color=discord.Colour(0xFF0000)
+                ))
             last_command_time[user_id] = time.time()
     else:
         await ctx.send(result)
