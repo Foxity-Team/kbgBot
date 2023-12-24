@@ -127,7 +127,20 @@ def no_format(user):
     return user.name
 
 def execute_code(code):
-    forbidden_keywords = ['def', 'eval', 'while', '*', 'import']
+    forbidden_keywords = [
+        'def', 
+        'eval', 
+        'while', 
+        '*', 
+        'import', 
+        'print', 
+        'return', 
+        'sudo', 
+        'subprocess',
+        'eval',
+        'exec',
+        'system'
+    ]
     
     for keyword in forbidden_keywords:
         if keyword in code:
@@ -1816,7 +1829,6 @@ async def execute(ctx, *, code=None):
     result = execute_code(code)
     if result == "Код успешно выполнен.":
         await ctx.send(result)
-        await asyncio.sleep(1)
         with open('result.png', 'rb') as file:
             result_image = discord.File(file)
             await ctx.send(file=result_image)
