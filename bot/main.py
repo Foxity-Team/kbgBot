@@ -1848,7 +1848,7 @@ async def execute(ctx, *, code=None):
             await ctx.send(result)
             last_command_time[user_id] = time.time()
         except:
-            ctx.send("Код не был выполнен успешно")
+            await ctx.send("Код не был выполнен успешно")
             last_command_time[user_id] = time.time()
     else:
         await ctx.send(result)
