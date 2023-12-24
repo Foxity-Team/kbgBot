@@ -1823,11 +1823,21 @@ async def execute(ctx, *, code=None):
         current_time = time.time()
         last_time = last_command_time[user_id]
         if current_time - last_time < 15:
-            await ctx.send(f"Подождите еще {15 - (current_time - last_time):.1f} секунд")
+            await ctx.send((
+                embed=discord.Embed(
+                title='Ошибка:',
+                description=f"Подождите еще {15 - (current_time - last_time):.1f} секунд",
+                color=discord.Colour(0xFF0000)
+                ))
             return
             
     if not code and not ctx.message.attachments:
-        await ctx.send("Вы должны прикрепить файл с кодом или ввести код в сообщении.")
+        await ctx.send(
+                embed=discord.Embed(
+                title='Ошибка:',
+                description="Вы должны прикрепить файл с кодом или ввести код в сообщении.",
+                color=discord.Colour(0xFF0000)
+                ))
         return
 
     if not code and ctx.message.attachments:
@@ -1835,7 +1845,12 @@ async def execute(ctx, *, code=None):
         if attachment.filename.endswith('.hellya'):
             code = (await attachment.read()).decode('utf-8')
         else:
-            await ctx.send("Пожалуйста, прикрепите текстовый файл с кодом.")
+            await ctx.send(
+                embed=discord.Embed(
+                title="Пожалуйста, прикрепите текстовый файл с кодом.",
+                description=result,
+                color=discord.Colour(0xFF0000)
+                ))
             return
 
     result = execute_code(code)
@@ -1843,7 +1858,7 @@ async def execute(ctx, *, code=None):
         try:
             with open('result.png', 'rb') as file:
                 result_image = discord.File(file)
-                await ctx.send(file=result_image)
+                await ctx.send(result,":", file=result_image)
                 os.remove('result.png')
             await ctx.send(result)
             last_command_time[user_id] = time.time()
