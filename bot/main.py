@@ -1823,7 +1823,7 @@ async def execute(ctx, *, code=None):
         current_time = time.time()
         last_time = last_command_time[user_id]
         if current_time - last_time < 15:
-            await ctx.send((
+            await ctx.send(
                 embed=discord.Embed(
                 title='Ошибка:',
                 description=f"Подождите еще {15 - (current_time - last_time):.1f} секунд",
@@ -1847,8 +1847,8 @@ async def execute(ctx, *, code=None):
         else:
             await ctx.send(
                 embed=discord.Embed(
-                title="Пожалуйста, прикрепите текстовый файл с кодом.",
-                description=result,
+                title="Ошибка:",
+                description="Пожалуйста, прикрепите текстовый файл с кодом.",
                 color=discord.Colour(0xFF0000)
                 ))
             return
