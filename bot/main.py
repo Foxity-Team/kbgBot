@@ -1843,7 +1843,7 @@ async def execute(ctx, *, code=None):
         with open('result.png', 'rb') as file:
             result_image = discord.File(file)
             await ctx.send(file=result_image)
-        os.remove('result.png')
+            os.remove('result.png')
         await ctx.send(result)
         last_command_time[user_id] = time.time()
     else:
@@ -1853,7 +1853,7 @@ async def execute(ctx, *, code=None):
                 description=result,
                 color=discord.Colour(0xFF0000)
                 ))
-        last_command_time[user_id] = time.time().time()
+         last_command_time[user_id] = time.time().time()
 
 @kgb.command(description="Подробный хелп по команде execute")
 @helpCategory('info')
