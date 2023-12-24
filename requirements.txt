@@ -121,6 +121,4 @@ yarl==1.9.2
 youtube-dl==2021.12.17
 yt-dlp==2023.3.4
 zipp==3.15.0
-Pillow==10.1.0
-hellya==2.0
-opencv-python==4.8.1.78
+hellya-lite==1.0
