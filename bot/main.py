@@ -1840,15 +1840,19 @@ async def execute(ctx, *, code=None):
 
     result = execute_code(code)
     if result == "Код успешно выполнен.":
-        await ctx.send(result)
-        with open('result.png', 'rb') as file:
-            result_image = discord.File(file)
-            await ctx.send(file=result_image)
-            
-        os.remove('result.png')
+        try:
+            await ctx.send(result)
+            with open('result.png', 'rb') as file:
+                result_image = discord.File(file)
+                await ctx.send(file=result_image)
+            os.remove('result.png')
+            last_command_time[user_id] = time.time()
+        except FileNotFoundError:
+            ctx.send("Код не был выполнен успешно")
+            last_command_time[user_id] = time.time()
     else:
         await ctx.send(result)
-    last_command_time[user_id] = time.time()
+        last_command_time[user_id] = time.time()
 
 @kgb.command(description="Подробный хелп по команде execute")
 @helpCategory('info')
