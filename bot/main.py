@@ -1848,6 +1848,7 @@ async def execute(ctx, *, code=None):
         os.remove('result.png')
     else:
         await ctx.send(result)
+    last_command_time[user_id] = time.time()
 
 @kgb.command(description="Подробный хелп по команде execute")
 @helpCategory('info')
