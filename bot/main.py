@@ -153,7 +153,7 @@ def execute_code(code):
         exec('from hellya import *\n' + code)
         return "Код успешно выполнен."
     except Exception as e:
-        return f"Ошибка при выполнении кода: {str(e)}"
+        return f"{str(e)}"
 
 @kgb.event
 async def on_ready():
@@ -1840,24 +1840,20 @@ async def execute(ctx, *, code=None):
 
     result = execute_code(code)
     if result == "Код успешно выполнен.":
-        try:
-            with open('result.png', 'rb') as file:
-                result_image = discord.File(file)
-                await ctx.send(file=result_image)
-            os.remove('result.png')
-            await ctx.send(result)
-            last_command_time[user_id] = time.time()
-        except:
-            await ctx.send(
+        with open('result.png', 'rb') as file:
+            result_image = discord.File(file)
+            await ctx.send(file=result_image)
+        os.remove('result.png')
+        await ctx.send(result)
+        last_command_time[user_id] = time.time()
+    else:
+         await ctx.send(
                 embed=discord.Embed(
                 title='Ошибка:',
                 description=result,
                 color=discord.Colour(0xFF0000)
                 ))
-            last_command_time[user_id] = time.time()
-    else:
-        await ctx.send(result)
-        last_command_time[user_id] = time.time()
+        last_command_time[user_id] = time.time().time()
 
 @kgb.command(description="Подробный хелп по команде execute")
 @helpCategory('info')
