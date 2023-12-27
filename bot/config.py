@@ -4,7 +4,6 @@ botURL = "https://discord.com/api/oauth2/authorize?client_id=1061907927880974406
 serverURL = "https://discord.gg/CDMaFC84JE"
 secretURL = 'https://media.discordapp.net/attachments/1067069690066767924/1095385824247423120/SPOILER_image.png'
 nasaKEY = "oEUDnRapyzulvTNbWimSBmFldgwMZt5ZZgU547Xf"
-chatbotKEY = 'wlkMplI6cPas78JtMwzKpwgO5EqNUw7fsXtpm2bmLE332cuHN3VZXIs17QdQ0pi1'
 cipherURL = 'https://media.discordapp.net/attachments/977992655466270730/1073628659417632828/qr-code.png?width=425&height=425'
 avaURL = "https://media.discordapp.net/attachments/1056839870535979070/1076440402367885403/0a24dfcff79ee1f4.png?width=403&height=403"
 boostyURL = "https://boosty.to/kgbmodernbot"
