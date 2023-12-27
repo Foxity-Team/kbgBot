@@ -595,17 +595,6 @@ async def verlist(ctx):
         color = discord.Color(0x000000)
     ))
 
-#@kgb.command(description = ")")
-#@helpCategory('secret')
-#async def love(ctx):
-#    if isinstance(ctx.channel, discord.DMChannel): return
-#
-#    await ctx.send(embed = discord.Embed(
-#        title = "Да)",
-#        description = "Несо и Саня пара навеки:3",
-#        color = discord.Color(0xff7089)
-#    ))
-
 @kgb.command(description = "шифр")
 @helpCategory('misc')
 async def cipher(ctx):
@@ -646,7 +635,7 @@ async def thank(ctx):
         description = 
             'СВЗ(@svz_code_), за предоставленный обучающий материал!\n'
             'Грише(@grisshink), за помощь в разработке бота!\n'
-            'Санечке(@demsanechka) за рисование аватара для бота и постоянную поддержку меня:3',
+            'Санечке(@demsanechka) за рисование аватара для бота',
         color = discord.Color(0xFFFF00)
     ))
   
